@@ -5,3 +5,7 @@ hash_without_intercept <- function(src) {
     .Call('FeatureHashing_hash_without_intercept', PACKAGE = 'FeatureHashing', src)
 }
 
+rehash_inplace <- function(m, Rmapping, hash_size) {
+    .Call('FeatureHashing_rehash_inplace', PACKAGE = 'FeatureHashing', m, Rmapping, hash_size)
+}
+

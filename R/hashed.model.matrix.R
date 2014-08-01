@@ -1,5 +1,7 @@
 #'@title Feature Hashing of Model Matrix
 #'@importFrom Matrix sparse.model.matrix
+#'@importClassesFrom SparseM matrix.csc
+#'@importFrom SparseM as.matrix.csr
 #'@export
 hashed.model.matrix <- function(object, data = environment(object),
   xlev = NULL, transpose = FALSE, 
@@ -16,6 +18,11 @@ hashed.model.matrix <- function(object, data = environment(object),
   })
   m <- sparse.model.matrix(object, data, contrasts.arg, xlev, transpose,
                            drop.unused.levels, row.names, verbose, ...)
-  hash_internal(m)
+  print(colnames(m))
+  mapping <- hash_without_intercept(colnames(m))
+  X.csc <- new("matrix.csc", ra = m@x, ja = m@i + 1L, ia = m@p + 1L, dimension = m@Dim)
+  X.csr <- as.matrix.csr(X.csc)
+  hash_internal(X.csr, mapping, hash_size)
+  X.csr
 }
   

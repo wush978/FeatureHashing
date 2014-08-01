@@ -13,7 +13,9 @@ Description: Feature hashing, also known as hashing trick,
   improvement should be significant for model matrix with
   lots of categorical features.
 License: GPL(>= 3)
+Depends:
+  methods
 Imports: 
-  Rcpp (>= 0.11.2),
+  Rcpp (>= 0.11),
   Matrix
 LinkingTo: Rcpp

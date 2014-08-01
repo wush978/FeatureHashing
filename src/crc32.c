@@ -21,6 +21,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "crc32.h"
 
 /*----------------------------------------------------------------------------*\
  *  Local functions
@@ -28,7 +29,7 @@
 
 static int Crc32_ComputeFile( FILE *file, unsigned long *outCrc32 );
 
-static unsigned long Crc32_ComputeBuf( unsigned long inCrc32, const void *buf,
+unsigned long Crc32_ComputeBuf( unsigned long inCrc32, const void *buf,
                                        size_t bufLen );
 
 /*----------------------------------------------------------------------------*\
@@ -146,7 +147,7 @@ ERR_EXIT:
  *     (no errors are possible)
 \*----------------------------------------------------------------------------*/
 
-static unsigned long Crc32_ComputeBuf( unsigned long inCrc32, const void *buf,
+unsigned long Crc32_ComputeBuf( unsigned long inCrc32, const void *buf,
                                        size_t bufLen )
 {
     static const unsigned long crcTable[256] = {

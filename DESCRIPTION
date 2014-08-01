@@ -17,5 +17,6 @@ Depends:
   methods
 Imports: 
   Rcpp (>= 0.11),
-  Matrix
+  Matrix,
+  SparseM
 LinkingTo: Rcpp

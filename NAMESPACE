@@ -2,3 +2,4 @@
 
 export(hashed.model.matrix)
 importFrom(Matrix,sparse.model.matrix)
+useDynLib(FeatureHashing)

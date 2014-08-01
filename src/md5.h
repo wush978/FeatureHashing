@@ -7,7 +7,7 @@ typedef unsigned int uint32;
 typedef unsigned long uint32;
 #endif
 
-#ifdef __cplucplu
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -28,7 +28,7 @@ void MD5Transform(uint32 buf[4], uint32 const in[16]);
  */
 typedef struct MD5Context MD5_CTX;
 
-#ifdef __cplucplu
+#ifdef __cplusplus
 }
 #endif
 

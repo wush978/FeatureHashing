@@ -22,14 +22,14 @@
 #ifndef __CRC32_H__
 #define __CRC32_H__
 
-#ifdef __cplucplu
+#ifdef __cplusplus
 extern "C" {
 #endif
 
 unsigned long Crc32_ComputeBuf( unsigned long inCrc32, const void *buf,
                                        size_t bufLen );
 
-#ifdef __cplucplu
+#ifdef __cplusplus
 }
 #endif
 

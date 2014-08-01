@@ -10,8 +10,8 @@ IntegerVector hash_without_intercept(CharacterVector src) {
   for(int i = 0;i < src.size();i++) {
     const char* str = CHAR(src[i]);
     if (::strcmp("(Intercept)", str) == 0) continue;
-    md5(str, strlen(str), md5buf);
-    retval[i] = crc32(md5buf, 16);
+    FeatureHashing_md5(str, strlen(str), md5buf);
+    retval[i] = FeatureHashing_crc32(md5buf, 16);
   }
   return retval;
 }

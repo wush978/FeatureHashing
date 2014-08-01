@@ -7,6 +7,10 @@ typedef unsigned int uint32;
 typedef unsigned long uint32;
 #endif
 
+#ifdef __cplucplu
+extern "C" {
+#endif
+
 struct MD5Context {
 	uint32 buf[4];
 	uint32 bits[2];
@@ -23,5 +27,9 @@ void MD5Transform(uint32 buf[4], uint32 const in[16]);
  * This is needed to make RSAREF happy on some MS-DOS compilers.
  */
 typedef struct MD5Context MD5_CTX;
+
+#ifdef __cplucplu
+}
+#endif
 
 #endif /* !MD5_H */

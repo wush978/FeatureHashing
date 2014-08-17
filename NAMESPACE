@@ -2,8 +2,6 @@
 
 export(hashed.model.matrix)
 importClassesFrom(Matrix,dgCMatrix)
-importClassesFrom(SparseM,matrix.csc)
 importFrom(Matrix,sparse.model.matrix)
 importFrom(Rcpp,evalCpp)
-importFrom(SparseM,as.matrix.csr)
 useDynLib(FeatureHashing)

@@ -1,0 +1,3 @@
+PKG_CFLAGS = -g
+
+PKG_CXXFLAGS = -g

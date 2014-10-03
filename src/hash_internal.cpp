@@ -6,12 +6,10 @@ using namespace Rcpp;
 //[[Rcpp::export("hash_without_intercept")]]
 IntegerVector hash_without_intercept(CharacterVector src) {
   IntegerVector retval(src.size(), 0);
-  char md5buf[16];
   for(int i = 0;i < src.size();i++) {
     const char* str = CHAR(src[i]);
     if (::strcmp("(Intercept)", str) == 0) continue;
-    FeatureHashing_md5(str, strlen(str), md5buf);
-    retval[i] = FeatureHashing_crc32(md5buf, 16);
+    retval[i] = FeatureHashing_crc32(str, ::strlen(str));
   }
   return retval;
 }
@@ -22,11 +20,10 @@ SEXP rehash_inplace(S4 m, IntegerVector Rmapping, int hash_size) {
   for(int i = 0;i < Rmapping.size();i++) {
     pmapping[i] = pmapping[i] % hash_size;
   }
-  IntegerVector ja(m.slot("ja"));
-  for(int i = 0;i < ja.size();i++) {
-    ja[i] = pmapping[ja[i] - 1] + 1;
+  IntegerVector i(m.slot("i")), dimension(m.slot("Dim"));
+  dimension[0] = hash_size;
+  for(int j = 0;j < i.size();j++) {
+    i[j] = pmapping[i[j]];
   }
-  IntegerVector dimension(m.slot("dimension"));
-  dimension[1] = hash_size;
   return R_NilValue;
 }

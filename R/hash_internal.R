@@ -3,6 +3,6 @@ hash_internal <- function(m, ...) {
 }
 
 #'@importClassesFrom Matrix dgCMatrix
-hash_internal.matrix.csr <- function(m, mapping, hash_size) {
+hash_internal.dgCMatrix <- function(m, mapping, hash_size) {
   rehash_inplace(m, mapping, hash_size);
 }

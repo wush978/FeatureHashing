@@ -13,6 +13,8 @@ hashed.model.matrix <- function(object, data = environment(object),
   if (is.null(hash_size)) return(m)
   mapping <- hash_without_intercept(rownames(m))
   rehash_inplace(m, mapping, hash_size)
-  dim(m)[1] <- hash_size
+  class(m) <- .CSRMatrix
+  m@Dim[1] <- as.integer(hash_size)
   m
 }
+

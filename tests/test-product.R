@@ -21,3 +21,18 @@ for(i in 1:ncol(m1)) {
   stopifnot(isTRUE(all.equal(r1, r2)))
   r <- as.vector(m1[,i])
 }
+
+
+v <- numeric(dim(m1)[1])
+r1 <- as.vector(v %*% m1)
+r2 <- FeatureHashing:::vX(v, m1, numeric(dim(m1)[2]))
+stopifnot(isTRUE(all.equal(r1, r2)))
+
+for(i in 1:nrow(m1)) {
+  v <- numeric(dim(m1)[1])
+  v[i] <- 1
+  r1 <- as.vector(v %*% m1)
+  r2 <- numeric(dim(m1)[2])
+  FeatureHashing:::vX(v, m1, r2)
+  stopifnot(isTRUE(all.equal(r1, r2)))
+}

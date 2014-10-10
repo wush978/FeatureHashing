@@ -11,7 +11,3 @@ m3 <- hashed.model.matrix(~ ., data = CO2, contr, hash_size = NULL)
 stopifnot(isTRUE(all.equal(m1, m3)))
 
 m4 <- hashed.model.matrix(~ ., data = CO2, contr, hash_size = 2^4)
-
-invisible(dim(m4))
-invisible(m4 %*% rnorm(dim(m4)[2]))
-invisible(rnorm(dim(m4)[1]) %*% m4)

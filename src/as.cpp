@@ -80,13 +80,14 @@ SEXP todgCMatrix(S4 m) {
   double *pnew_x = &new_x[0];
   size_t len = 0;
   for(auto col = 0;col < Dim[1];col++) {
-    p[col] = len;
+    new_p[col] = len;
     auto src_len = p[col + 1] - p[col];
     memcpy(pnew_i + len, pi + p[col], sizeof(int) * src_len);
     memcpy(pnew_x + len, px + p[col], sizeof(double) * src_len);
     pair_sort(pnew_i + len, pnew_x + len, src_len);
     len += merge(pnew_i + len, pnew_x + len, src_len);
   }
+  new_p[Dim[1]] = len;
   new_i.resize(len);
   new_x.resize(len);
   retval.slot("i") = wrap(new_i);

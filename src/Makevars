@@ -1,3 +1,5 @@
+CXX_STD = CXX11
+
 PKG_CFLAGS = -g -fopenmp
 
-PKG_CXXFLAGS = -g -std=c++11 -fopenmp
+PKG_CXXFLAGS = -g -fopenmp

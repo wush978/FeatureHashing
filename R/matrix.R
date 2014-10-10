@@ -24,3 +24,8 @@ setMethod("%*%", signature(x = "numeric", y = .CSRMatrix), function(x, y) {
   stopifnot(y@Dim[1] == length(x))
   vX(x, y, numeric(y@Dim[2]))
 })
+
+setAs(.CSRMatrix, "dgCMatrix", function(from) todgCMatrix(from))
+
+setMethod("[", signature(x = .CSRMatrix, i = "index", j = "missing", drop = "logical"), 
+          function(x, i, j, ..., drop) .selectRow(x, i))

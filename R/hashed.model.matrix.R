@@ -15,6 +15,7 @@ hashed.model.matrix <- function(object, data = environment(object),
   rehash_inplace(m, mapping, hash_size)
   class(m) <- .CSRMatrix
   m@Dim[1] <- as.integer(hash_size)
+  m@Dimnames[[1]] <- character(0)
   m
 }
 

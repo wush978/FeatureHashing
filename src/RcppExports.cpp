@@ -5,6 +5,50 @@
 
 using namespace Rcpp;
 
+// pair_sort
+void pair_sort(IntegerVector i, NumericVector x);
+RcppExport SEXP FeatureHashing_pair_sort(SEXP iSEXP, SEXP xSEXP) {
+BEGIN_RCPP
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< IntegerVector >::type i(iSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP );
+        pair_sort(i, x);
+    }
+    return R_NilValue;
+END_RCPP
+}
+// merge
+int merge(IntegerVector i, NumericVector x);
+RcppExport SEXP FeatureHashing_merge(SEXP iSEXP, SEXP xSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< IntegerVector >::type i(iSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP );
+        int __result = merge(i, x);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// todgCMatrix
+SEXP todgCMatrix(S4 m);
+RcppExport SEXP FeatureHashing_todgCMatrix(SEXP mSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< S4 >::type m(mSEXP );
+        SEXP __result = todgCMatrix(m);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // hash_without_intercept_single
 IntegerVector hash_without_intercept_single(CharacterVector src);
 RcppExport SEXP FeatureHashing_hash_without_intercept_single(SEXP srcSEXP) {
@@ -33,19 +77,6 @@ BEGIN_RCPP
     }
     UNPROTECT(1);
     return __sexp_result;
-END_RCPP
-}
-// pair_sort
-void pair_sort(IntegerVector i, NumericVector x);
-RcppExport SEXP FeatureHashing_pair_sort(SEXP iSEXP, SEXP xSEXP) {
-BEGIN_RCPP
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< IntegerVector >::type i(iSEXP );
-        Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP );
-        pair_sort(i, x);
-    }
-    return R_NilValue;
 END_RCPP
 }
 // rehash_inplace
@@ -90,6 +121,22 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< S4 >::type m(mSEXP );
         Rcpp::traits::input_parameter< NumericVector >::type retval(retvalSEXP );
         NumericVector __result = vX(v, m, retval);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// selectRow
+SEXP selectRow(S4 m, IntegerVector index);
+RcppExport SEXP FeatureHashing_selectRow(SEXP mSEXP, SEXP indexSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< S4 >::type m(mSEXP );
+        Rcpp::traits::input_parameter< IntegerVector >::type index(indexSEXP );
+        SEXP __result = selectRow(m, index);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

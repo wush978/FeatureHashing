@@ -11,6 +11,7 @@ using namespace Rcpp;
 NumericVector Xv(S4 m, NumericVector v, NumericVector retval) {
   IntegerVector i(m.slot("i")), p(m.slot("p")), Dim(m.slot("Dim"));
   NumericVector x(m.slot("x"));
+  retval.fill(0.0);
   for(size_t col = 0;col < Dim[1];col++) {
     for(int k = p[col];k < p[col + 1];k++) {
       int row = i[k];
@@ -25,6 +26,7 @@ NumericVector Xv(S4 m, NumericVector v, NumericVector retval) {
 NumericVector vX(NumericVector v, S4 m, NumericVector retval) {
   IntegerVector i(m.slot("i")), p(m.slot("p")), Dim(m.slot("Dim"));
   NumericVector x(m.slot("x"));
+  retval.fill(0.0);
   #pragma omp parallel for
   for(size_t col = 0;col < Dim[1];col++) {
     for(int k = p[col];k < p[col + 1];k++) {

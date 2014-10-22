@@ -3,10 +3,10 @@
 \alias{interpret.tag}
 \title{Interpret tag in formula}
 \usage{
-interpret.tag(f, data)
+interpret.tag(object, data)
 }
 \arguments{
-\item{f}{formula}
+\item{object}{formula}
 
 \item{data}{data.frame}
 }

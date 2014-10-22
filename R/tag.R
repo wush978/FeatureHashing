@@ -1,12 +1,20 @@
+#'@title expand tag feature
+#'@param x character vector or factor. The source of tag features.
+#'@param split character vector. The split symbol for tag features.
+#'@param type character value. Either "count" or "existence". "count" indicates the number of occurrance of the tag. "existence" indicates the boolean that whether the tag exist or not.
+#'@return integer vector for \code{type = "count"} and logical vector for \code{type = "existence"}.
+#'@export
 tag <- function(x, split = ",", type = c("count", "existence")) {
-  switch(class(x), 
+  retval <- switch(class(x), 
     "character" = tag.character(x, split, type),
     "factor" = tag.factor(x, split, type),
   )
+  attr(retval, "type") <- type[1]
+  retval
 }
 
 tag.character <- function(x, split, type) {
-  x <- strsplit(x, split = ",")
+  x <- strsplit(x, split = split)
   x.levels <- sort(unique(unlist(x)))
   retval <- list()
   for(x.element in x.levels) {

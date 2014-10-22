@@ -91,8 +91,8 @@ benchmark(v %*% m1, v %*% m3)
 
 ```
 ##       test replications elapsed relative user.self sys.self user.child
-## 1 v %*% m1          100   0.004      1.0     0.015        0          0
-## 2 v %*% m3          100   0.022      5.5     0.021        0          0
+## 1 v %*% m1          100   0.004      1.0     0.014    0.000          0
+## 2 v %*% m3          100   0.022      5.5     0.022    0.001          0
 ##   sys.child
 ## 1         0
 ## 2         0
@@ -146,11 +146,103 @@ tag(data1$a, split = ",", type = "existence")
 
 ```r
 # interpret.tag expands the formula and data.frame
-# the return list has object(formula) and data
-# the object is the expand formula from tag
-interpret.tag(~ tag(a, split = ",", type = "count") * type + type * tag(a, split = ",", type = "existence"), data = data1)
+retval <- interpret.tag(~ tag(a, split = ",", type = "count") * type + type * tag(a, split = ",", type = "existence"), data = data1)
 ```
 
 ```
-## Error: object 'object' not found
+## $a_count__1
+## [1] 1 0 1 0
+## 
+## $a_count__2
+## [1] 1 1 0 0
+## 
+## $a_count__3
+## [1] 1 2 1 1
+## 
+## attr(,"type")
+## [1] "count"
+## $a_existence__1
+## [1]  TRUE FALSE  TRUE FALSE
+## 
+## $a_existence__2
+## [1]  TRUE  TRUE FALSE FALSE
+## 
+## $a_existence__3
+## [1] TRUE TRUE TRUE TRUE
+## 
+## attr(,"type")
+## [1] "existence"
+```
+
+```r
+# the return list has object(formula) and data
+# the object is the expand formula from tag
+retval$object
+```
+
+```
+## ~a_count__1 + a_count__2 + a_count__3 + type + a_existence__1 + 
+##     a_existence__2 + a_existence__3 + a_count__1:type + a_count__2:type + 
+##     a_count__3:type + type:a_existence__1 + type:a_existence__2 + 
+##     type:a_existence__3
+```
+
+```r
+# the data is the data.frame fetch the expanded tag features
+retval$data
+```
+
+```
+##       a type a_count__1 a_count__2 a_count__3 a_existence__1
+## 1 1,2,3    a          1          1          1           TRUE
+## 2 2,3,3    b          0          1          2          FALSE
+## 3   1,3    a          1          0          1           TRUE
+## 4     3    a          0          0          1          FALSE
+##   a_existence__2 a_existence__3
+## 1           TRUE           TRUE
+## 2           TRUE           TRUE
+## 3          FALSE           TRUE
+## 4          FALSE           TRUE
+```
+
+```r
+# We could evaluate the model matrix from the result of interpret.tag
+model.matrix(retval$object, data = retval$data)
+```
+
+```
+##   (Intercept) a_count__1 a_count__2 a_count__3 typeb a_existence__1TRUE
+## 1           1          1          1          1     0                  1
+## 2           1          0          1          2     1                  0
+## 3           1          1          0          1     0                  1
+## 4           1          0          0          1     0                  0
+##   a_existence__2TRUE a_existence__3TRUE a_count__1:typeb a_count__2:typeb
+## 1                  1                  1                0                0
+## 2                  1                  1                0                1
+## 3                  0                  1                0                0
+## 4                  0                  1                0                0
+##   a_count__3:typeb typeb:a_existence__1TRUE typeb:a_existence__2TRUE
+## 1                0                        0                        0
+## 2                2                        0                        1
+## 3                0                        0                        0
+## 4                0                        0                        0
+##   typeb:a_existence__3TRUE
+## 1                        0
+## 2                        1
+## 3                        0
+## 4                        0
+## attr(,"assign")
+##  [1]  0  1  2  3  4  5  6  7  8  9 10 11 12 13
+## attr(,"contrasts")
+## attr(,"contrasts")$type
+## [1] "contr.treatment"
+## 
+## attr(,"contrasts")$a_existence__1
+## [1] "contr.treatment"
+## 
+## attr(,"contrasts")$a_existence__2
+## [1] "contr.treatment"
+## 
+## attr(,"contrasts")$a_existence__3
+## [1] "contr.treatment"
 ```

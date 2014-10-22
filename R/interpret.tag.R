@@ -1,5 +1,5 @@
 #'@title Interpret tag in formula
-#'@param f formula
+#'@param object formula
 #'@param data data.frame
 #'@examples
 #'\dontrun{
@@ -7,19 +7,24 @@
 #'  r <- interpret.tag(~ tag(a, split = ",") * type, data)
 #'}
 #'@export
-interpret.tag <- function(f, data) {
-  tf <- terms.formula(f, specials = "tag", data = data)
+interpret.tag <- function(object, data) {
+  tf <- terms.formula(object, specials = "tag", data = data)
   terms <- attr(tf, "term.labels")
   nt <- length(terms)
   tagp <- attr(tf, "specials")$tag
   vtab <- attr(tf, "factors")
   tagst <- list()
   for(i in tagp) {
-    tagst[[i]] <- eval(p <- parse(text = rownames(vtab)[i]), envir = data)
+    origin.keep.source <- options()$keep.source
+    tryCatch({
+      options(keep.source = TRUE)
+      tagst[[i]] <- eval(p <- parse(text = rownames(vtab)[i]), envir = data)
+    }, finally = {options(keep.source = origin.keep.source)})
     tmp <- getParseData(p)
     stopifnot(tmp[which(tmp$token == "SYMBOL"), "text"] %in% names(data))
     pre.name <- sprintf("%s_%s", tmp[which(tmp$token == "SYMBOL"), "text"], attr(tagst[[i]], "type"))
     names(tagst[[i]]) <- sprintf("%s__%s", pre.name, names(tagst[[i]]))
+    print(tagst[[i]])
     for(j in seq_along(tagst[[i]])) {
       data[[names(tagst[[i]])[j]]] <- tagst[[i]][[j]]
     }

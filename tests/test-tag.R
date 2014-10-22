@@ -1,7 +1,11 @@
+.origin.keep.source <- options()$keep.source
+library(methods)
 library(FeatureHashing)
+print(sessionInfo())
 data <- data.frame(a = c("1,2,3", "2,3,3", "1,3", "3"), type = c("a", "b", "a", "a"), stringsAsFactors = FALSE)
 object <- ~ tag(a, split = ",") + type
 r <- interpret.tag(~ tag(a)*type, data)
+print("test 1")
 stopifnot(isTRUE(all.equal(r, 
 structure(list(object = ~a_count__1 + a_count__2 + a_count__3 + 
     type + a_count__1:type + a_count__2:type + a_count__3:type, 
@@ -15,6 +19,7 @@ structure(list(object = ~a_count__1 + a_count__2 + a_count__3 +
 
 data$a <- gsub(",", ";", data$a)
 r <- interpret.tag(~ tag(a, split = ";")*type, data)
+print("test 2")
 stopifnot(isTRUE(all.equal(r, 
 structure(list(object = ~a_count__1 + a_count__2 + a_count__3 + 
     type + a_count__1:type + a_count__2:type + a_count__3:type, 
@@ -27,6 +32,7 @@ structure(list(object = ~a_count__1 + a_count__2 + a_count__3 +
 )))
 
 r <- interpret.tag(~ tag(a, split = ";", type = "existence") * tag(a, split = ";", type = "count"), data)
+print("test 3")
 stopifnot(isTRUE(all.equal(r, 
 structure(list(object = ~a_existence__1 + a_existence__2 + a_existence__3 + 
     a_count__1 + a_count__2 + a_count__3 + a_existence__1:a_count__1 + 
@@ -42,3 +48,4 @@ structure(list(object = ~a_existence__1 + a_existence__2 + a_existence__3 +
 "a_count__1", "a_count__2", "a_count__3"), row.names = c(NA, 
 -4L), class = "data.frame")), .Names = c("object", "data"))
 )))
+stopifnot(.origin.keep.source == options()$keep.source)

@@ -24,7 +24,6 @@ interpret.tag <- function(object, data) {
     stopifnot(tmp[which(tmp$token == "SYMBOL"), "text"] %in% names(data))
     pre.name <- sprintf("%s_%s", tmp[which(tmp$token == "SYMBOL"), "text"], attr(tagst[[i]], "type"))
     names(tagst[[i]]) <- sprintf("%s__%s", pre.name, names(tagst[[i]]))
-    print(tagst[[i]])
     for(j in seq_along(tagst[[i]])) {
       data[[names(tagst[[i]])[j]]] <- tagst[[i]][[j]]
     }

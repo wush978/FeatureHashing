@@ -6,7 +6,7 @@
 #'@export
 tag <- function(x, split = ",", type = c("count", "existence")) {
   retval <- switch(class(x), 
-    "character" = tag.character1(x, split, type),
+    "character" = tag.character2(x, split, type),
     "factor" = tag.factor(x, split, type),
   )
   attr(retval, "type") <- type[1]

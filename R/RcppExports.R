@@ -45,3 +45,11 @@ dgemm <- function(A, B, C, alpha = 1.0, beta = 0.0, is_A_transpose = FALSE, is_B
     .Call('FeatureHashing_selectRow', PACKAGE = 'FeatureHashing', m, index)
 }
 
+tag_existence <- function(src, delim) {
+    .Call('FeatureHashing_tag_existence', PACKAGE = 'FeatureHashing', src, delim)
+}
+
+tag_count <- function(src, delim) {
+    .Call('FeatureHashing_tag_count', PACKAGE = 'FeatureHashing', src, delim)
+}
+

@@ -127,47 +127,6 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// dgemv
-SEXP dgemv(NumericMatrix A, NumericVector y, NumericVector retval, double alpha = 1.0, double beta = 0.0, bool is_A_transpose = false);
-RcppExport SEXP FeatureHashing_dgemv(SEXP ASEXP, SEXP ySEXP, SEXP retvalSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP is_A_transposeSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< NumericMatrix >::type A(ASEXP );
-        Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP );
-        Rcpp::traits::input_parameter< NumericVector >::type retval(retvalSEXP );
-        Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP );
-        Rcpp::traits::input_parameter< double >::type beta(betaSEXP );
-        Rcpp::traits::input_parameter< bool >::type is_A_transpose(is_A_transposeSEXP );
-        SEXP __result = dgemv(A, y, retval, alpha, beta, is_A_transpose);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
-// dgemm
-SEXP dgemm(NumericMatrix A, NumericMatrix B, NumericMatrix C, double alpha = 1.0, double beta = 0.0, bool is_A_transpose = false, bool is_B_transpose = false);
-RcppExport SEXP FeatureHashing_dgemm(SEXP ASEXP, SEXP BSEXP, SEXP CSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP is_A_transposeSEXP, SEXP is_B_transposeSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< NumericMatrix >::type A(ASEXP );
-        Rcpp::traits::input_parameter< NumericMatrix >::type B(BSEXP );
-        Rcpp::traits::input_parameter< NumericMatrix >::type C(CSEXP );
-        Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP );
-        Rcpp::traits::input_parameter< double >::type beta(betaSEXP );
-        Rcpp::traits::input_parameter< bool >::type is_A_transpose(is_A_transposeSEXP );
-        Rcpp::traits::input_parameter< bool >::type is_B_transpose(is_B_transposeSEXP );
-        SEXP __result = dgemm(A, B, C, alpha, beta, is_A_transpose, is_B_transpose);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
 // selectRow
 SEXP selectRow(S4 m, IntegerVector index);
 RcppExport SEXP FeatureHashing_selectRow(SEXP mSEXP, SEXP indexSEXP) {

@@ -33,14 +33,6 @@ vX <- function(v, m, retval) {
     .Call('FeatureHashing_vX', PACKAGE = 'FeatureHashing', v, m, retval)
 }
 
-dgemv <- function(A, y, retval, alpha = 1.0, beta = 0.0, is_A_transpose = FALSE) {
-    .Call('FeatureHashing_dgemv', PACKAGE = 'FeatureHashing', A, y, retval, alpha, beta, is_A_transpose)
-}
-
-dgemm <- function(A, B, C, alpha = 1.0, beta = 0.0, is_A_transpose = FALSE, is_B_transpose = FALSE) {
-    .Call('FeatureHashing_dgemm', PACKAGE = 'FeatureHashing', A, B, C, alpha, beta, is_A_transpose, is_B_transpose)
-}
-
 .selectRow <- function(m, index) {
     .Call('FeatureHashing_selectRow', PACKAGE = 'FeatureHashing', m, index)
 }

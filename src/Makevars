@@ -1,5 +1,0 @@
-CXX_STD = CXX11
-
-PKG_CFLAGS = -g -fopenmp
-
-PKG_CXXFLAGS = -g -fopenmp

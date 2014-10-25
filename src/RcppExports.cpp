@@ -49,6 +49,24 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// hashed_model_matrix
+SEXP hashed_model_matrix(RObject tf, DataFrame data, unsigned long hash_size, S4 retval);
+RcppExport SEXP FeatureHashing_hashed_model_matrix(SEXP tfSEXP, SEXP dataSEXP, SEXP hash_sizeSEXP, SEXP retvalSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< RObject >::type tf(tfSEXP );
+        Rcpp::traits::input_parameter< DataFrame >::type data(dataSEXP );
+        Rcpp::traits::input_parameter< unsigned long >::type hash_size(hash_sizeSEXP );
+        Rcpp::traits::input_parameter< S4 >::type retval(retvalSEXP );
+        SEXP __result = hashed_model_matrix(tf, data, hash_size, retval);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // hash_without_intercept_single
 IntegerVector hash_without_intercept_single(CharacterVector src);
 RcppExport SEXP FeatureHashing_hash_without_intercept_single(SEXP srcSEXP) {

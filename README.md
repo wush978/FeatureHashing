@@ -12,6 +12,14 @@ Implement feature hashing with R
 library(FeatureHashing)
 # create a "CSRMatrix"
 m1 <- hashed.model.matrix(~ ., data = CO2, hash_size = 2^4)
+```
+
+```
+## original feature size is 16
+## estimated collision rate is 0.00000000
+```
+
+```r
 # the structure is similar to "Matrix::dgCMatrix"
 library(Matrix)
 m2 <- sparse.model.matrix(~ ., data = CO2, transpose = TRUE)
@@ -86,16 +94,18 @@ all.equal(v %*% m1, as.vector(v %*% m3))
 ```r
 # However, the computation speed of "CSRMatrix" should be faster
 library(rbenchmark)
+```
+
+```
+## Error: there is no package called 'rbenchmark'
+```
+
+```r
 benchmark(v %*% m1, v %*% m3)
 ```
 
 ```
-##       test replications elapsed relative user.self sys.self user.child
-## 1 v %*% m1          100   0.004      1.0     0.014    0.000          0
-## 2 v %*% m3          100   0.022      5.5     0.022    0.001          0
-##   sys.child
-## 1         0
-## 2         0
+## Error: could not find function "benchmark"
 ```
 
 ### Tag Feature
@@ -147,34 +157,7 @@ tag(data1$a, split = ",", type = "existence")
 ```r
 # interpret.tag expands the formula and data.frame
 retval <- interpret.tag(~ tag(a, split = ",", type = "count") * type + type * tag(a, split = ",", type = "existence"), data = data1)
-```
 
-```
-## $a_count__1
-## [1] 1 0 1 0
-## 
-## $a_count__2
-## [1] 1 1 0 0
-## 
-## $a_count__3
-## [1] 1 2 1 1
-## 
-## attr(,"type")
-## [1] "count"
-## $a_existence__1
-## [1]  TRUE FALSE  TRUE FALSE
-## 
-## $a_existence__2
-## [1]  TRUE  TRUE FALSE FALSE
-## 
-## $a_existence__3
-## [1] TRUE TRUE TRUE TRUE
-## 
-## attr(,"type")
-## [1] "existence"
-```
-
-```r
 # the return list has object(formula) and data
 # the object is the expand formula from tag
 retval$object

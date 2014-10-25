@@ -15,5 +15,6 @@ Description: Feature hashing, also known as hashing trick,
 License: GPL(>= 3)
 Imports: 
   Rcpp (>= 0.11),
-  Matrix
+  Matrix,
+  methods
 LinkingTo: Rcpp

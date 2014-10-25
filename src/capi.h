@@ -5,8 +5,9 @@
 extern "C" {
 #endif
 
-void FeatureHashing_md5(const char* buf, int size, char retval[16]);
 uint32_t FeatureHashing_crc32(const char* buf, int size);
+
+char FeatureHashing_xor(const char* buf, int size);
 
 #ifdef __cplusplus
 }

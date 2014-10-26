@@ -25,8 +25,8 @@ rehash_inplace <- function(m, Rmapping, hash_size) {
     invisible(.Call('FeatureHashing_rehash_inplace', PACKAGE = 'FeatureHashing', m, Rmapping, hash_size))
 }
 
-.hashed.model.matrix <- function(tf, data, hash_size, retval, keep_hashing_mapping) {
-    .Call('FeatureHashing_hashed_model_matrix', PACKAGE = 'FeatureHashing', tf, data, hash_size, retval, keep_hashing_mapping)
+.hashed.model.matrix.dataframe <- function(tf, data, hash_size, retval, keep_hashing_mapping) {
+    .Call('FeatureHashing_hashed_model_matrix_dataframe', PACKAGE = 'FeatureHashing', tf, data, hash_size, retval, keep_hashing_mapping)
 }
 
 Xv <- function(m, v, retval) {

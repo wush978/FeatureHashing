@@ -8,10 +8,12 @@
 #'@export
 #'@importFrom methods new
 #'@importFrom methods checkAtAssignment
-hashed.model.matrix <- function(object, data = environment(object), hash_size = 2^24, keep.hashing_mapping = FALSE) {
+hashed.model.matrix <- function(object, data, hash_size = 2^24, keep.hashing_mapping = FALSE) {
+  stopifnot(hash_size >= 0)
+  stopifnot(is.data.frame(data))
   tf <- terms.formula(object, data = data, specials = "tag")
   retval <- new(.CSRMatrix)
-  .hashed.model.matrix(tf, data, hash_size, retval, keep.hashing_mapping)
+  .hashed.model.matrix.dataframe(tf, data, hash_size, retval, keep.hashing_mapping)
   class(retval) <- .CSRMatrix
   retval@Dimnames[[2]] <- paste(seq_len(retval@Dim[2]))
   retval

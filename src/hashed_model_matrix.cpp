@@ -58,7 +58,7 @@ public:
 
   explicit CharacterConverter(SEXP _src, const std::string& _name)
   : VectorConverter(_name), src(_src), psrc(wrap(src)) {
-    value_buffer.resize(1, 1);
+    value_buffer.resize(1, 1.0);
     feature_buffer.resize(1);
   }
   
@@ -116,8 +116,8 @@ class DenseConverter : public VectorConverter {
 public:
 
   explicit DenseConverter(SEXP _src, const std::string& _name) : VectorConverter(_name), src(_src) {
-    feature_buffer.resize(FeatureHashing_crc32(name.c_str(), name.size()), 1);
-    value_buffer.resize(0.0, 1);
+    feature_buffer.resize(1, FeatureHashing_crc32(name.c_str(), name.size()));
+    value_buffer.resize(1, 0.0);
   }
   
   virtual ~DenseConverter() { }

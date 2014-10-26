@@ -13,10 +13,6 @@ todgCMatrix <- function(m) {
     .Call('FeatureHashing_todgCMatrix', PACKAGE = 'FeatureHashing', m)
 }
 
-.hashed.model.matrix <- function(tf, data, hash_size, retval) {
-    .Call('FeatureHashing_hashed_model_matrix', PACKAGE = 'FeatureHashing', tf, data, hash_size, retval)
-}
-
 hash_without_intercept_single <- function(src) {
     .Call('FeatureHashing_hash_without_intercept_single', PACKAGE = 'FeatureHashing', src)
 }
@@ -27,6 +23,10 @@ hash_without_intercept <- function(src) {
 
 rehash_inplace <- function(m, Rmapping, hash_size) {
     invisible(.Call('FeatureHashing_rehash_inplace', PACKAGE = 'FeatureHashing', m, Rmapping, hash_size))
+}
+
+.hashed.model.matrix <- function(tf, data, hash_size, retval) {
+    .Call('FeatureHashing_hashed_model_matrix', PACKAGE = 'FeatureHashing', tf, data, hash_size, retval)
 }
 
 Xv <- function(m, v, retval) {

@@ -10,10 +10,10 @@ hashed.model.matrix <- function(object, data = environment(object),
   hash_size = 2^24, ...) {
   m <- sparse.model.matrix(object, data, contrasts.arg, xlev, transpose,
                            drop.unused.levels, row.names, verbose)
-  cat(sprintf("original feature size is %d\n", nrow(m)))
+  if (verbose) cat(sprintf("original feature size is %d\n", nrow(m)))
   if (is.null(hash_size)) return(m)
   mapping <- hash_without_intercept(rownames(m))
-  cat(sprintf("estimated collision rate is %0.8f\n", sum(duplicated(mapping)) / length(mapping)))
+  if (verbose) cat(sprintf("estimated collision rate is %0.8f\n", sum(duplicated(mapping)) / length(mapping)))
   rehash_inplace(m, mapping, hash_size)
   class(m) <- .CSRMatrix
   m@Dim[1] <- as.integer(hash_size)
@@ -21,9 +21,34 @@ hashed.model.matrix <- function(object, data = environment(object),
   m
 }
 
+parse_tag <- function(text) {
+  origin.keep.source <- options()$keep.source
+  tryCatch({
+    options(keep.source = TRUE)
+    p <- parse(text = text)
+    tmp <- getParseData(p)
+    reference_name <- tmp$text[which(tmp$token == "SYMBOL")]
+    if ("split" %in% tmp$text) {
+      split <- tmp$text[which(tmp$text == "split")[1] + 2]
+      split <- gsub(pattern = '"', replacement = '', split)
+    } else {
+      split <- ","
+    }
+    if ("type" %in% tmp$text) {
+      type <- tmp$text[which(tmp$text == "type")[1] + 2]
+      type <- gsub(pattern = '"', replacement = '', type)
+    } else {
+      type <- "existence"
+    }
+    list(reference_name = reference_name, split = split, type = type)
+  }, finally = {options(keep.source = origin.keep.source)})
+}
+
 #'@importFrom methods new
+#'@importFrom methods checkAtAssignment
+#'@export
 hashed.model.matrix2 <- function(object, data = environment(object), hash_size = 2^24, keep.hashing_mapping = FALSE) {
-  tf <- terms.formula(object, data = data)
+  tf <- terms.formula(object, data = data, specials = "tag")
   retval <- new(.CSRMatrix)
   .hashed.model.matrix(tf, data, hash_size, retval)
   class(retval) <- .CSRMatrix

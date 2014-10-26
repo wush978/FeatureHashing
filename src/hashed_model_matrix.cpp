@@ -2,6 +2,7 @@
 #include <memory>
 #include <Rcpp.h>
 #include "capi.h"
+#include "tag.hpp"
 
 using namespace Rcpp;
 
@@ -133,6 +134,152 @@ public:
   
 };
 
+template<typename CacheTagType>
+class TagConverter : public VectorConverter {
+  
+
+protected:
+  
+  std::string delim;
+  size_t cache_i;
+  CacheTagType cache_tags;
+  
+  virtual void get_tags(size_t i) = 0;
+
+public:
+  
+  explicit TagConverter(const std::string& _name, const std::string& _delim)
+  : VectorConverter(_name), delim(_delim), cache_i(-1)
+  { }
+  
+  virtual ~TagConverter() { }
+  
+  virtual const std::vector<uint32_t>& get_feature(size_t i) {
+    get_tags(i);
+    feature_buffer.resize(cache_tags.size());
+    size_t k = 0;
+    for(auto j = cache_tags.begin();j != cache_tags.end();j++) {
+      name.append(*j);
+      feature_buffer[k++] = FeatureHashing_crc32(name.c_str(), name.size());
+      name.resize(name_len);    
+    }
+    return feature_buffer;
+  }
+  
+  virtual const std::vector<double>& get_value(size_t i) {
+    get_tags(i);
+    value_buffer.clear();
+    value_buffer.resize(cache_tags.size(), 1);
+    return value_buffer;
+  }
+  
+};
+
+class TagExistenceFactorConverter : public TagConverter< std::set<std::string> > {
+  
+  IntegerVector src;
+  CharacterVector levels;
+  SEXP plevels;
+  std::vector<std::string> cache_splitted;
+
+protected:
+
+  virtual void get_tags(size_t i) {
+    if (i == cache_i) return;
+    const char* str = CHAR(STRING_ELT(plevels, src[i] - 1));
+    std::vector<std::string> temp(split(str, delim));
+    cache_splitted.swap(temp);
+    cache_tags.clear();
+    cache_tags.insert(cache_splitted.begin(), cache_splitted.end());
+  }
+
+public:
+
+  explicit TagExistenceFactorConverter(SEXP _src, const std::string& _name, const std::string& _delim)
+  : TagConverter< std::set<std::string> >(_name, _delim), src(_src), levels(src.attr("levels")), plevels(wrap(levels))
+  { }
+  
+  virtual ~TagExistenceFactorConverter() { }
+  
+};
+
+class TagExistenceCharacterConverter : public TagConverter< std::set<std::string> > {
+
+  CharacterVector src;
+  SEXP psrc;
+  std::vector<std::string> cache_splitted;
+
+protected:
+
+  virtual void get_tags(size_t i) {
+    if (i == cache_i) return;
+    const char* str = CHAR(STRING_ELT(psrc, i));
+    std::vector<std::string> temp(split(str, delim));
+    cache_splitted.swap(temp);
+    cache_tags.clear();
+    cache_tags.insert(cache_splitted.begin(), cache_splitted.end());    
+  }
+
+public:
+
+  explicit TagExistenceCharacterConverter(SEXP _src, const std::string& _name, const std::string& _delim)
+  : TagConverter< std::set<std::string> >(_name, _delim), src(_src), psrc(wrap(src))
+  { }
+
+  virtual ~TagExistenceCharacterConverter() { }
+  
+};
+
+class TagCountFactorConverter : public TagConverter< std::vector<std::string> > {
+
+  IntegerVector src;
+  CharacterVector levels;
+  SEXP plevels;
+
+protected:
+
+  virtual void get_tags(size_t i) {
+    if (i == cache_i) return;
+    const char* str = CHAR(STRING_ELT(plevels, src[i] - 1));
+    std::vector<std::string> temp(split(str, delim));
+    cache_tags.swap(temp);
+  }
+  
+public:
+
+  explicit TagCountFactorConverter(SEXP _src, const std::string& _name, const std::string& _delim)
+  : TagConverter< std::vector<std::string> >(_name, _delim), src(_src), levels(src.attr("levels")), plevels(wrap(levels))
+  { }
+  
+  virtual ~TagCountFactorConverter() { }
+  
+};
+
+class TagCountCharacterConverter : public TagConverter< std::vector<std::string> > {
+
+  CharacterVector src;
+  SEXP psrc;
+  
+protected:
+  
+  virtual void get_tags(size_t i) {
+    if (i == cache_i) return;
+    const char* str = CHAR(STRING_ELT(psrc, i));
+    std::vector<std::string> temp(split(str, delim));
+    cache_tags.swap(temp);
+  }
+
+public:
+
+  explicit TagCountCharacterConverter(SEXP _src, const std::string& _name, const std::string& _delim)
+  : TagConverter< std::vector<std::string> >(_name, _delim), src(_src), psrc(wrap(src))
+  { }
+
+  virtual ~TagCountCharacterConverter() { }
+
+};
+
+
 typedef std::shared_ptr<VectorConverter> pVectorConverter;
 typedef std::shared_ptr<CharacterConverter> pCharacterConverter;
 typedef std::shared_ptr<FactorConverter> pFactorConverter;
@@ -140,6 +287,10 @@ typedef DenseConverter<double, REALSXP> NumConverter;
 typedef std::shared_ptr<NumConverter> pNumConverter;
 typedef DenseConverter<int, INTSXP> IntConverter;
 typedef std::shared_ptr<IntConverter> pIntConverter;
+typedef std::shared_ptr<TagExistenceFactorConverter> pTagExistenceFactorConverter;
+typedef std::shared_ptr<TagExistenceCharacterConverter> pTagExistenceCharacterConverter;
+typedef std::shared_ptr<TagCountFactorConverter> pTagCountFactorConverter;
+typedef std::shared_ptr<TagCountCharacterConverter> pTagCountCharacterConverter;
 typedef std::vector< pVectorConverter > ConvertersVec;
 
 class InteractionConverter : public VectorConverter {
@@ -185,6 +336,17 @@ const ConvertersVec get_converters(
   ) {
   NumericMatrix tfactors(wrap(tf.attr("factors")));
   CharacterVector reference_name, feature_name;
+  Environment feature_hashing(Environment::namespace_env("FeatureHashing"));
+  Function parse_tag(feature_hashing["parse_tag"]);
+  std::set<int> specials;
+  {
+    List tmp(tf.attr("specials"));
+    SEXP ptag = tmp["tag"];
+    if (!Rf_isNull(ptag)) {
+      IntegerVector tmpvec(ptag);
+      specials.insert(tmpvec.begin(), tmpvec.end());
+    }
+  }
   {
     List tmp(tfactors.attr("dimnames"));
     reference_name = CharacterVector(tmp[0]); // rownames
@@ -199,35 +361,90 @@ const ConvertersVec get_converters(
       #ifdef NOISY_DEBUG
       Rprintf("%s -> ", rname.c_str());
       #endif
-      const std::string& rclass(reference_class.find(rname)->second);
-      #ifdef NOISY_DEBUG
-      Rprintf("%s\n", rclass.c_str());
-      #endif
       pVectorConverter p(NULL);
-      if (rclass.compare("factor") == 0) {
-        #ifdef NOISY_DEBUG
-        Rprintf("Initialize FactorConverter\n");
-        #endif
-        p.reset(new FactorConverter(wrap(data[rname.c_str()]), rname));
-      } else if (rclass.compare("numeric") == 0) {
-        #ifdef NOISY_DEBUG
-        Rprintf("Initialize NumConverter\n");
-        #endif
-        p.reset(new NumConverter(wrap(data[rname.c_str()]), rname));
-      } else if (rclass.compare("integer") == 0) {
-        #ifdef NOISY_DEBUG
-        Rprintf("Initialize IntConverter\n");
-        #endif
-        p.reset(new IntConverter(wrap(data[rname.c_str()]), rname));
-      } else if (rclass.compare("character") == 0) {
-        #ifdef NOISY_DEBUG
-        Rprintf("Initialize CharacterConverter\n");
-        #endif
-        p.reset(new CharacterConverter(wrap(data[rname.c_str()]), rname));
-      } else {
-        std::string message("Non supported type: ");
-        message.append(rclass);
-        message.append(" at name: ");
+      try{
+        if (specials.find(j + 1) == specials.end()) {
+          const std::string& rclass(reference_class.find(rname)->second);
+          #ifdef NOISY_DEBUG
+          Rprintf("%s\n", rclass.c_str());
+          #endif
+          if (rclass.compare("factor") == 0) {
+            #ifdef NOISY_DEBUG
+            Rprintf("Initialize FactorConverter\n");
+            #endif
+            p.reset(new FactorConverter(wrap(data[rname.c_str()]), rname));
+          } else if (rclass.compare("numeric") == 0) {
+            #ifdef NOISY_DEBUG
+            Rprintf("Initialize NumConverter\n");
+            #endif
+            p.reset(new NumConverter(wrap(data[rname.c_str()]), rname));
+          } else if (rclass.compare("integer") == 0) {
+            #ifdef NOISY_DEBUG
+            Rprintf("Initialize IntConverter\n");
+            #endif
+            p.reset(new IntConverter(wrap(data[rname.c_str()]), rname));
+          } else if (rclass.compare("character") == 0) {
+            #ifdef NOISY_DEBUG
+            Rprintf("Initialize CharacterConverter\n");
+            #endif
+            p.reset(new CharacterConverter(wrap(data[rname.c_str()]), rname));
+          } else {
+            throw std::invalid_argument("");
+          }
+        } 
+        else {
+          #ifdef NOISY_DEBUG
+          Rprintf(" (parsing tag..) ");
+          #endif
+          List expression(parse_tag(wrap(rname)));
+          rname.assign(as<std::string>(expression["reference_name"]));
+          #ifdef NOISY_DEBUG
+          Rprintf(" (rname ==> %s) ", rname.c_str());
+          #endif
+          const std::string& rclass(reference_class.find(rname)->second);
+          #ifdef NOISY_DEBUG
+          Rprintf("%s\n", rclass.c_str());
+          #endif
+          std::string 
+            delim(as<std::string>(expression["split"])), 
+            type(as<std::string>(expression["type"]));
+          #ifdef NOISY_DEBUG
+          Rprintf("delim: %s type: %s\n", delim.c_str(), type.c_str());
+          #endif
+          if (rclass.compare("factor") == 0) {
+            if (type.compare("existence") == 0) {
+              #ifdef NOISY_DEBUG
+              Rprintf("Initialize TagExistenceFactorConverter\n");
+              #endif
+              p.reset(new TagExistenceFactorConverter(wrap(data[rname.c_str()]), rname, delim));
+            } else if (type.compare("count") == 0) {
+              #ifdef NOISY_DEBUG
+              Rprintf("Initialize TagCountFactorConverter\n");
+              #endif
+              p.reset(new TagCountFactorConverter(wrap(data[rname.c_str()]), rname, delim));
+            } else {
+              throw std::invalid_argument("");
+            }
+          } else if (rclass.compare("character") == 0) {
+            if (type.compare("existence") == 0) {
+              #ifdef NOISY_DEBUG
+              Rprintf("Initialize TagExistenceCharacterConverter\n");
+              #endif
+              p.reset(new TagExistenceCharacterConverter(wrap(data[rname.c_str()]), rname, delim));
+            } else if (type.compare("count") == 0) {
+              #ifdef NOISY_DEBUG
+              Rprintf("Initialize TagCountCharacterConverter\n");
+              #endif
+              p.reset(new TagCountCharacterConverter(wrap(data[rname.c_str()]), rname, delim));
+            } else {
+              throw std::invalid_argument("");
+            }
+          } else {
+            throw std::invalid_argument("");
+          }
+        }
+      } catch(std::invalid_argument& e) {
+        std::string message("Non supported type at name: ");
         message.append(rname);
         throw std::invalid_argument(message);
       }

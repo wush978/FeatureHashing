@@ -9,7 +9,8 @@ using namespace Rcpp;
 typedef std::map< std::string, std::string > NameClassMapping;
 typedef std::vector< std::string > StrVec;
 
-NameClassMapping get_class(DataFrame data) {
+template<typename DataFrameLike>
+NameClassMapping get_class(DataFrameLike data) {
   Function lapply("lapply");
   Function fclass("class");
   List colclass(lapply(data, fclass));
@@ -376,8 +377,9 @@ public:
 
 typedef std::shared_ptr<InteractionConverter> pInteractionConverter;
 
+template<typename DataFrameLike>
 const ConvertersVec get_converters(
-  const NameClassMapping& reference_class, RObject tf, DataFrame data, HashFunction* _h
+  const NameClassMapping& reference_class, RObject tf, DataFrameLike data, HashFunction* _h
   ) {
   NumericMatrix tfactors(wrap(tf.attr("factors")));
   CharacterVector reference_name, feature_name;
@@ -505,8 +507,8 @@ const ConvertersVec get_converters(
   return retval;
 } 
 
-//[[Rcpp::export(".hashed.model.matrix")]]
-SEXP hashed_model_matrix(RObject tf, DataFrame data, unsigned long hash_size, S4 retval, bool keep_hashing_mapping) {
+template<typename DataFrameLike>
+SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size, S4 retval, bool keep_hashing_mapping) {
   if (hash_size > 4294967296) throw std::invalid_argument("hash_size is too big!");
   NameClassMapping reference_class(get_class(data));
   Environment e(Environment::base_env().new_child(wrap(true)));
@@ -561,3 +563,9 @@ SEXP hashed_model_matrix(RObject tf, DataFrame data, unsigned long hash_size, S4
   retval.attr("mapping") = e;
   return retval;
 }
+
+//[[Rcpp::export(".hashed.model.matrix.dataframe")]]
+SEXP hashed_model_matrix_dataframe(RObject tf, DataFrame data, unsigned long hash_size, S4 retval, bool keep_hashing_mapping) {
+  return hashed_model_matrix<DataFrame>(tf, data, hash_size, retval, keep_hashing_mapping);
+}
+

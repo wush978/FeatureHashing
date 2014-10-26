@@ -94,8 +94,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // hashed_model_matrix
-SEXP hashed_model_matrix(RObject tf, DataFrame data, unsigned long hash_size, S4 retval);
-RcppExport SEXP FeatureHashing_hashed_model_matrix(SEXP tfSEXP, SEXP dataSEXP, SEXP hash_sizeSEXP, SEXP retvalSEXP) {
+SEXP hashed_model_matrix(RObject tf, DataFrame data, unsigned long hash_size, S4 retval, bool keep_hashing_mapping);
+RcppExport SEXP FeatureHashing_hashed_model_matrix(SEXP tfSEXP, SEXP dataSEXP, SEXP hash_sizeSEXP, SEXP retvalSEXP, SEXP keep_hashing_mappingSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
@@ -104,7 +104,8 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< DataFrame >::type data(dataSEXP );
         Rcpp::traits::input_parameter< unsigned long >::type hash_size(hash_sizeSEXP );
         Rcpp::traits::input_parameter< S4 >::type retval(retvalSEXP );
-        SEXP __result = hashed_model_matrix(tf, data, hash_size, retval);
+        Rcpp::traits::input_parameter< bool >::type keep_hashing_mapping(keep_hashing_mappingSEXP );
+        SEXP __result = hashed_model_matrix(tf, data, hash_size, retval, keep_hashing_mapping);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

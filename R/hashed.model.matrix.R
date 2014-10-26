@@ -50,7 +50,7 @@ parse_tag <- function(text) {
 hashed.model.matrix2 <- function(object, data = environment(object), hash_size = 2^24, keep.hashing_mapping = FALSE) {
   tf <- terms.formula(object, data = data, specials = "tag")
   retval <- new(.CSRMatrix)
-  .hashed.model.matrix(tf, data, hash_size, retval)
+  .hashed.model.matrix(tf, data, hash_size, retval, keep.hashing_mapping)
   class(retval) <- .CSRMatrix
   retval@Dimnames[[2]] <- paste(seq_len(retval@Dim[2]))
   retval

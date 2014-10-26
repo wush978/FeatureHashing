@@ -251,12 +251,17 @@ SEXP hashed_model_matrix(RObject tf, DataFrame data, unsigned long hash_size, S4
   #ifdef NOISY_DEBUG
   Rprintf("The size of convertres is %d\n", converters.size());
   #endif
-  std::vector<int> ivec, pvec(0, 1);
+  std::vector<int> ivec, pvec(1, 0);
   std::vector<double> xvec;
+  bool is_intercept = as<bool>(tf.attr("intercept"));
   #ifdef NOISY_DEBUG
-  Rprintf("nrow(data): %d\n", data.nrows());
+  Rprintf("nrow(data): %d length(converters): %d\n", data.nrows(), converters.size());
   #endif
   for(auto i = 0;i < data.nrows();i++) {
+    if (is_intercept) {
+      ivec.push_back(0);
+      xvec.push_back(1.0);
+    }
     for(auto j = converters.begin();j != converters.end();j++) {
       pVectorConverter& p(*j);
       const std::vector<uint32_t>& i_origin(p->get_feature(i));
@@ -265,8 +270,8 @@ SEXP hashed_model_matrix(RObject tf, DataFrame data, unsigned long hash_size, S4
         ivec.push_back(hashed_value % hash_size);
       });
       xvec.insert(xvec.end(), x_origin.begin(), x_origin.end());
-      pvec.push_back(ivec.size());
     }
+    pvec.push_back(ivec.size());
   }
   retval.slot("i") = wrap(ivec);
   retval.slot("p") = wrap(pvec);

@@ -27,5 +27,6 @@ hashed.model.matrix2 <- function(object, data = environment(object), hash_size =
   retval <- new(.CSRMatrix)
   .hashed.model.matrix(tf, data, hash_size, retval)
   class(retval) <- .CSRMatrix
+  retval@Dimnames[[2]] <- paste(seq_len(retval@Dim[2]))
   retval
 }

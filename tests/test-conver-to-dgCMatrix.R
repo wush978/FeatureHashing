@@ -6,7 +6,7 @@ contr <- list(
   Treatment = contrasts(CO2$Treatment, contrasts = FALSE)
 )
 
-m4 <- hashed.model.matrix(~ ., data = CO2, contr, hash_size = 2^4)
+m4 <- hashed.model.matrix(~ ., data = CO2, hash_size = 2^4)
 
 m5 <- as(m4, "dgCMatrix")
 invisible(capture.output(print(m5)))

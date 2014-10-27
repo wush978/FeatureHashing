@@ -157,23 +157,31 @@ template<typename ValueType, int RType>
 class DenseConverter : public VectorConverter {
   
   Vector<RType> src;
+  uint32_t hash;
   
 public:
 
   explicit DenseConverter(SEXP _src, const std::string& _name, HashFunction* _h) 
-  : VectorConverter(_name, _h), src(_src) {
-    feature_buffer.resize(1, (*h)(name.c_str(), name.size()));
-    value_buffer.resize(1, 0.0);
+  : VectorConverter(_name, _h), src(_src), hash((*h)(name.c_str(), name.size())) {
   }
   
   virtual ~DenseConverter() { }
   
   virtual const std::vector<uint32_t>& get_feature(size_t i) {
+    if (src[i] == 0) {
+      feature_buffer.resize(0);
+    } else {
+      feature_buffer.resize(1, hash);
+    }
     return feature_buffer;
   }
   
   virtual const std::vector<double>& get_value(size_t i) {
-    value_buffer[0] = src[i];
+    if (src[i] == 0) {
+      value_buffer.resize(0);
+    } else {
+      value_buffer.resize(1, src[i]);
+    }
     return value_buffer;
   }
   

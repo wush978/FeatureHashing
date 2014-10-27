@@ -205,7 +205,7 @@ public:
   virtual ~DenseConverter() { }
   
   virtual const std::vector<uint32_t>& get_feature(size_t i) {
-    if (src[i] == get_NA()) {
+    if (src[i] == get_NA() | src[i] == 0) {
       feature_buffer.clear();
     } else {
       feature_buffer.resize(1, value);
@@ -214,7 +214,7 @@ public:
   }
   
   virtual const std::vector<double>& get_value(size_t i) {
-    if (src[i] == get_NA()) {
+    if (src[i] == get_NA() | src[i] == 0) {
       value_buffer.clear();
     } else {
       value_buffer.resize(1, 0);
@@ -396,6 +396,8 @@ typedef DenseConverter<double, REALSXP> NumConverter;
 typedef std::shared_ptr<NumConverter> pNumConverter;
 typedef DenseConverter<int, INTSXP> IntConverter;
 typedef std::shared_ptr<IntConverter> pIntConverter;
+typedef DenseConverter<int, LGLSXP> LogicalConverter;
+typedef std::shared_ptr<LogicalConverter> pLogicalConverter;
 typedef std::shared_ptr<TagExistenceFactorConverter> pTagExistenceFactorConverter;
 typedef std::shared_ptr<TagExistenceCharacterConverter> pTagExistenceCharacterConverter;
 typedef std::shared_ptr<TagCountFactorConverter> pTagCountFactorConverter;
@@ -494,6 +496,11 @@ const ConvertersVec get_converters(
             Rprintf("Initialize IntConverter\n");
             #endif
             p.reset(new IntConverter(wrap(data[rname.c_str()]), rname, _h));
+          } else if (rclass.compare("logical") == 0) {
+            #ifdef NOISY_DEBUG
+            Rprintf("Initialize LogicalConverter\n");
+            #endif
+            p.reset(new LogicalConverter(wrap(data[rname.c_str()]), rname, _h));            
           } else if (rclass.compare("character") == 0) {
             #ifdef NOISY_DEBUG
             Rprintf("Initialize CharacterConverter\n");

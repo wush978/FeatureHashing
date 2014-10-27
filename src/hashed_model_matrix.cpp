@@ -110,14 +110,26 @@ public:
   virtual ~CharacterConverter() { }
   
   virtual const std::vector<uint32_t>& get_feature(size_t i) {
-    const char* str = CHAR(STRING_ELT(psrc, i));
-    name.append(str);
-    feature_buffer[0] = (*h)(name.c_str(), name.size());
-    name.resize(name_len);
+    SEXP pstr = STRING_ELT(psrc, i);
+    if (pstr == NA_STRING) {
+      feature_buffer.clear();
+    } else {
+      const char* str = CHAR(pstr);
+      feature_buffer.resize(1, 1);
+      name.append(str);
+      feature_buffer[0] = (*h)(name.c_str(), name.size());
+      name.resize(name_len);
+    }
     return feature_buffer;
   }
 
   virtual const std::vector<double>& get_value(size_t i) {
+    SEXP pstr = STRING_ELT(psrc, i);
+    if (pstr == NA_STRING) {
+      value_buffer.clear();
+    } else {
+      value_buffer.resize(1, 1);
+    }
     return value_buffer;
   }
 
@@ -140,14 +152,24 @@ public:
   virtual ~FactorConverter() { }
   
   virtual const std::vector<uint32_t>& get_feature(size_t i) {
-    const char* str = CHAR(STRING_ELT(plevels, src[i] - 1)); // R start from 1 and C start from 0
-    name.append(str);
-    feature_buffer[0] = (*h)(name.c_str(), name.size());
-    name.resize(name_len);
+    if (src[i] == NA_INTEGER) {
+      feature_buffer.clear();
+    } else {
+      feature_buffer.resize(1);
+      const char* str = CHAR(STRING_ELT(plevels, src[i] - 1)); // R start from 1 and C start from 0
+      name.append(str);
+      feature_buffer[0] = (*h)(name.c_str(), name.size());
+      name.resize(name_len);
+    }
     return feature_buffer;
   }
   
   virtual const std::vector<double>& get_value(size_t i) {
+    if (src[i] == NA_INTEGER) {
+      value_buffer.clear();
+    } else {
+      value_buffer.resize(1, 1);
+    }
     return value_buffer;
   }
 
@@ -157,22 +179,46 @@ template<typename ValueType, int RType>
 class DenseConverter : public VectorConverter {
   
   Vector<RType> src;
+  uint32_t value;
+  
+  static ValueType get_NA() {
+    switch(RType) {
+    case REALSXP: 
+      return NA_REAL;
+    case INTSXP:
+      return NA_INTEGER;
+    case LGLSXP:
+      return NA_LOGICAL;
+    default:
+      throw std::logic_error("Invalid RType");
+    }
+  }
   
 public:
 
   explicit DenseConverter(SEXP _src, const std::string& _name, HashFunction* _h) 
-  : VectorConverter(_name, _h), src(_src) {
-    feature_buffer.resize(1, (*h)(name.c_str(), name.size()));
+  : VectorConverter(_name, _h), src(_src), value((*h)(name.c_str(), name.size())) {
+    feature_buffer.resize(1, value);
     value_buffer.resize(1, 0.0);
   }
   
   virtual ~DenseConverter() { }
   
   virtual const std::vector<uint32_t>& get_feature(size_t i) {
+    if (src[i] == get_NA()) {
+      feature_buffer.clear();
+    } else {
+      feature_buffer.resize(1, value);
+    }
     return feature_buffer;
   }
   
   virtual const std::vector<double>& get_value(size_t i) {
+    if (src[i] == get_NA()) {
+      value_buffer.clear();
+    } else {
+      value_buffer.resize(1, 0);
+    }
     value_buffer[0] = src[i];
     return value_buffer;
   }
@@ -231,11 +277,15 @@ protected:
 
   virtual void get_tags(size_t i) {
     if (i == cache_i) return;
-    const char* str = CHAR(STRING_ELT(plevels, src[i] - 1));
-    std::vector<std::string> temp(split(str, delim));
-    cache_splitted.swap(temp);
-    cache_tags.clear();
-    cache_tags.insert(cache_splitted.begin(), cache_splitted.end());
+    if (src[i] == NA_INTEGER) {
+      cache_tags.clear();
+    } else {
+      const char* str = CHAR(STRING_ELT(plevels, src[i] - 1));
+      std::vector<std::string> temp(split(str, delim));
+      cache_splitted.swap(temp);
+      cache_tags.clear();
+      cache_tags.insert(cache_splitted.begin(), cache_splitted.end());
+    }
   }
 
 public:
@@ -258,11 +308,16 @@ protected:
 
   virtual void get_tags(size_t i) {
     if (i == cache_i) return;
-    const char* str = CHAR(STRING_ELT(psrc, i));
-    std::vector<std::string> temp(split(str, delim));
-    cache_splitted.swap(temp);
-    cache_tags.clear();
-    cache_tags.insert(cache_splitted.begin(), cache_splitted.end());    
+    SEXP pstr = STRING_ELT(psrc, i);
+    if (pstr == NA_STRING) {
+      cache_tags.clear();
+    } else {
+      const char* str = CHAR(STRING_ELT(psrc, i));
+      std::vector<std::string> temp(split(str, delim));
+      cache_splitted.swap(temp);
+      cache_tags.clear();
+      cache_tags.insert(cache_splitted.begin(), cache_splitted.end());    
+    }
   }
 
 public:
@@ -285,9 +340,13 @@ protected:
 
   virtual void get_tags(size_t i) {
     if (i == cache_i) return;
-    const char* str = CHAR(STRING_ELT(plevels, src[i] - 1));
-    std::vector<std::string> temp(split(str, delim));
-    cache_tags.swap(temp);
+    if (src[i] == NA_INTEGER) {
+      cache_tags.clear();
+    } else {
+      const char* str = CHAR(STRING_ELT(plevels, src[i] - 1));
+      std::vector<std::string> temp(split(str, delim));
+      cache_tags.swap(temp);
+    }
   }
   
 public:
@@ -309,9 +368,14 @@ protected:
   
   virtual void get_tags(size_t i) {
     if (i == cache_i) return;
-    const char* str = CHAR(STRING_ELT(psrc, i));
-    std::vector<std::string> temp(split(str, delim));
-    cache_tags.swap(temp);
+    SEXP pstr = STRING_ELT(psrc, i);
+    if (pstr == NA_STRING) {
+      cache_tags.clear();
+    } else {
+      const char* str = CHAR(STRING_ELT(psrc, i));
+      std::vector<std::string> temp(split(str, delim));
+      cache_tags.swap(temp);
+    }
   }
 
 public:

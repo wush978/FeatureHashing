@@ -181,14 +181,14 @@ class DenseConverter : public VectorConverter {
   Vector<RType> src;
   uint32_t value;
   
-  static ValueType get_NA() {
+  static bool isNA(ValueType x) {
     switch(RType) {
     case REALSXP: 
-      return NA_REAL;
+      return R_IsNA(x);
     case INTSXP:
-      return NA_INTEGER;
+      return x == NA_INTEGER;
     case LGLSXP:
-      return NA_LOGICAL;
+      return x == NA_LOGICAL;
     default:
       throw std::logic_error("Invalid RType");
     }
@@ -205,7 +205,7 @@ public:
   virtual ~DenseConverter() { }
   
   virtual const std::vector<uint32_t>& get_feature(size_t i) {
-    if (src[i] == get_NA() | src[i] == 0) {
+    if (isNA(src[i]) | src[i] == 0) {
       feature_buffer.clear();
     } else {
       feature_buffer.resize(1, value);
@@ -214,7 +214,7 @@ public:
   }
   
   virtual const std::vector<double>& get_value(size_t i) {
-    if (src[i] == get_NA() | src[i] == 0) {
+    if (isNA(src[i]) | src[i] == 0) {
       value_buffer.clear();
     } else {
       value_buffer.resize(1, 0);

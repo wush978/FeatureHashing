@@ -505,6 +505,7 @@ const ConvertersVec get_converters(
       pVectorConverter p(NULL);
       try{
         if (specials.find(j + 1) == specials.end()) {
+          if (reference_class.find(rname) == reference_class.end()) throw std::invalid_argument("Failed to find the column:");
           const std::string& rclass(reference_class.find(rname)->second);
           #ifdef NOISY_DEBUG
           Rprintf("%s\n", rclass.c_str());
@@ -535,7 +536,7 @@ const ConvertersVec get_converters(
             #endif
             p.reset(new CharacterConverter(wrap(data[rname.c_str()]), rname, _h));
           } else {
-            throw std::invalid_argument("");
+            throw std::invalid_argument("Non supported type at name: ");
           }
         } 
         else {
@@ -547,6 +548,7 @@ const ConvertersVec get_converters(
           #ifdef NOISY_DEBUG
           Rprintf(" (rname ==> %s) ", rname.c_str());
           #endif
+          if (reference_class.find(rname) == reference_class.end()) throw std::invalid_argument("Failed to find the column: ");
           const std::string& rclass(reference_class.find(rname)->second);
           #ifdef NOISY_DEBUG
           Rprintf("%s\n", rclass.c_str());
@@ -569,7 +571,7 @@ const ConvertersVec get_converters(
               #endif
               p.reset(new TagCountFactorConverter(wrap(data[rname.c_str()]), rname, _h, delim));
             } else {
-              throw std::invalid_argument("");
+              throw std::invalid_argument("Non supported type at name: ");
             }
           } else if (rclass.compare("character") == 0) {
             if (type.compare("existence") == 0) {
@@ -583,14 +585,14 @@ const ConvertersVec get_converters(
               #endif
               p.reset(new TagCountCharacterConverter(wrap(data[rname.c_str()]), rname, _h, delim));
             } else {
-              throw std::invalid_argument("");
+              throw std::invalid_argument("Non supported type at name: ");
             }
           } else {
-            throw std::invalid_argument("");
+            throw std::invalid_argument("Non supported type at name: ");
           }
         }
       } catch(std::invalid_argument& e) {
-        std::string message("Non supported type at name: ");
+        std::string message(e.what());
         message.append(rname);
         throw std::invalid_argument(message);
       }

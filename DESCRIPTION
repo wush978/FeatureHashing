@@ -5,13 +5,11 @@ Version: 0.3.1
 Date: 2014-08-01
 Author: Wush Wu
 Maintainer: Wush Wu <wush978@gmail.com>
-Description: Feature hashing, also known as hashing trick, 
-  is a fast and space-efficient way to vectorize features.
-  It also synchronizes model matrix from different data set.
-  FeatureHashing hashes the model matrix to save the space
-  and enhance the efficiency of fitting algorithms. The 
-  improvement should be significant for model matrix with
-  lots of categorical features.
+Description: Feature hashing is a popular trick to enhance the efficiency of 
+  feature extraction in the field of text mining. The pakcage FeatureHashing integrate
+  the hashing trick proposed by Weinberger et. al. (2009) into the construction of 
+  model matrix in R. The FeatureHashing also supports the splitting of concatenated 
+  data during the constructiong of model matrix.
 License: GPL(>= 3)
 Imports: 
   Rcpp (>= 0.11),

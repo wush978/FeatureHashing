@@ -1,7 +1,7 @@
 Package: FeatureHashing
 Type: Package
 Title: Implement Feature Hashing on Model Matrix
-Version: 0.3.1
+Version: 0.3.2
 Date: 2014-08-01
 Author: Wush Wu
 Maintainer: Wush Wu <wush978@gmail.com>

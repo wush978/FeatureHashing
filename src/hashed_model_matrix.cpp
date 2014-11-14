@@ -2,6 +2,7 @@
 #include <memory>
 #include <Rcpp.h>
 #include "capi.h"
+#include "MurmurHash3.h"
 #include "tag.hpp"
 
 using namespace Rcpp;
@@ -47,18 +48,45 @@ public:
 
 };
 
-class CRC32LogHashFunction : public CRC32HashFunction {
+class MurmurHash3HashFunction : public HashFunction {
+  
+public :
+
+  virtual uint32_t operator()(const char* buf, int size) {
+    return ::FeatureHashing_murmurhash3(buf, size);
+  }
+};
+
+class CRC32LogHashFunction : public HashFunction {
   
   Environment e;
   
 public:
 
   CRC32LogHashFunction(SEXP _e) 
-  : CRC32HashFunction(), e(_e)
+  : HashFunction(), e(_e)
   { }
   
   virtual uint32_t operator()(const char* buf, int size) {
     uint32_t retval = FeatureHashing_crc32(buf, size);
+    e[buf] = wrap(retval);
+    return retval;
+  }
+  
+};
+
+class MurmurHash3LogHashFunction : public HashFunction {
+  
+  Environment e;
+  
+public:
+
+  MurmurHash3LogHashFunction(SEXP _e) 
+  : HashFunction(), e(_e)
+  { }
+  
+  virtual uint32_t operator()(const char* buf, int size) {
+    uint32_t retval = FeatureHashing_murmurhash3(buf, size);
     e[buf] = wrap(retval);
     return retval;
   }
@@ -585,9 +613,9 @@ SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size
   Environment e(Environment::base_env().new_child(wrap(true)));
   std::auto_ptr<HashFunction> pHF(NULL);
   if (keep_hashing_mapping) {
-    pHF.reset(new CRC32LogHashFunction(wrap(e)));
+    pHF.reset(new MurmurHash3LogHashFunction(wrap(e)));
   } else {
-    pHF.reset(new CRC32HashFunction());
+    pHF.reset(new MurmurHash3HashFunction());
   }
   ConvertersVec converters(get_converters(reference_class, tf, data, pHF.get()));
   #ifdef NOISY_DEBUG

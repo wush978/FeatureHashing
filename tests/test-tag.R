@@ -1,7 +1,7 @@
 .origin.keep.source <- options()$keep.source
 library(methods)
 library(FeatureHashing)
-print(sessionInfo())
+# print(sessionInfo())
 data <- data.frame(a = c("1,2,3", "2,3,3", "1,3", "3"), type = c("a", "b", "a", "a"), stringsAsFactors = FALSE)
 object <- ~ tag(a, split = ",") + type
 r <- interpret.tag(~ tag(a)*type, data)

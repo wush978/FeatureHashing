@@ -607,7 +607,7 @@ const ConvertersVec get_converters(
 } 
 
 template<typename DataFrameLike>
-SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size, S4 retval, bool keep_hashing_mapping) {
+SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size, bool transpose, S4 retval, bool keep_hashing_mapping) {
   if (hash_size > 4294967296) throw std::invalid_argument("hash_size is too big!");
   NameClassMapping reference_class(get_class(data));
   Environment e(Environment::base_env().new_child(wrap(true)));
@@ -627,29 +627,76 @@ SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size
   #ifdef NOISY_DEBUG
   Rprintf("nrow(data): %d length(converters): %d\n", data.nrows(), converters.size());
   #endif
-  for(auto i = 0;i < data.nrows();i++) {
+  if (transpose) {
+    for(auto i = 0;i < data.nrows();i++) {
+      if (is_intercept) {
+        ivec.push_back(0);
+        xvec.push_back(1.0);
+      }
+      for(auto j = converters.begin();j != converters.end();j++) {
+        pVectorConverter& p(*j);
+        const std::vector<uint32_t>& i_origin(p->get_feature(i));
+        const std::vector<double>& x_origin(p->get_value(i));
+        std::for_each(i_origin.begin(), i_origin.end(), [&ivec, &xvec, &hash_size](uint32_t hashed_value) {
+          ivec.push_back(hashed_value % hash_size);
+        });
+        xvec.insert(xvec.end(), x_origin.begin(), x_origin.end());
+      }
+      pvec.push_back(ivec.size());
+    }
+  }
+  else {
+    std::map< uint32_t, std::pair< std::vector<int>, std::vector<double> > > cache;
     if (is_intercept) {
-      ivec.push_back(0);
-      xvec.push_back(1.0);
+      std::pair< std::vector<int>, std::vector<double> >& k(cache[0]);
+      k.first.resize(data.nrows());
+      for(int i = 0;i < data.nrows();i++) {
+        k.first[i] = i;
+      }
+      k.second.resize(data.nrows(), 1.0);
     }
-    for(auto j = converters.begin();j != converters.end();j++) {
-      pVectorConverter& p(*j);
-      const std::vector<uint32_t>& i_origin(p->get_feature(i));
-      const std::vector<double>& x_origin(p->get_value(i));
-      std::for_each(i_origin.begin(), i_origin.end(), [&ivec, &xvec, &hash_size](uint32_t hashed_value) {
-        ivec.push_back(hashed_value % hash_size);
-      });
-      xvec.insert(xvec.end(), x_origin.begin(), x_origin.end());
+    for(auto i = 0;i < data.nrows();i++) {
+      for(auto j = converters.begin();j != converters.end();j++) {
+        pVectorConverter& p(*j);
+        const std::vector<uint32_t>& i_origin(p->get_feature(i));
+        const std::vector<double>& x_origin(p->get_value(i));
+        auto x_value = x_origin.begin();
+        std::for_each(i_origin.begin(), i_origin.end(), [&cache, &hash_size, &x_value, &i](uint32_t hashed_value) {
+          std::pair< std::vector<int>, std::vector<double> >& k(cache[hashed_value % hash_size]);
+          k.first.push_back(i);
+          k.second.push_back(*(x_value++));
+        });
+      }
     }
-    pvec.push_back(ivec.size());
+    int pvec_value = ivec.size();
+    for(auto i = cache.begin();i != cache.end();i++) {
+      while(pvec.size() <= i->first) pvec.push_back(pvec_value);
+      ivec.insert(ivec.end(), i->second.first.begin(), i->second.first.end());
+      {
+        std::vector<int> tmp;
+        i->second.first.swap(tmp);
+      }
+      xvec.insert(xvec.end(), i->second.second.begin(), i->second.second.end());
+      {
+        std::vector<double> tmp;
+        i->second.second.swap(tmp);
+      }
+      pvec_value = ivec.size();
+    }
+    pvec.push_back(pvec_value);
   }
   retval.slot("i") = wrap(ivec);
   retval.slot("p") = wrap(pvec);
   retval.slot("x") = wrap(xvec);
-  {
-    IntegerVector dim(2);
+  IntegerVector dim(2);
+  if (transpose) {
     dim[0] = hash_size;
     dim[1] = pvec.size() - 1;
+    retval.slot("Dim") = dim;
+  }
+  else {
+    dim[0] = data.nrows();
+    dim[1] = hash_size;
     retval.slot("Dim") = dim;
   }
   {
@@ -664,7 +711,7 @@ SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size
 }
 
 //[[Rcpp::export(".hashed.model.matrix.dataframe")]]
-SEXP hashed_model_matrix_dataframe(RObject tf, DataFrame data, unsigned long hash_size, S4 retval, bool keep_hashing_mapping) {
-  return hashed_model_matrix<DataFrame>(tf, data, hash_size, retval, keep_hashing_mapping);
+SEXP hashed_model_matrix_dataframe(RObject tf, DataFrame data, unsigned long hash_size, bool transpose, S4 retval, bool keep_hashing_mapping) {
+  return hashed_model_matrix<DataFrame>(tf, data, hash_size, transpose, retval, keep_hashing_mapping);
 }
 

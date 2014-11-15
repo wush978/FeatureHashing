@@ -613,7 +613,7 @@ SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size
   if (hash_size > 4294967296) throw std::invalid_argument("hash_size is too big!");
   NameClassMapping reference_class(get_class(data));
   Environment e(Environment::base_env().new_child(wrap(true)));
-  std::auto_ptr<HashFunction> pHF(NULL);
+  std::shared_ptr<HashFunction> pHF(NULL);
   if (keep_hashing_mapping) {
     pHF.reset(new MurmurHash3LogHashFunction(wrap(e)));
   } else {

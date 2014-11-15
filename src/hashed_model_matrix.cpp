@@ -50,10 +50,14 @@ public:
 
 class MurmurHash3HashFunction : public HashFunction {
   
+  uint32_t seed;
+  
 public :
 
+  MurmurHash3HashFunction(uint32_t _seed) : seed(_seed) { }
+
   virtual uint32_t operator()(const char* buf, int size) {
-    return ::FeatureHashing_murmurhash3(buf, size);
+    return ::FeatureHashing_murmurhash3(buf, size, seed);
   }
 };
 
@@ -77,16 +81,17 @@ public:
 
 class MurmurHash3LogHashFunction : public HashFunction {
   
+  uint32_t seed;
   Environment e;
   
 public:
 
-  MurmurHash3LogHashFunction(SEXP _e) 
-  : HashFunction(), e(_e)
+  MurmurHash3LogHashFunction(SEXP _e, uint32_t _seed) 
+  : HashFunction(), e(_e), seed(_seed)
   { }
   
   virtual uint32_t operator()(const char* buf, int size) {
-    uint32_t retval = FeatureHashing_murmurhash3(buf, size);
+    uint32_t retval = FeatureHashing_murmurhash3(buf, size, seed);
     e[buf] = wrap(retval);
     return retval;
   }
@@ -100,26 +105,47 @@ protected:
   std::vector<double> value_buffer;
   std::string name;
   size_t name_len;
-  HashFunction* h;
+  HashFunction *h_main, *h_binary;
 
 public:
   
-  explicit VectorConverter(const std::string& _name, HashFunction* _h) 
-  : name(_name), name_len(_name.size()), h(_h)
+  explicit VectorConverter(const std::string& _name, HashFunction* _h_main, HashFunction* _h_binary) 
+  : name(_name), name_len(_name.size()), h_main(_h_main), h_binary(_h_binary)
   { }
   
   virtual ~VectorConverter() { }
   
+  /**
+   * Evaluate the hashed feature from the raw data.
+   * The \code{get_feature} should be called before \code{get_value}
+   */
   virtual const std::vector<uint32_t>& get_feature(size_t i) = 0;
   
+  /**
+   * Evaluate the value from the raw data
+   * The \code{get_feature} should be called before \code{get_value}
+   */ 
   virtual const std::vector<double>& get_value(size_t i) = 0;
   
   const std::string& get_name() const {
     return name;
   }
   
-private:
-  
+protected:
+
+  /**
+   * @return -1 if (int) v < 0, or +1 otherwise
+   */ 
+  static inline int get_sign(uint32_t v) {
+    return +1 | (v >> (sizeof(uint32_t) * CHAR_BIT - 1));
+  }
+
+  uint32_t get_hashed_feature(HashFunction* h, const char* str) {
+    name.append(str);
+    uint32_t retval = (*h)(name.c_str(), name.size());
+    name.resize(name_len);
+  }
+
 };
 
 class CharacterConverter : public VectorConverter {
@@ -129,14 +155,14 @@ class CharacterConverter : public VectorConverter {
   
 public:
 
-  explicit CharacterConverter(SEXP _src, const std::string& _name, HashFunction* _h)
-  : VectorConverter(_name, _h), src(_src), psrc(wrap(src)) {
+  explicit CharacterConverter(SEXP _src, const std::string& _name, HashFunction* _h_main, HashFunction* _h_binary)
+  : VectorConverter(_name, _h_main, _h_binary), src(_src), psrc(wrap(src)) {
     value_buffer.resize(1, 1.0);
     feature_buffer.resize(1);
   }
   
   virtual ~CharacterConverter() { }
-  
+
   virtual const std::vector<uint32_t>& get_feature(size_t i) {
     SEXP pstr = STRING_ELT(psrc, i);
     if (pstr == NA_STRING) {
@@ -144,9 +170,7 @@ public:
     } else {
       const char* str = CHAR(pstr);
       feature_buffer.resize(1, 1);
-      name.append(str);
-      feature_buffer[0] = (*h)(name.c_str(), name.size());
-      name.resize(name_len);
+      feature_buffer[0] = get_hashed_feature(h_main, str);
     }
     return feature_buffer;
   }
@@ -156,11 +180,12 @@ public:
     if (pstr == NA_STRING) {
       value_buffer.clear();
     } else {
-      value_buffer.resize(1, 1);
+      const char* str = CHAR(pstr);
+      uint32_t sign_value = get_hashed_feature(h_binary, str);
+      value_buffer.resize(1, get_sign(sign_value));
     }
     return value_buffer;
   }
-
 };
 
 class FactorConverter : public VectorConverter {
@@ -171,8 +196,8 @@ class FactorConverter : public VectorConverter {
 
 public: 
 
-  explicit FactorConverter(SEXP _src, const std::string& _name, HashFunction* _h) 
-  : VectorConverter(_name, _h), src(_src), levels(src.attr("levels")), plevels(wrap(levels)) {
+  explicit FactorConverter(SEXP _src, const std::string& _name, HashFunction* _h_main, HashFunction* _h_binary) 
+  : VectorConverter(_name, _h_main, _h_binary), src(_src), levels(src.attr("levels")), plevels(wrap(levels)) {
     value_buffer.resize(1, 1);
     feature_buffer.resize(1);
   }
@@ -185,9 +210,7 @@ public:
     } else {
       feature_buffer.resize(1);
       const char* str = CHAR(STRING_ELT(plevels, src[i] - 1)); // R start from 1 and C start from 0
-      name.append(str);
-      feature_buffer[0] = (*h)(name.c_str(), name.size());
-      name.resize(name_len);
+      feature_buffer[0] = get_hashed_feature(h_main, str);
     }
     return feature_buffer;
   }
@@ -196,7 +219,9 @@ public:
     if (src[i] == NA_INTEGER) {
       value_buffer.clear();
     } else {
-      value_buffer.resize(1, 1);
+      const char* str = CHAR(STRING_ELT(plevels, src[i] - 1)); // R start from 1 and C start from 0
+      uint32_t sign_value = get_hashed_feature(h_binary, str);
+      value_buffer.resize(1, get_sign(sign_value));
     }
     return value_buffer;
   }
@@ -208,6 +233,7 @@ class DenseConverter : public VectorConverter {
   
   Vector<RType> src;
   uint32_t value;
+  int sign_value;
   
   static bool isNA(ValueType x) {
     switch(RType) {
@@ -224,8 +250,9 @@ class DenseConverter : public VectorConverter {
   
 public:
 
-  explicit DenseConverter(SEXP _src, const std::string& _name, HashFunction* _h) 
-  : VectorConverter(_name, _h), src(_src), value((*h)(name.c_str(), name.size())) {
+  explicit DenseConverter(SEXP _src, const std::string& _name, HashFunction* _h_main, HashFunction* _h_binary) 
+  : VectorConverter(_name, _h_main, _h_binary), src(_src), value(get_hashed_feature(h_main, "")), 
+  sign_value(get_sign(get_hashed_feature(h_binary, ""))) {
     feature_buffer.resize(1, value);
     value_buffer.resize(1, 0.0);
   }
@@ -247,7 +274,7 @@ public:
     } else {
       value_buffer.resize(1, 0);
     }
-    value_buffer[0] = src[i];
+    value_buffer[0] = sign_value * src[i];
     return value_buffer;
   }
   
@@ -267,8 +294,8 @@ protected:
 
 public:
   
-  explicit TagConverter(const std::string& _name, HashFunction* _h, const std::string& _delim)
-  : VectorConverter(_name, _h), delim(_delim), cache_i(-1)
+  explicit TagConverter(const std::string& _name, HashFunction* _h_main, HashFunction* _h_binary, const std::string& _delim)
+  : VectorConverter(_name, _h_main, _h_binary), delim(_delim), cache_i(-1)
   { }
   
   virtual ~TagConverter() { }
@@ -278,17 +305,18 @@ public:
     feature_buffer.resize(cache_tags.size());
     size_t k = 0;
     for(auto j = cache_tags.begin();j != cache_tags.end();j++) {
-      name.append(*j);
-      feature_buffer[k++] = (*h)(name.c_str(), name.size());
-      name.resize(name_len);    
+      feature_buffer[k++] = get_hashed_feature(h_main, j->c_str());
     }
     return feature_buffer;
   }
   
   virtual const std::vector<double>& get_value(size_t i) {
     get_tags(i);
-    value_buffer.clear();
-    value_buffer.resize(cache_tags.size(), 1);
+    value_buffer.resize(cache_tags.size());
+    size_t k = 0;
+    for(auto j = cache_tags.begin();j != cache_tags.end();j++) {
+      value_buffer[k++] = get_sign(get_hashed_feature(h_binary, j->c_str()));
+    }
     return value_buffer;
   }
   
@@ -318,8 +346,8 @@ protected:
 
 public:
 
-  explicit TagExistenceFactorConverter(SEXP _src, const std::string& _name, HashFunction* _h, const std::string& _delim)
-  : TagConverter< std::set<std::string> >(_name, _h, _delim), src(_src), levels(src.attr("levels")), plevels(wrap(levels))
+  explicit TagExistenceFactorConverter(SEXP _src, const std::string& _name, HashFunction* _h_main, HashFunction* _h_binary, const std::string& _delim)
+  : TagConverter< std::set<std::string> >(_name, _h_main, _h_binary, _delim), src(_src), levels(src.attr("levels")), plevels(wrap(levels))
   { }
   
   virtual ~TagExistenceFactorConverter() { }
@@ -350,8 +378,8 @@ protected:
 
 public:
 
-  explicit TagExistenceCharacterConverter(SEXP _src, const std::string& _name, HashFunction* _h, const std::string& _delim)
-  : TagConverter< std::set<std::string> >(_name, _h, _delim), src(_src), psrc(wrap(src))
+  explicit TagExistenceCharacterConverter(SEXP _src, const std::string& _name, HashFunction* _h_main, HashFunction* _h_binary, const std::string& _delim)
+  : TagConverter< std::set<std::string> >(_name, _h_main, _h_binary, _delim), src(_src), psrc(wrap(src))
   { }
 
   virtual ~TagExistenceCharacterConverter() { }
@@ -379,8 +407,8 @@ protected:
   
 public:
 
-  explicit TagCountFactorConverter(SEXP _src, const std::string& _name, HashFunction* _h, const std::string& _delim)
-  : TagConverter< std::vector<std::string> >(_name, _h, _delim), src(_src), levels(src.attr("levels")), plevels(wrap(levels))
+  explicit TagCountFactorConverter(SEXP _src, const std::string& _name, HashFunction* _h_main, HashFunction* _h_binary, const std::string& _delim)
+  : TagConverter< std::vector<std::string> >(_name, _h_main, _h_binary, _delim), src(_src), levels(src.attr("levels")), plevels(wrap(levels))
   { }
   
   virtual ~TagCountFactorConverter() { }
@@ -408,8 +436,8 @@ protected:
 
 public:
 
-  explicit TagCountCharacterConverter(SEXP _src, const std::string& _name, HashFunction* _h, const std::string& _delim)
-  : TagConverter< std::vector<std::string> >(_name, _h, _delim), src(_src), psrc(wrap(src))
+  explicit TagCountCharacterConverter(SEXP _src, const std::string& _name, HashFunction* _h_main, HashFunction* _h_binary, const std::string& _delim)
+  : TagConverter< std::vector<std::string> >(_name, _h_main, _h_binary, _delim), src(_src), psrc(wrap(src))
   { }
 
   virtual ~TagCountCharacterConverter() { }
@@ -438,18 +466,21 @@ class InteractionConverter : public VectorConverter {
 
 public:
 
-  explicit InteractionConverter(pVectorConverter _a, pVectorConverter _b, HashFunction* _h) : 
-  VectorConverter("", _h), a(_a), b(_b) { }
+  explicit InteractionConverter(pVectorConverter _a, pVectorConverter _b, HashFunction* _h_main, HashFunction* _h_binary) : 
+  VectorConverter("", _h_main, _h_binary), a(_a), b(_b) { }
   
   virtual ~InteractionConverter() { }
   
   virtual const std::vector<uint32_t>& get_feature(size_t i) {
     const std::vector<uint32_t> &afeature_buffer(a->get_feature(i)), &bfeature_buffer(b->get_feature(i));
     feature_buffer.resize(afeature_buffer.size() * bfeature_buffer.size());
+    value_buffer.resize(afeature_buffer.size() * bfeature_buffer.size());
     size_t l = 0;
     for(auto j = 0;j < afeature_buffer.size();j++) {
       for(auto k = 0;k < bfeature_buffer.size();k++) {
-        feature_buffer[l++] = afeature_buffer[j] ^ bfeature_buffer[k];
+        feature_buffer[l] = get_hashed_feature(h_main, afeature_buffer[j], bfeature_buffer[k]);
+        value_buffer[l] = get_sign(get_hashed_feature(h_binary, afeature_buffer[j], bfeature_buffer[k]));
+        l++;
       }
     }
     return feature_buffer;
@@ -457,14 +488,23 @@ public:
   
   virtual const std::vector<double>& get_value(size_t i) {
     const std::vector<double> &avalue_buffer(a->get_value(i)), &bvalue_buffer(b->get_value(i));
-    value_buffer.resize(avalue_buffer.size() * bvalue_buffer.size());
     size_t l = 0;
     for(auto j = 0;j < avalue_buffer.size();j++) {
       for(auto k = 0;k < bvalue_buffer.size();k++) {
-        value_buffer[l++] = avalue_buffer[j] * bvalue_buffer[k];
+        value_buffer[l] = avalue_buffer[j] * bvalue_buffer[k] * value_buffer[l];
+        l++;
       }
     }
     return value_buffer;
+  }
+  
+private:
+
+  uint32_t get_hashed_feature(HashFunction *h, uint32_t a, uint32_t b) {
+    uint32_t buf[2];
+    buf[0] = a;
+    buf[1] = b;
+    return (*h)(reinterpret_cast<char*>(buf), sizeof(uint32_t) * 2);
   }
   
 };
@@ -473,7 +513,7 @@ typedef std::shared_ptr<InteractionConverter> pInteractionConverter;
 
 template<typename DataFrameLike>
 const ConvertersVec get_converters(
-  const NameClassMapping& reference_class, RObject tf, DataFrameLike data, HashFunction* _h
+  const NameClassMapping& reference_class, RObject tf, DataFrameLike data, HashFunction* _h_main, HashFunction* _h_binary
   ) {
   NumericMatrix tfactors(wrap(tf.attr("factors")));
   CharacterVector reference_name, feature_name;
@@ -514,27 +554,27 @@ const ConvertersVec get_converters(
             #ifdef NOISY_DEBUG
             Rprintf("Initialize FactorConverter\n");
             #endif
-            p.reset(new FactorConverter(wrap(data[rname.c_str()]), rname, _h));
+            p.reset(new FactorConverter(wrap(data[rname.c_str()]), rname, _h_main, _h_binary));
           } else if (rclass.compare("numeric") == 0) {
             #ifdef NOISY_DEBUG
             Rprintf("Initialize NumConverter\n");
             #endif
-            p.reset(new NumConverter(wrap(data[rname.c_str()]), rname, _h));
+            p.reset(new NumConverter(wrap(data[rname.c_str()]), rname, _h_main, _h_binary));
           } else if (rclass.compare("integer") == 0) {
             #ifdef NOISY_DEBUG
             Rprintf("Initialize IntConverter\n");
             #endif
-            p.reset(new IntConverter(wrap(data[rname.c_str()]), rname, _h));
+            p.reset(new IntConverter(wrap(data[rname.c_str()]), rname, _h_main, _h_binary));
           } else if (rclass.compare("logical") == 0) {
             #ifdef NOISY_DEBUG
             Rprintf("Initialize LogicalConverter\n");
             #endif
-            p.reset(new LogicalConverter(wrap(data[rname.c_str()]), rname, _h));            
+            p.reset(new LogicalConverter(wrap(data[rname.c_str()]), rname, _h_main, _h_binary));            
           } else if (rclass.compare("character") == 0) {
             #ifdef NOISY_DEBUG
             Rprintf("Initialize CharacterConverter\n");
             #endif
-            p.reset(new CharacterConverter(wrap(data[rname.c_str()]), rname, _h));
+            p.reset(new CharacterConverter(wrap(data[rname.c_str()]), rname, _h_main, _h_binary));
           } else {
             throw std::invalid_argument("Non supported type at name: ");
           }
@@ -564,12 +604,12 @@ const ConvertersVec get_converters(
               #ifdef NOISY_DEBUG
               Rprintf("Initialize TagExistenceFactorConverter\n");
               #endif
-              p.reset(new TagExistenceFactorConverter(wrap(data[rname.c_str()]), rname, _h, delim));
+              p.reset(new TagExistenceFactorConverter(wrap(data[rname.c_str()]), rname, _h_main, _h_binary, delim));
             } else if (type.compare("count") == 0) {
               #ifdef NOISY_DEBUG
               Rprintf("Initialize TagCountFactorConverter\n");
               #endif
-              p.reset(new TagCountFactorConverter(wrap(data[rname.c_str()]), rname, _h, delim));
+              p.reset(new TagCountFactorConverter(wrap(data[rname.c_str()]), rname, _h_main, _h_binary, delim));
             } else {
               throw std::invalid_argument("Non supported type at name: ");
             }
@@ -578,12 +618,12 @@ const ConvertersVec get_converters(
               #ifdef NOISY_DEBUG
               Rprintf("Initialize TagExistenceCharacterConverter\n");
               #endif
-              p.reset(new TagExistenceCharacterConverter(wrap(data[rname.c_str()]), rname, _h, delim));
+              p.reset(new TagExistenceCharacterConverter(wrap(data[rname.c_str()]), rname, _h_main, _h_binary, delim));
             } else if (type.compare("count") == 0) {
               #ifdef NOISY_DEBUG
               Rprintf("Initialize TagCountCharacterConverter\n");
               #endif
-              p.reset(new TagCountCharacterConverter(wrap(data[rname.c_str()]), rname, _h, delim));
+              p.reset(new TagCountCharacterConverter(wrap(data[rname.c_str()]), rname, _h_main, _h_binary, delim));
             } else {
               throw std::invalid_argument("Non supported type at name: ");
             }
@@ -601,7 +641,7 @@ const ConvertersVec get_converters(
         is_interaction = true;
       } else {
         pVectorConverter q(*retval.rbegin());
-        *retval.rbegin() = pInteractionConverter(new InteractionConverter(q, p, _h));
+        *retval.rbegin() = pInteractionConverter(new InteractionConverter(q, p, _h_main, _h_binary));
       }
     }
   }
@@ -613,13 +653,14 @@ SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size
   if (hash_size > 4294967296) throw std::invalid_argument("hash_size is too big!");
   NameClassMapping reference_class(get_class(data));
   Environment e(Environment::base_env().new_child(wrap(true)));
-  std::shared_ptr<HashFunction> pHF(NULL);
+  std::shared_ptr<HashFunction> pHF(NULL), pBHF(NULL);
   if (keep_hashing_mapping) {
-    pHF.reset(new MurmurHash3LogHashFunction(wrap(e)));
+    pHF.reset(new MurmurHash3LogHashFunction(wrap(e), 3120602769));
   } else {
-    pHF.reset(new MurmurHash3HashFunction());
+    pHF.reset(new MurmurHash3HashFunction(3120602769));
   }
-  ConvertersVec converters(get_converters(reference_class, tf, data, pHF.get()));
+  pBHF.reset(new MurmurHash3HashFunction(79193439));
+  ConvertersVec converters(get_converters(reference_class, tf, data, pHF.get(), pBHF.get()));
   #ifdef NOISY_DEBUG
   Rprintf("The size of convertres is %d\n", converters.size());
   #endif

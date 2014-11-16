@@ -142,8 +142,15 @@ protected:
 
   uint32_t get_hashed_feature(HashFunction* h, const char* str) {
     name.append(str);
+    #ifdef NOISY_DEBUG
+    Rprintf("hashing %s ... ", name.c_str());
+    #endif
     uint32_t retval = (*h)(name.c_str(), name.size());
+    #ifdef NOISY_DEBUG
+    Rprintf(" got %zu \n", retval);
+    #endif
     name.resize(name_len);
+    return retval;
   }
 
 };
@@ -680,6 +687,12 @@ SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size
         pVectorConverter& p(*j);
         const std::vector<uint32_t>& i_origin(p->get_feature(i));
         const std::vector<double>& x_origin(p->get_value(i));
+        #ifdef NOISY_DEBUG
+        std::for_each(i_origin.begin(), i_origin.end(), [&hash_size](uint32_t hashed_value) {
+          Rprintf("(%zu module %d = %d),", hashed_value, hash_size, hashed_value % hash_size);
+        });
+        Rprintf("\n");
+        #endif
         std::for_each(i_origin.begin(), i_origin.end(), [&ivec, &xvec, &hash_size](uint32_t hashed_value) {
           ivec.push_back(hashed_value % hash_size);
         });

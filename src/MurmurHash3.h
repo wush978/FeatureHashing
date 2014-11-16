@@ -36,7 +36,7 @@ inline uint32_t FeatureHashing_murmurhash3(const char* buf, int size, uint32_t s
 #if defined(__x86_64__) || defined(_M_X64)
   /* x86 64-bit ----------------------------------------------- */
   uint32_t retval[4];
-  MurmurHash3_x86_128(reinterpret_cast<const void*>(buf), size, seed, 
+  MurmurHash3_x64_128(reinterpret_cast<const void*>(buf), size, seed, 
     reinterpret_cast<void*>(retval));
   return retval[0];
 #elif defined(__i386) || defined(_M_IX86)

@@ -49,6 +49,21 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// tomatrix
+SEXP tomatrix(S4 m);
+RcppExport SEXP FeatureHashing_tomatrix(SEXP mSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< S4 >::type m(mSEXP );
+        SEXP __result = tomatrix(m);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // hash_without_intercept_single
 IntegerVector hash_without_intercept_single(CharacterVector src);
 RcppExport SEXP FeatureHashing_hash_without_intercept_single(SEXP srcSEXP) {
@@ -147,16 +162,36 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// selectRow
-SEXP selectRow(S4 m, IntegerVector index);
-RcppExport SEXP FeatureHashing_selectRow(SEXP mSEXP, SEXP indexSEXP) {
+// selectColumn
+SEXP selectColumn(S4 m, IntegerVector index, bool drop = true, SEXP Rretval = R_NilValue);
+RcppExport SEXP FeatureHashing_selectColumn(SEXP mSEXP, SEXP indexSEXP, SEXP dropSEXP, SEXP RretvalSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< S4 >::type m(mSEXP );
         Rcpp::traits::input_parameter< IntegerVector >::type index(indexSEXP );
-        SEXP __result = selectRow(m, index);
+        Rcpp::traits::input_parameter< bool >::type drop(dropSEXP );
+        Rcpp::traits::input_parameter< SEXP >::type Rretval(RretvalSEXP );
+        SEXP __result = selectColumn(m, index, drop, Rretval);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// selectRow
+SEXP selectRow(S4 m, IntegerVector index, bool drop = true, SEXP Rretval = R_NilValue);
+RcppExport SEXP FeatureHashing_selectRow(SEXP mSEXP, SEXP indexSEXP, SEXP dropSEXP, SEXP RretvalSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< S4 >::type m(mSEXP );
+        Rcpp::traits::input_parameter< IntegerVector >::type index(indexSEXP );
+        Rcpp::traits::input_parameter< bool >::type drop(dropSEXP );
+        Rcpp::traits::input_parameter< SEXP >::type Rretval(RretvalSEXP );
+        SEXP __result = selectRow(m, index, drop, Rretval);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

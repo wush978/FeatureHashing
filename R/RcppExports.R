@@ -13,6 +13,10 @@ todgCMatrix <- function(m) {
     .Call('FeatureHashing_todgCMatrix', PACKAGE = 'FeatureHashing', m)
 }
 
+tomatrix <- function(m) {
+    .Call('FeatureHashing_tomatrix', PACKAGE = 'FeatureHashing', m)
+}
+
 hash_without_intercept_single <- function(src) {
     .Call('FeatureHashing_hash_without_intercept_single', PACKAGE = 'FeatureHashing', src)
 }
@@ -37,8 +41,12 @@ vX <- function(v, m, retval) {
     .Call('FeatureHashing_vX', PACKAGE = 'FeatureHashing', v, m, retval)
 }
 
-.selectRow <- function(m, index) {
-    .Call('FeatureHashing_selectRow', PACKAGE = 'FeatureHashing', m, index)
+.selectColumn <- function(m, index, drop = TRUE, Rretval = NULL) {
+    .Call('FeatureHashing_selectColumn', PACKAGE = 'FeatureHashing', m, index, drop, Rretval)
+}
+
+.selectRow <- function(m, index, drop = TRUE, Rretval = NULL) {
+    .Call('FeatureHashing_selectRow', PACKAGE = 'FeatureHashing', m, index, drop, Rretval)
 }
 
 tag_existence <- function(src, delim) {

@@ -26,6 +26,35 @@ setMethod("%*%", signature(x = "numeric", y = .CSRMatrix), function(x, y) {
 })
 
 setAs(.CSRMatrix, "dgCMatrix", function(from) todgCMatrix(from))
+setAs(.CSRMatrix, "matrix", function(from) tomatrix(from))
 
-setMethod("[", signature(x = .CSRMatrix, i = "index", j = "missing", drop = "logical"), 
-          function(x, i, j, ..., drop) .selectRow(x, i))
+setMethod("[", c(.CSRMatrix, "numeric", "numeric"), 
+          function(x, i, j, ..., drop = TRUE) {
+            iset <- head(seq(from = x@p[j], to = x@p[j + 1], by = 1), -1) + 1
+            if (i %in% x@i[iset]) {
+              sum(x@x[iset[i == x@i[iset]]])
+            } else 0
+          })
+
+setMethod("[", c(.CSRMatrix, "numeric", "missing"),
+          function(x, i, j, ..., drop = TRUE) {
+            if (drop) return(.selectRow(x, i, drop)) else {
+              retval <- new(.CSRMatrix)
+              .selectRow(x, i, drop, retval)
+              class(retval) <- .CSRMatrix
+              retval@Dimnames[[2]] <- paste(seq_len(retval@Dim[2]))
+              return(retval)
+            }
+          })
+
+setMethod("[", c(.CSRMatrix, "missing", "numeric"), 
+          function(x, i, j, ..., drop = TRUE) {
+            if (drop) return(.selectColumn(x, j, drop)) else {
+              retval <- new(.CSRMatrix)
+              .selectColumn(x, j, drop, retval)
+              class(retval) <- .CSRMatrix
+              retval@Dimnames[[2]] <- paste(seq_len(retval@Dim[2]))
+              return(retval)
+            }
+          })
+

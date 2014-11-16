@@ -726,7 +726,7 @@ SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size
       }
       pvec_value = ivec.size();
     }
-    pvec.push_back(pvec_value);
+    pvec.resize(hash_size + 1, pvec_value);
   }
   retval.slot("i") = wrap(ivec);
   retval.slot("p") = wrap(pvec);

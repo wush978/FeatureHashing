@@ -25,7 +25,7 @@ void pair_sort(IntegerVector i, NumericVector x) {
   pair_sort(pi, px, i.size());
 }
 
-const size_t merge(int *i, double *x, size_t n) {
+size_t merge(int *i, double *x, size_t n) {
   if (n == 0) return 0;
   size_t len = 0, current_i = i[0];
   for(size_t j = 0;j < n;j++) {
@@ -93,5 +93,21 @@ SEXP todgCMatrix(S4 m) {
   retval.slot("i") = wrap(new_i);
   retval.slot("p") = wrap(new_p);
   retval.slot("x") = wrap(new_x);
+  return retval;
+}
+
+//[[Rcpp::export]]
+SEXP tomatrix(S4 m) {
+  IntegerVector i(m.slot("i")), p(m.slot("p")), Dim(m.slot("Dim"));
+  NumericVector x(m.slot("x"));
+  NumericMatrix retval(Dim[0], Dim[1]);
+  retval.fill(0.0);
+  for(auto col = 0;col < Dim[1];col++) {
+    for(auto j = p[col];j < p[col + 1];j++) {
+      auto row = i[j];
+      auto value = x[j];
+      retval(row, col) += value;
+    }
+  }
   return retval;
 }

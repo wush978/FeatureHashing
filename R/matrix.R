@@ -17,6 +17,12 @@
 #'m <- hashed.model.matrix(~ ., CO2, 8)
 #'# convert it to dgCMatrix
 #'m2 <- as(m, "dgCMatrix")
+#'@aliases dim<-,CSCMatrix-method dim,CSCMatrix-method 
+#'%*%,CSCMatrix,numeric-method 
+#'%*%,numeric,CSCMatrix-method 
+#'[,CSCMatrix,missing,numeric,ANY-method
+#'[,CSCMatrix,numeric,missing,ANY-method 
+#'[,CSCMatrix,numeric,numeric,ANY-method
 setClass("CSCMatrix", representation(
   i = "integer",
   p = "integer",

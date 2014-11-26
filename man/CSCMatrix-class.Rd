@@ -2,6 +2,13 @@
 \docType{class}
 \name{CSCMatrix-class}
 \alias{CSCMatrix-class}
+\alias{[,CSCMatrix,missing,numeric,ANY-method}
+\alias{[,CSCMatrix,numeric,missing,ANY-method}
+\alias{[,CSCMatrix,numeric,numeric,ANY-method}
+\alias{\%*\%,CSCMatrix,numeric-method}
+\alias{\%*\%,numeric,CSCMatrix-method}
+\alias{dim,CSCMatrix-method}
+\alias{dim<-,CSCMatrix-method}
 \title{CSCMatrix}
 \description{
 The structure of \code{CSCMatrix} is the same

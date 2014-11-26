@@ -8,7 +8,7 @@ contr <- list(
   )
 m1 <- sparse.model.matrix(~ ., CO2, contr, transpose = TRUE)
 m2 <- m1
-class(m2) <- "CSRMatrix"
+class(m2) <- "CSCMatrix"
 
 r1 <- as.vector(m1[1,])
 r2 <- FeatureHashing:::.selectRow(m1, 1)
@@ -43,7 +43,7 @@ attr(r1, "dimnames") <- NULL
 r2 <- FeatureHashing:::.selectRow(m1, 1:2)
 stopifnot(isTRUE(all.equal(r1, r2)))
 m2 <- m1
-class(m2) <- "CSRMatrix"
+class(m2) <- "CSCMatrix"
 r3 <- m2[1:2, drop = FALSE]
 stopifnot(isTRUE(all.equal(r1, local({
   retval <- as(as(r3, "dgCMatrix"), "matrix")

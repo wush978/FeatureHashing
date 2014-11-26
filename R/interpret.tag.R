@@ -3,7 +3,9 @@
 #'@param data data.frame
 #'@examples
 #'\dontrun{
-#'  data <- data.frame(a = c("1,2,3", "2,3,3", "1,3", "3"), type = c("a", "b", "a", "a"), stringsAsFactors = FALSE)
+#'  data <- data.frame(a = c("1,2,3", "2,3,3", "1,3", "3"), 
+#'    type = c("a", "b", "a", "a"), 
+#'    stringsAsFactors = FALSE)
 #'  r <- interpret.tag(~ tag(a, split = ",") * type, data)
 #'}
 #'@export

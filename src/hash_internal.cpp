@@ -1,43 +1,29 @@
 #include <cstring>
 #include <Rcpp.h>
-#include "capi.h"
+#include "MurmurHash3.h"
 using namespace Rcpp;
 
-//[[Rcpp::export("hash_without_intercept_single")]]
-IntegerVector hash_without_intercept_single(CharacterVector src) {
+//[[Rcpp::export("hash_xi")]]
+IntegerVector xi(CharacterVector src) {
   IntegerVector retval(src.size(), 0);
   for(int i = 0;i < src.size();i++) {
     const char* str = CHAR(src[i]);
     if (::strcmp("(Intercept)", str) == 0) continue;
-    retval[i] = FeatureHashing_crc32(str, ::strlen(str));
+    retval[i] = FeatureHashing_murmurhash3(str, ::strlen(str), MURMURHASH3_XI_SEED);
   }
   return retval;
 }
 
-//[[Rcpp::export("hash_without_intercept")]]
-IntegerVector hash_without_intercept(CharacterVector src) {
+//[[Rcpp::export("hash_h")]]
+IntegerVector h(CharacterVector src) {
   IntegerVector retval(src.size(), 0);
-  #pragma omp parallel for
   for(int i = 0;i < src.size();i++) {
     const char* str = CHAR(src[i]);
     if (::strcmp("(Intercept)", str) == 0) continue;
-    retval[i] = FeatureHashing_crc32(str, ::strlen(str));
+    retval[i] = FeatureHashing_murmurhash3(str, ::strlen(str), MURMURHASH3_H_SEED);
+    if (retval[i] < 0) retval[i] = -1;
+    else retval[i] = 1;
   }
   return retval;
 }
 
-//[[Rcpp::export("rehash_inplace")]]
-void rehash_inplace(S4 m, IntegerVector Rmapping, int hash_size) {
-  uint32_t *pmapping = reinterpret_cast<uint32_t*>(INTEGER(wrap(Rmapping)));
-  #pragma omp parallel for
-  for(size_t i = 0;i < Rmapping.size();i++) {
-    pmapping[i] = pmapping[i] % hash_size;
-  }
-  IntegerVector i(m.slot("i")), p(m.slot("p")), dimension(m.slot("Dim"));
-  NumericVector x(m.slot("x"));
-  dimension[0] = hash_size;
-  #pragma omp parallel for
-  for(size_t j = 0;j < i.size();j++) {
-    i[j] = pmapping[i[j]];
-  }
-}

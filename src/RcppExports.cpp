@@ -64,48 +64,34 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// hash_without_intercept_single
-IntegerVector hash_without_intercept_single(CharacterVector src);
-RcppExport SEXP FeatureHashing_hash_without_intercept_single(SEXP srcSEXP) {
+// xi
+IntegerVector xi(CharacterVector src);
+RcppExport SEXP FeatureHashing_xi(SEXP srcSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< CharacterVector >::type src(srcSEXP );
-        IntegerVector __result = hash_without_intercept_single(src);
+        IntegerVector __result = xi(src);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
     return __sexp_result;
 END_RCPP
 }
-// hash_without_intercept
-IntegerVector hash_without_intercept(CharacterVector src);
-RcppExport SEXP FeatureHashing_hash_without_intercept(SEXP srcSEXP) {
+// h
+IntegerVector h(CharacterVector src);
+RcppExport SEXP FeatureHashing_h(SEXP srcSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< CharacterVector >::type src(srcSEXP );
-        IntegerVector __result = hash_without_intercept(src);
+        IntegerVector __result = h(src);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
     return __sexp_result;
-END_RCPP
-}
-// rehash_inplace
-void rehash_inplace(S4 m, IntegerVector Rmapping, int hash_size);
-RcppExport SEXP FeatureHashing_rehash_inplace(SEXP mSEXP, SEXP RmappingSEXP, SEXP hash_sizeSEXP) {
-BEGIN_RCPP
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< S4 >::type m(mSEXP );
-        Rcpp::traits::input_parameter< IntegerVector >::type Rmapping(RmappingSEXP );
-        Rcpp::traits::input_parameter< int >::type hash_size(hash_sizeSEXP );
-        rehash_inplace(m, Rmapping, hash_size);
-    }
-    return R_NilValue;
 END_RCPP
 }
 // hashed_model_matrix_dataframe

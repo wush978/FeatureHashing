@@ -17,16 +17,12 @@ tomatrix <- function(m) {
     .Call('FeatureHashing_tomatrix', PACKAGE = 'FeatureHashing', m)
 }
 
-hash_without_intercept_single <- function(src) {
-    .Call('FeatureHashing_hash_without_intercept_single', PACKAGE = 'FeatureHashing', src)
+hash_xi <- function(src) {
+    .Call('FeatureHashing_xi', PACKAGE = 'FeatureHashing', src)
 }
 
-hash_without_intercept <- function(src) {
-    .Call('FeatureHashing_hash_without_intercept', PACKAGE = 'FeatureHashing', src)
-}
-
-rehash_inplace <- function(m, Rmapping, hash_size) {
-    invisible(.Call('FeatureHashing_rehash_inplace', PACKAGE = 'FeatureHashing', m, Rmapping, hash_size))
+hash_h <- function(src) {
+    .Call('FeatureHashing_h', PACKAGE = 'FeatureHashing', src)
 }
 
 .hashed.model.matrix.dataframe <- function(tf, data, hash_size, transpose, retval, keep_hashing_mapping) {

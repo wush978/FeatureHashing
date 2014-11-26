@@ -48,6 +48,8 @@ inline uint32_t FeatureHashing_murmurhash3(const char* buf, int size, uint32_t s
 #endif
 }
 
+#define MURMURHASH3_H_SEED 3120602769
+#define MURMURHASH3_XI_SEED 79193439
 
 //-----------------------------------------------------------------------------
 

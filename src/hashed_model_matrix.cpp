@@ -1,7 +1,6 @@
 #include <cstring>
 #include <memory>
 #include <Rcpp.h>
-#include "capi.h"
 #include "MurmurHash3.h"
 #include "tag.hpp"
 
@@ -38,15 +37,15 @@ public:
 
 };
 
-class CRC32HashFunction : public HashFunction {
-  
-public:
-
-  virtual uint32_t operator()(const char* buf, int size) {
-    return ::FeatureHashing_crc32(buf, size);
-  }
-
-};
+//class CRC32HashFunction : public HashFunction {
+//  
+//public:
+//
+//  virtual uint32_t operator()(const char* buf, int size) {
+//    return ::FeatureHashing_crc32(buf, size);
+//  }
+//
+//};
 
 class MurmurHash3HashFunction : public HashFunction {
   
@@ -61,23 +60,23 @@ public :
   }
 };
 
-class CRC32LogHashFunction : public HashFunction {
-  
-  Environment e;
-  
-public:
-
-  CRC32LogHashFunction(SEXP _e) 
-  : HashFunction(), e(_e)
-  { }
-  
-  virtual uint32_t operator()(const char* buf, int size) {
-    uint32_t retval = FeatureHashing_crc32(buf, size);
-    e[buf] = wrap(retval);
-    return retval;
-  }
-  
-};
+//class CRC32LogHashFunction : public HashFunction {
+//  
+//  Environment e;
+//  
+//public:
+//
+//  CRC32LogHashFunction(SEXP _e) 
+//  : HashFunction(), e(_e)
+//  { }
+//  
+//  virtual uint32_t operator()(const char* buf, int size) {
+//    uint32_t retval = FeatureHashing_crc32(buf, size);
+//    e[buf] = wrap(retval);
+//    return retval;
+//  }
+//  
+//};
 
 class MurmurHash3LogHashFunction : public HashFunction {
   
@@ -662,11 +661,11 @@ SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size
   Environment e(Environment::base_env().new_child(wrap(true)));
   std::shared_ptr<HashFunction> pHF(NULL), pBHF(NULL);
   if (keep_hashing_mapping) {
-    pHF.reset(new MurmurHash3LogHashFunction(wrap(e), 3120602769));
+    pHF.reset(new MurmurHash3LogHashFunction(wrap(e), MURMURHASH3_H_SEED));
   } else {
-    pHF.reset(new MurmurHash3HashFunction(3120602769));
+    pHF.reset(new MurmurHash3HashFunction(MURMURHASH3_H_SEED));
   }
-  pBHF.reset(new MurmurHash3HashFunction(79193439));
+  pBHF.reset(new MurmurHash3HashFunction(MURMURHASH3_XI_SEED));
   ConvertersVec converters(get_converters(reference_class, tf, data, pHF.get(), pBHF.get()));
   #ifdef NOISY_DEBUG
   Rprintf("The size of convertres is %d\n", converters.size());

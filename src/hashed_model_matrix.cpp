@@ -87,7 +87,7 @@ class MurmurHash3LogHashFunction : public HashFunction {
 public:
 
   MurmurHash3LogHashFunction(SEXP _e, uint32_t _seed) 
-  : HashFunction(), e(_e), seed(_seed)
+  : HashFunction(), seed(_seed), e(_e)
   { }
   
   virtual uint32_t operator()(const char* buf, int size) {

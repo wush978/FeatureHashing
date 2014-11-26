@@ -10,10 +10,10 @@
 #'The \code{hashed.model.matrix} hashes the feature automatically during
 #'the construction of the model matrix. It uses the 32-bit variant of MurmurHash3 
 #'\url{https://code.google.com/p/smhasher/wiki/MurmurHash3}. Weinberger 
-#'et. al. (2009) used two seperate hashing function \eqn{h} and \eqn{\xi}
-#'to determine the index and the sign of a feature, respectively. Different
-#'seed is used to implement the hashing function \eqn{h} and \eqn{\xi} with
-#'MurmurHash3.
+#'et. al. (2009) used two seperate hashing function \eqn{h}(\code{hash_h}) and 
+#'\eqn{\xi}(\code{hash_xi}) to determine the index and the sign of a feature, 
+#'respectively. Different seed is used to implement the hashing function 
+#'\eqn{h} and \eqn{\xi} with MurmurHash3.
 #'
 #'@references Kilian Q. Weinberger, Anirban Dasgupta, John Langford, 
 #'Alexander J. Smola, and Josh Attenberg. ICML, volume 382 of ACM 
@@ -34,6 +34,7 @@
 #'@export
 #'@importFrom methods new
 #'@importFrom methods checkAtAssignment
+#'@aliases hash_h hash_xi
 hashed.model.matrix <- function(object, data, hash_size = 2^24, transpose = TRUE, keep.hashing_mapping = FALSE) {
   stopifnot(hash_size >= 0)
   stopifnot(is.data.frame(data))

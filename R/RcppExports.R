@@ -17,10 +17,12 @@ tomatrix <- function(m) {
     .Call('FeatureHashing_tomatrix', PACKAGE = 'FeatureHashing', m)
 }
 
+#'@export hash_xi
 hash_xi <- function(src) {
     .Call('FeatureHashing_xi', PACKAGE = 'FeatureHashing', src)
 }
 
+#'@export hash_h
 hash_h <- function(src) {
     .Call('FeatureHashing_h', PACKAGE = 'FeatureHashing', src)
 }

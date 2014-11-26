@@ -23,6 +23,14 @@
 #'[,CSCMatrix,missing,numeric,ANY-method
 #'[,CSCMatrix,numeric,missing,ANY-method 
 #'[,CSCMatrix,numeric,numeric,ANY-method
+#'@section Methods:
+#'\itemize{
+#'\item \code{dim} The dimension of the matrix object \code{CSCMatrix}.
+#'\item \code{dim<-} The assignment of dimention of the matrix object \code{CSCMatrix}.
+#'\item \code{[} The subsetting operator of the matrix object \code{CSCMatrix}.
+#'\item \code{\%*\%} The matrix-vector multiplication of the matrix object \code{CSCMatrix}.
+#'The returned object is a numeric vector.
+#'}
 setClass("CSCMatrix", representation(
   i = "integer",
   p = "integer",

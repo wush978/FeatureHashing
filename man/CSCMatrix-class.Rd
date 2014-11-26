@@ -26,6 +26,16 @@ The \code{CSCMatrix} validates two constraints used in \code{dgCMatrix}:
 }
 Therefore, the result of matrix-vector should be the same.
 }
+\section{Methods}{
+
+\itemize{
+\item \code{dim} The dimension of the matrix object \code{CSCMatrix}.
+\item \code{dim<-} The assignment of dimention of the matrix object \code{CSCMatrix}.
+\item \code{[} The subsetting operator of the matrix object \code{CSCMatrix}.
+\item \code{\%*\%} The matrix-vector multiplication of the matrix object \code{CSCMatrix}.
+The returned object is a numeric vector.
+}
+}
 \examples{
 # construct a CSCMatrix
 m <- hashed.model.matrix(~ ., CO2, 8)

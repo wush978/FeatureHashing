@@ -69,14 +69,14 @@ SEXP todgCMatrix(S4 m) {
   }
   IntegerVector i(m.slot("i")), p(m.slot("p")), Dim(m.slot("Dim"));
   NumericVector x(m.slot("x"));
-  int *pi = &i[0], *pp(&p[0]);
+  int *pi = &i[0];
   double *px = &x[0];
   std::vector<int> new_i, new_p;
   std::vector<double> new_x;
   new_i.resize(i.size());
   new_p.resize(p.size());
   new_x.resize(x.size());
-  int *pnew_i = &new_i[0], *pnew_p = &new_p[0];
+  int *pnew_i = &new_i[0];
   double *pnew_x = &new_x[0];
   size_t len = 0;
   for(auto col = 0;col < Dim[1];col++) {

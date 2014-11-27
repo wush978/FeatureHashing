@@ -16,3 +16,4 @@ Imports:
   Matrix,
   methods
 LinkingTo: Rcpp
+Suggests: pack

@@ -10,7 +10,7 @@ IntegerVector xi(CharacterVector src) {
   for(int i = 0;i < src.size();i++) {
     const char* str = CHAR(src[i]);
     if (::strcmp("(Intercept)", str) == 0) continue;
-    retval[i] = FeatureHashing_murmurhash3(str, ::strlen(str), MURMURHASH3_XI_SEED);
+    retval[i] = (int) FeatureHashing_murmurhash3(str, ::strlen(str), MURMURHASH3_XI_SEED);
     if (retval[i] < 0) retval[i] = -1;
     else retval[i] = 1;
   }

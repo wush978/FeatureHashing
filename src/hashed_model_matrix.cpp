@@ -33,7 +33,7 @@ class HashFunction {
 
 public:
 
-  virtual uint32_t operator()(const char* buf, int size) = 0;
+  virtual uint32_t operator()(const char* buf, int size, bool is_interaction = false) = 0;
 
 };
 
@@ -55,7 +55,7 @@ public :
 
   MurmurHash3HashFunction(uint32_t _seed) : seed(_seed) { }
 
-  virtual uint32_t operator()(const char* buf, int size) {
+  virtual uint32_t operator()(const char* buf, int size, bool is_interaction = false) {
     return ::FeatureHashing_murmurhash3(buf, size, seed);
   }
 };
@@ -82,6 +82,7 @@ class MurmurHash3LogHashFunction : public HashFunction {
   
   uint32_t seed;
   Environment e;
+  std::map<uint32_t, std::string> inverse_mapping;
   
 public:
 
@@ -89,9 +90,22 @@ public:
   : HashFunction(), seed(_seed), e(_e)
   { }
   
-  virtual uint32_t operator()(const char* buf, int size) {
+  virtual uint32_t operator()(const char* buf, int size, bool is_interaction = false) {
     uint32_t retval = FeatureHashing_murmurhash3(buf, size, seed);
-    e[buf] = wrap(retval);
+    if (is_interaction) {
+      const uint32_t* src = reinterpret_cast<const uint32_t*>(buf);
+      if (inverse_mapping.find(src[0]) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
+      if (inverse_mapping.find(src[1]) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
+      std::string key(inverse_mapping[src[0]]);
+      key.append(":");
+      key.append(inverse_mapping[src[1]]);
+      e[key.c_str()] = wrap(retval);
+      inverse_mapping[retval] = key;
+    } 
+    else {
+      e[buf] = wrap(retval);
+      inverse_mapping[retval] = buf;
+    }
     return retval;
   }
   
@@ -514,7 +528,7 @@ private:
     uint32_t buf[2];
     buf[0] = a;
     buf[1] = b;
-    return (*h)(reinterpret_cast<char*>(buf), sizeof(uint32_t) * 2);
+    return (*h)(reinterpret_cast<char*>(buf), sizeof(uint32_t) * 2, true);
   }
   
 };

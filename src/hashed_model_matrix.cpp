@@ -136,7 +136,8 @@ protected:
    * @return -1 if (int) v < 0, or +1 otherwise
    */ 
   static inline int get_sign(uint32_t v) {
-    return +1 | (v >> (sizeof(uint32_t) * CHAR_BIT - 1));
+    if ((int) v < 0) return -1;
+    else return 1;
   }
 
   uint32_t get_hashed_feature(HashFunction* h, const char* str) {
@@ -163,8 +164,8 @@ public:
 
   explicit CharacterConverter(SEXP _src, const std::string& _name, HashFunction* _h_main, HashFunction* _h_binary)
   : VectorConverter(_name, _h_main, _h_binary), src(_src), psrc(wrap(src)) {
-    value_buffer.resize(1, 1.0);
-    feature_buffer.resize(1);
+    value_buffer.reserve(1);
+    feature_buffer.reserve(1);
   }
   
   virtual ~CharacterConverter() { }
@@ -175,7 +176,7 @@ public:
       feature_buffer.clear();
     } else {
       const char* str = CHAR(pstr);
-      feature_buffer.resize(1, 1);
+      feature_buffer.resize(1);
       feature_buffer[0] = get_hashed_feature(h_main, str);
     }
     return feature_buffer;
@@ -188,7 +189,8 @@ public:
     } else {
       const char* str = CHAR(pstr);
       uint32_t sign_value = get_hashed_feature(h_binary, str);
-      value_buffer.resize(1, get_sign(sign_value));
+      value_buffer.resize(1);
+      value_buffer[0] = get_sign(sign_value);
     }
     return value_buffer;
   }
@@ -204,8 +206,8 @@ public:
 
   explicit FactorConverter(SEXP _src, const std::string& _name, HashFunction* _h_main, HashFunction* _h_binary) 
   : VectorConverter(_name, _h_main, _h_binary), src(_src), levels(src.attr("levels")), plevels(wrap(levels)) {
-    value_buffer.resize(1, 1);
-    feature_buffer.resize(1);
+    value_buffer.reserve(1);
+    feature_buffer.reserve(1);
   }
   
   virtual ~FactorConverter() { }
@@ -227,7 +229,8 @@ public:
     } else {
       const char* str = CHAR(STRING_ELT(plevels, src[i] - 1)); // R start from 1 and C start from 0
       uint32_t sign_value = get_hashed_feature(h_binary, str);
-      value_buffer.resize(1, get_sign(sign_value));
+      value_buffer.resize(1);
+      value_buffer[0] = get_sign(sign_value);
     }
     return value_buffer;
   }
@@ -259,8 +262,8 @@ public:
   explicit DenseConverter(SEXP _src, const std::string& _name, HashFunction* _h_main, HashFunction* _h_binary) 
   : VectorConverter(_name, _h_main, _h_binary), src(_src), value(get_hashed_feature(h_main, "")), 
   sign_value(get_sign(get_hashed_feature(h_binary, ""))) {
-    feature_buffer.resize(1, value);
-    value_buffer.resize(1, 0.0);
+    feature_buffer.reserve(1);
+    value_buffer.reserve(1);
   }
   
   virtual ~DenseConverter() { }
@@ -269,7 +272,8 @@ public:
     if (isNA(src[i]) | src[i] == 0) {
       feature_buffer.clear();
     } else {
-      feature_buffer.resize(1, value);
+      feature_buffer.resize(1);
+      feature_buffer[0] = value;
     }
     return feature_buffer;
   }
@@ -278,9 +282,9 @@ public:
     if (isNA(src[i]) | src[i] == 0) {
       value_buffer.clear();
     } else {
-      value_buffer.resize(1, 0);
+      value_buffer.resize(1);
+      value_buffer[0] = sign_value * src[i];
     }
-    value_buffer[0] = sign_value * src[i];
     return value_buffer;
   }
   

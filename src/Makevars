@@ -1,0 +1,5 @@
+CXX_STD = CXX11
+
+PKG_CFLAGS = -g 
+
+PKG_CXXFLAGS = -g 

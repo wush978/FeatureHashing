@@ -64,7 +64,7 @@ all(hash_h(names(mapping)) \%\% 2^6 == mapping \%\% 2^6)
 ## The sign is corrected by `hash_xi`
 hash_xi(names(mapping))
 ## The interaction term is implemented as follow:
-# m2 <- hashed.model.matrix(~ .^2, CO2, 2^6, keep.hashing_mapping = TRUE)
+m2 <- hashed.model.matrix(~ .^2, CO2, 2^6, keep.hashing_mapping = TRUE)
 mapping2 <- unlist(as.list(attr(m2, "mapping")))
 mapping2[2] # PlantQn2:uptake
 h1 <- mapping2["PlantQn2"]

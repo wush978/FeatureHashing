@@ -19,3 +19,4 @@ Imports:
   methods
 LinkingTo: Rcpp
 Suggests: pack
+SystemRequirements: C++11

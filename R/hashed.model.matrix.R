@@ -71,6 +71,7 @@
 #'@export
 #'@importFrom methods new
 #'@importFrom methods checkAtAssignment
+#'@importFrom Matrix dgCMatrix
 #'@aliases hash_h hash_xi
 hashed.model.matrix <- function(object, data, hash_size = 2^24, transpose = TRUE, keep.hashing_mapping = FALSE) {
   stopifnot(hash_size >= 0)

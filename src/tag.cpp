@@ -1,6 +1,6 @@
 #include <cstring>
 #include <Rcpp.h>
-#include "tag.hpp"
+#include "tag.h"
 using namespace Rcpp;
 
 std::vector<std::string> split(const std::string& src, const std::string& delim) {

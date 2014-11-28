@@ -2,7 +2,7 @@
 #include <memory>
 #include <Rcpp.h>
 #include "MurmurHash3.h"
-#include "tag.hpp"
+#include "tag.h"
 
 using namespace Rcpp;
 

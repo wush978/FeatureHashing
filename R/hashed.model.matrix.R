@@ -21,7 +21,7 @@
 #'such as "1,27,19,25,tp,tw" which represents the occurrense of multiple categorical
 #'variable. The \code{hashed.model.matrix} will expand the tag feature and hash them.
 #'
-#'The "tag" key word except two parameter:
+#'The "tag" accepts two parameters:
 #'\itemize{
 #'  \item \code{split}, character value used for splitting.
 #'  \item \code{type}, one of \code{existence} or \code{count}.

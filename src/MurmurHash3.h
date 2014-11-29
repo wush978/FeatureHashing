@@ -33,19 +33,10 @@ void MurmurHash3_x86_128 ( const void * key, int len, uint32_t seed, void * out 
 void MurmurHash3_x64_128 ( const void * key, int len, uint32_t seed, void * out );
 
 inline uint32_t FeatureHashing_murmurhash3(const char* buf, int size, uint32_t seed) {
-#if defined(__x86_64__) || defined(_M_X64)
-  /* x86 64-bit ----------------------------------------------- */
-  uint32_t retval[4] = {0, 0, 0, 0};
-  MurmurHash3_x64_128(reinterpret_cast<const void*>(buf), size, seed, 
-    reinterpret_cast<void*>(retval));
-  return retval[0];
-#elif defined(__i386) || defined(_M_IX86)
-	/* x86 32-bit ----------------------------------------------- */
-  uint32_t retval = 0;
+  uint32_t retval[1] = {0};
   MurmurHash3_x86_32(reinterpret_cast<const void*>(buf), size, seed, 
     reinterpret_cast<void*>(retval));
-  return retval;
-#endif
+  return retval[0];
 }
 
 extern const uint32_t MURMURHASH3_H_SEED, MURMURHASH3_XI_SEED;

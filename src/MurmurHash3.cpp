@@ -332,7 +332,7 @@ void MurmurHash3_x64_128 ( const void * key, const int len,
 }
 
 const uint32_t 
-  MURMURHASH3_H_SEED = 3120602769,
-  MURMURHASH3_XI_SEED = 79193439;
+  MURMURHASH3_H_SEED = 3120602769LL,
+  MURMURHASH3_XI_SEED = 79193439LL;
 //-----------------------------------------------------------------------------
 

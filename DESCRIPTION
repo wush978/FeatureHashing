@@ -11,7 +11,7 @@ Description: Feature hashing is a popular trick to vectorize text features.
   and provides an API similar to model.matrix and Matrix::sparse.model.matrix 
   in R. 
   The FeatureHashing also supports the splitting of concatenated data during 
-  the constructiong of model matrix to save the memory.
+  the construction of model matrix to save the memory.
 License: GPL(>= 3)
 Imports: 
   Rcpp (>= 0.11),

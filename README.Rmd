@@ -3,20 +3,47 @@ FeatureHashing
 
 Implement feature hashing with R
 
+## Introduction
+
+[Feature hashing](http://en.wikipedia.org/wiki/Feature_hashing) is a popular trick to vectorize text features. 
+The pakcage FeatureHashing implements the hashing trick introduced in 
+Weinberger et. al. (2009) 
+and provides an API similar to model.matrix and Matrix::sparse.model.matrix 
+in R. 
+The FeatureHashing also supports the splitting of concatenated data during 
+the construction of model matrix to save the memory.
+
+### When do I use Feature Hashing?
+
+- I don't need to know the meaning of the cofficient.
+
+    After feature hashing, it is hard to connect the trained coeifficents to the original data.
+
+- I cannot convert all data including training data and testing data to a matrix in one time. 
+
+    To make the matrix consistent, I need to synchronize the mapping between the position and the feature. Feature hashing makes my life easier.
+
+- You get a concatenated data in one column.
+
+    Feature Hashing supports the splitting of concatenated data and the user only need to specify the concatenated data and the delimiter in the formula.
+
 ## Demo
 
-### Hashed Matrix
+### Feature Hashing
 
 ```{r}
 library(FeatureHashing)
 # Construct the model matrix. The transposed matrix is returned by default.
 m <- hashed.model.matrix(~ ., CO2, 2^6, keep.hashing_mapping = TRUE)
+mapping <- as.list(attr(m, "mapping"))
 # Print the matrix via dgCMatrix
-as(m, "dgCMatrix")
+as(m, "dgCMatrix")[1:20,1:17]
+
 # Check the result of hashing
 mapping <- unlist(as.list(attr(m, "mapping")))
+mapping %% 2^6 # the 9-th row is conc
 # Check the rate of collision
-# mean(duplicated(mapping %% 2^6))
+mean(duplicated(mapping %% 2^6))
 # The result is CSCMatrix which supports simple subsetting and matrix-vector
 # multiplication
 # rnorm(2^6) %*% m
@@ -34,13 +61,19 @@ h1 <- mapping2["PlantQn2"]
 h2 <- mapping2["uptake"]
 library(pack)
 hash_h(rawToChar(c(numToRaw(h1, 4), numToRaw(h2, 4)))) # should be mapping2[2]
+```
 
+### Concatenated Data
+
+```{r}
 # The tag-like feature
 data(test.tag)
 df <- data.frame(a = test.tag, b = rnorm(length(test.tag)))
+head(df)
 m <- hashed.model.matrix(~ tag(a, split = ",", type = "existence"):b, df, 2^6,
  keep.hashing_mapping = TRUE)
 # The column `a` is splitted by "," and have an interaction with "b":
 mapping <- unlist(as.list(attr(m, "mapping")))
 names(mapping)
 ```
+

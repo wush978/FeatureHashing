@@ -1,5 +1,19 @@
 library(FeatureHashing)
 
+# test consistency of hashing
+
+mapping_value <- structure(c(3789462177, 4122940517, 1079927366, 1505155248, 4103768016, 
+  1576910802, 248868694, 2189134401, 1321560276, 2636986885, 1980993114, 
+  3588767725, 3873367263, 3437882550, 1125161513, 875000041, 1178743966, 
+  1791688646), .Names = c("PlantQn1", "PlantQn2", "PlantQn3", "uptake", 
+    "TypeMississippi", "Treatmentchilled", "PlantMn1", "PlantMn2", 
+    "PlantMn3", "PlantQc1", "PlantQc2", "PlantQc3", "Treatmentnonchilled", 
+    "PlantMc1", "PlantMc2", "PlantMc3", "conc", "TypeQuebec"))
+
+stopifnot(all(hash_h(names(mapping_value)) %% 2^32 == mapping_value))
+
+# test hashing result
+
 m <- hashed.model.matrix(~ ., CO2, hash_size = 2^10, keep.hashing_mapping = T)
 mapping <- as.list(attr(m, "mapping"))
 stopifnot(all(!duplicated(unlist(mapping) %% 2^10 + 1)))

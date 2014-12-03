@@ -3,7 +3,7 @@
 #'as the structure of \code{dgCMatrix}. However, the
 #'\code{CSCMatrix} has weaker constraints compared to \code{dgCMatrix}.
 #'
-#'\code{CSCMatrix} supportes limited operators. The user should convert it to
+#'\code{CSCMatrix} supports limited operators. The user should convert it to
 #'\code{dgCMatrix} if more comprehensive computation is required.
 #'@seealso \code{\link{dgCMatrix-class}}
 #'@details The \code{CSCMatrix} validates two constraints used in \code{dgCMatrix}:
@@ -26,7 +26,7 @@
 #'@section Methods:
 #'\itemize{
 #'\item \code{dim} The dimension of the matrix object \code{CSCMatrix}.
-#'\item \code{dim<-} The assignment of dimention of the matrix object \code{CSCMatrix}.
+#'\item \code{dim<-} The assignment of dimension of the matrix object \code{CSCMatrix}.
 #'\item \code{[} The subsetting operator of the matrix object \code{CSCMatrix}.
 #'\item \code{\%*\%} The matrix-vector multiplication of the matrix object \code{CSCMatrix}.
 #'The returned object is a numeric vector.

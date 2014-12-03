@@ -1,7 +1,7 @@
 #'@title expand tag feature
 #'@param x character vector or factor. The source of tag features.
 #'@param split character vector. The split symbol for tag features.
-#'@param type character value. Either "count" or "existence". "count" indicates the number of occurrance of the tag. "existence" indicates the boolean that whether the tag exist or not.
+#'@param type character value. Either "count" or "existence". "count" indicates the number of occurrence of the tag. "existence" indicates the boolean that whether the tag exist or not.
 #'@return integer vector for \code{type = "count"} and logical vector for \code{type = "existence"}.
 #'@export
 tag <- function(x, split = ",", type = c("count", "existence")) {

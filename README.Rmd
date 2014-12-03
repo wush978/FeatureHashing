@@ -6,7 +6,7 @@ Implement feature hashing with R
 ## Introduction
 
 [Feature hashing](http://en.wikipedia.org/wiki/Feature_hashing) is a popular trick to vectorize text features. 
-The pakcage FeatureHashing implements the hashing trick introduced in 
+The package FeatureHashing implements the hashing trick introduced in 
 Weinberger et. al. (2009) 
 and provides an API similar to model.matrix and Matrix::sparse.model.matrix 
 in R. 
@@ -15,9 +15,9 @@ the construction of model matrix to save the memory.
 
 ### When do I use Feature Hashing?
 
-- I don't need to know the meaning of the cofficient.
+- I don't need to know the meaning of the cofficients.
 
-    After feature hashing, it is hard to connect the trained coeifficents to the original data.
+    After feature hashing, it is hard to connect the trained cofficients to the original data.
 
 - I cannot convert all data including training data and testing data to a matrix in one time. 
 

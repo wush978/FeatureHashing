@@ -10,7 +10,7 @@
 #'The \code{hashed.model.matrix} hashes the feature automatically during
 #'the construction of the model matrix. It uses the 32-bit variant of MurmurHash3 
 #'\url{https://code.google.com/p/smhasher/wiki/MurmurHash3}. Weinberger 
-#'et. al. (2009) used two seperate hashing function \eqn{h}(\code{hash_h}) and 
+#'et. al. (2009) used two separate hashing function \eqn{h}(\code{hash_h}) and 
 #'\eqn{\xi}(\code{hash_xi}) to determine the index and the sign of a feature, 
 #'respectively. Different seed is used to implement the hashing function 
 #'\eqn{h} and \eqn{\xi} with MurmurHash3.
@@ -18,7 +18,7 @@
 #'The object formula is parsed via \code{\link{terms.formula}} with "tag" as special
 #'keyword. The interaction term is hashed in different way. Please see example for 
 #'the detailed implementation. The "tag" is used to expand the compressed feature
-#'such as "1,27,19,25,tp,tw" which represents the occurrense of multiple categorical
+#'such as "1,27,19,25,tp,tw" which represents the occurrence of multiple categorical
 #'variable. The \code{hashed.model.matrix} will expand the tag feature and hash them.
 #'
 #'The "tag" accepts two parameters:

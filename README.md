@@ -6,18 +6,18 @@ Implement feature hashing with R
 ## Introduction
 
 [Feature hashing](http://en.wikipedia.org/wiki/Feature_hashing) is a popular trick to vectorize text features. 
-The pakcage FeatureHashing implements the hashing trick introduced in 
+The package FeatureHashing implements the hashing trick introduced in 
 Weinberger et. al. (2009) 
 and provides an API similar to model.matrix and Matrix::sparse.model.matrix 
 in R. 
 The FeatureHashing also supports the splitting of concatenated data during 
 the construction of model matrix to save the memory.
 
-### When do I use Feature Hashing?
+### When will I use Feature Hashing?
 
-- I don't need to know the meaning of the cofficient.
+- I don't need to know the meaning of the cofficients.
 
-    After feature hashing, it is hard to connect the trained coeifficents to the original data.
+    After feature hashing, it is hard to connect the trained cofficients to the original data.
 
 - I cannot convert all data including training data and testing data to a matrix in one time. 
 
@@ -42,35 +42,7 @@ as(m, "dgCMatrix")[1:20,1:17]
 ```
 
 ```
-## 20 x 17 sparse Matrix of class "dgCMatrix"
-```
-
-```
-##    [[ suppressing 17 column names '1', '2', '3' ... ]]
-```
-
-```
-##                                                                        
-## <NA>  1   1   1   1   1   1    1  1   1   1   1   1   1    1  1   1   1
-## <NA>  .   .   .   .   .   .    .  .   .   .   .   .   .    .  .   .   .
-## <NA>  .   .   .   .   .   .    .  .   .   .   .   .   .    .  .   .   .
-## <NA>  .   .   .   .   .   .    .  .   .   .   .   .   .    .  .   .   .
-## <NA>  .   .   .   .   .   .    .  .   .   .   .   .   .    .  .   .   .
-## <NA>  .   .   .   .   .   .    .  .   .   .   .   .   .    .  .   .   .
-## <NA>  .   .   .   .   .   .    .  .   .   .   .   .   .    .  .   .   .
-## <NA>  .   .   .   .   .   .    .  .   .   .   .   .   .    .  .   .   .
-## <NA> 95 175 250 350 500 675 1000 95 175 250 350 500 675 1000 95 175 250
-## <NA>  .   .   .   .   .   .    .  .   .   .   .   .   .    .  .   .   .
-## <NA>  .   .   .   .   .   .    .  .   .   .   .   .   .    .  .   .   .
-## <NA>  .   .   .   .   .   .    .  .   .   .   .   .   .    .  .   .   .
-## <NA>  .   .   .   .   .   .    .  .   .   .   .   .   .    .  .   .   .
-## <NA>  .   .   .   .   .   .    .  .   .   .   .   .   .    .  .   .   .
-## <NA>  .   .   .   .   .   .    .  .   .   .   .   .   .    .  .   .   .
-## <NA>  .   .   .   .   .   .    .  .   .   .   .   .   .    .  .   .   .
-## <NA>  .   .   .   .   .   .    .  .   .   .   .   .   .    .  .   .   .
-## <NA>  .   .   .   .   .   .    .  .   .   .   .   .   .    .  .   .   .
-## <NA>  .   .   .   .   .   .    .  .   .   .   .   .   .    .  .   .   .
-## <NA>  .   .   .   .   .   .    .  .   .   .   .   .   .    .  .   .   .
+## Error: could not find function "as"
 ```
 
 ```r
@@ -81,17 +53,17 @@ mapping %% 2^6 # the 9-th row is conc
 
 ```
 ##            PlantQn1            PlantQn2            PlantQn3 
-##                  25                  56                  26 
+##                  33                  37                   6 
 ##              uptake     TypeMississippi    Treatmentchilled 
-##                  27                  56                  18 
+##                  48                  16                  18 
 ##            PlantMn1            PlantMn2            PlantMn3 
-##                  54                  34                  54 
+##                  22                   1                  20 
 ##            PlantQc1            PlantQc2            PlantQc3 
-##                  10                   2                   1 
+##                   5                  26                  45 
 ## Treatmentnonchilled            PlantMc1            PlantMc2 
-##                  38                   6                  22 
+##                  31                  54                  41 
 ##            PlantMc3                conc          TypeQuebec 
-##                  26                   8                  38
+##                  41                  30                   6
 ```
 
 ```r
@@ -100,7 +72,7 @@ mean(duplicated(mapping %% 2^6))
 ```
 
 ```
-## [1] 0.2222
+## [1] 0.1111
 ```
 
 ```r
@@ -123,7 +95,7 @@ hash_xi(names(mapping))
 ```
 
 ```
-##  [1]  1 -1  1 -1 -1 -1 -1  1  1 -1  1 -1  1  1  1  1  1 -1
+##  [1] -1  1  1 -1 -1  1 -1 -1  1  1  1  1 -1  1 -1  1  1  1
 ```
 
 ```r
@@ -135,7 +107,7 @@ mapping2[2] # PlantQn2:uptake
 
 ```
 ## PlantQn2:uptake 
-##        7.55e+08
+##       974267571
 ```
 
 ```r
@@ -146,7 +118,7 @@ hash_h(rawToChar(c(numToRaw(h1, 4), numToRaw(h2, 4)))) # should be mapping2[2]
 ```
 
 ```
-## [1] 755024387
+## [1] 974267571
 ```
 
 ### Concatenated Data
@@ -161,12 +133,12 @@ head(df)
 
 ```
 ##                                        a       b
-## 1                       1,27,19,25,tp,tw  0.9208
-## 2                       1,27,19,25,tp,tw  0.3930
-## 3 25,1,19,6,29,17,16,21,26,23,27,4,ty,tw  0.6202
-## 4                               19,tp,tw  0.8814
-## 5                                  19,tw -2.3572
-## 6                                 ,ch,tw -2.1393
+## 1                       1,27,19,25,tp,tw -0.2177
+## 2                       1,27,19,25,tp,tw  0.5818
+## 3 25,1,19,6,29,17,16,21,26,23,27,4,ty,tw -0.3241
+## 4                               19,tp,tw  1.5724
+## 5                                  19,tw -0.6810
+## 6                                 ,ch,tw  0.9433
 ```
 
 ```r

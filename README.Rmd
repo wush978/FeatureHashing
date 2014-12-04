@@ -13,7 +13,7 @@ in R.
 The FeatureHashing also supports the splitting of concatenated data during 
 the construction of model matrix to save the memory.
 
-### When do I use Feature Hashing?
+### When will I use Feature Hashing?
 
 - I don't need to know the meaning of the cofficients.
 

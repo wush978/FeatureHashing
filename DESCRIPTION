@@ -5,13 +5,13 @@ Version: 0.7
 Date: 2014-08-01
 Author: Wush Wu
 Maintainer: Wush Wu <wush978@gmail.com>
-Description: Feature hashing is a popular trick to vectorize text features. 
-  The package FeatureHashing implements the hashing trick introduced in 
-  Weinberger et. al. (2009) 
-  and provides an API similar to model.matrix and Matrix::sparse.model.matrix 
-  in R. 
-  The FeatureHashing also supports the splitting of concatenated data during 
-  the construction of model matrix to save the memory.
+Description: Feature hashing is a method to transform features to vector. Without looking
+  the indices up in an associative array, it applies a hash function to the features and
+  uses their hash values as indices directly. 
+  The FeatureHashing package implements the hashing trick introduced in Weinberger et. 
+  al. (2009) and provides an interface similar to `model.matrix` in R and 
+  `Matrix::sparse.model.matrix` in the Matrix package. Splitting of concatenated data, please
+  see the help of `test.tag` for example, is also supported.
 License: GPL(>= 3)
 Imports: 
   Rcpp (>= 0.11),

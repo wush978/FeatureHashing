@@ -1,4 +1,4 @@
-#'@title expand tag feature
+#'@title Expand concatenated feature
 #'@param x character vector or factor. The source of tag features.
 #'@param split character vector. The split symbol for tag features.
 #'@param type character value. Either "count" or "existence". "count" indicates the number of occurrence of the tag. "existence" indicates the boolean that whether the tag exist or not.

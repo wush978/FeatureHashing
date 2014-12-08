@@ -3,15 +3,15 @@
 #'as the structure of \code{dgCMatrix}. However, the
 #'\code{CSCMatrix} has weaker constraints compared to \code{dgCMatrix}.
 #'
-#'\code{CSCMatrix} supports limited operators. The user should convert it to
-#'\code{dgCMatrix} if more comprehensive computation is required.
+#'\code{CSCMatrix} onlysupports limited operators. The users can convert it to
+#'\code{dgCMatrix} for compatibility of existed algorithms.
 #'@seealso \code{\link{dgCMatrix-class}}
-#'@details The \code{CSCMatrix} validates two constraints used in \code{dgCMatrix}:
+#'@details The \code{CSCMatrix} violates two constraints used in \code{dgCMatrix}:
 #'\itemize{
 #'  \item The row indices should be sorted with columns.
 #'  \item The row indices should be unique with columns.
 #'}
-#'Therefore, the result of matrix-vector should be the same.
+#'The result of matrix-vector multiplication should be the same.
 #'@examples
 #'# construct a CSCMatrix
 #'m <- hashed.model.matrix(~ ., CO2, 8)

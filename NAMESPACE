@@ -3,7 +3,6 @@
 export(hash_h)
 export(hash_xi)
 export(hashed.model.matrix)
-export(interpret.tag)
 export(tag)
 importClassesFrom(Matrix,dgCMatrix)
 importFrom(Rcpp,evalCpp)

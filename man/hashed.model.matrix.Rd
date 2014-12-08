@@ -3,7 +3,7 @@
 \alias{hash_h}
 \alias{hash_xi}
 \alias{hashed.model.matrix}
-\title{Create a Model Matrix with Feature Hashing}
+\title{Create a model matrix with feature hashing}
 \usage{
 hashed.model.matrix(object, data, hash_size = 2^24, transpose = TRUE,
   keep.hashing_mapping = FALSE)
@@ -18,25 +18,26 @@ hashed.model.matrix(object, data, hash_size = 2^24, transpose = TRUE,
 \item{transpose}{logical value. Indicating if the transpose should be returned.}
 
 \item{keep.hashing_mapping}{logical value.
-The indicator of whether store the hash mapping.}
+The indicator of whether storing the hash mapping or not.}
 }
 \description{
-Create a Model Matrix with Feature Hashing
+Create a model matrix with feature hashing
 }
 \details{
 The \code{hashed.model.matrix} hashes the feature automatically during
 the construction of the model matrix. It uses the 32-bit variant of MurmurHash3
 \url{https://code.google.com/p/smhasher/wiki/MurmurHash3}. Weinberger
 et. al. (2009) used two separate hashing function \eqn{h}(\code{hash_h}) and
-\eqn{\xi}(\code{hash_xi}) to determine the index and the sign of a feature,
+\eqn{\xi}(\code{hash_xi}) to determine the indices and the sign of the values
 respectively. Different seed is used to implement the hashing function
 \eqn{h} and \eqn{\xi} with MurmurHash3.
 
 The object formula is parsed via \code{\link{terms.formula}} with "tag" as special
 keyword. The interaction term is hashed in different way. Please see example for
-the detailed implementation. The "tag" is used to expand the compressed feature
+the detailed implementation. The "tag" is used to expand the concatenated feature
 such as "1,27,19,25,tp,tw" which represents the occurrence of multiple categorical
-variable. The \code{hashed.model.matrix} will expand the tag feature and hash them.
+variable. The \code{hashed.model.matrix} will expand the tag feature and produce
+the related model matrix.
 
 The "tag" accepts two parameters:
 \itemize{

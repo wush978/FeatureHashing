@@ -12,7 +12,7 @@ is FALSE.}
 test.tag
 }
 \description{
-This is a vector to demo the concatenated data.
+This is a vector to demo the concatenated feature.
 }
 \keyword{datasets}
 

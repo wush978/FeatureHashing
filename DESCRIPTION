@@ -9,10 +9,8 @@ Description: Feature hashing, also called as the hashing trick, is a method to
   transform features to vector. Without looking the indices up in an 
   associative array, it applies a hash function to the features and uses their 
   hash values as indices directly. 
-    The FeatureHashing package implements the hashing trick introduced in 
-  Weinberger et. al. (2009) which uses two hashing functions to counter the 
-  effect of hash collision, which is a situation that two different feature
-  have the same hash value. The package also provides an interface similar 
+    The FeatureHashing package implements the method which was introduced in 
+  Weinberger et. al. (2009). The package also provides an interface similar 
   to `model.matrix` in R and `Matrix::sparse.model.matrix` in the Matrix 
   package. Splitting of concatenated feature, please see the help of `test.tag` 
   for details, is also supported.

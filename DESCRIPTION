@@ -9,11 +9,9 @@ Description: Feature hashing, also called as the hashing trick, is a method to
   transform features to vector. Without looking the indices up in an 
   associative array, it applies a hash function to the features and uses their 
   hash values as indices directly. 
-    The FeatureHashing package implements the method which was introduced in 
-  Weinberger et. al. (2009). The package also provides an interface similar 
-  to `model.matrix` in R and `Matrix::sparse.model.matrix` in the Matrix 
-  package. Splitting of concatenated feature, please see the help of `test.tag` 
-  for details, is also supported.
+    This package implements the method of feature hashing proposed in
+  Weinberger et. al. (2009) with Murmurhash3 and provides a formula interface
+  in R. See the README.md for more information.
 License: GPL(>= 3)
 Imports: 
   Rcpp (>= 0.11),

@@ -5,13 +5,15 @@ Implement feature hashing with R
 
 ## Introduction
 
-[Feature hashing](http://en.wikipedia.org/wiki/Feature_hashing) is a popular trick to vectorize text features. 
-The package FeatureHashing implements the hashing trick introduced in 
-Weinberger et. al. (2009) 
-and provides an API similar to model.matrix and Matrix::sparse.model.matrix 
-in R. 
-The FeatureHashing also supports the splitting of concatenated data during 
-the construction of model matrix to save the memory.
+[Feature hashing](http://en.wikipedia.org/wiki/Feature_hashing), also called as the hashing trick, is a method to
+transform features to vector. Without looking the indices up in an
+associative array, it applies a hash function to the features and uses their
+hash values as indices directly.
+  
+The package FeatureHashing implements the method in Weinberger et. al. (2009) to transform
+a `data.frame` to sparse matrix. The package provides a formula interface similar to model.matrix 
+in R and Matrix::sparse.model.matrix in the package Matrix. Splitting of concatenated data, 
+check the help of `test.tag` for explanation of concatenated data, during the construction of the model matrix.
 
 ### When will I use Feature Hashing?
 
@@ -19,19 +21,21 @@ the construction of model matrix to save the memory.
 
     After feature hashing, it is hard to connect the trained cofficients to the original data.
 
-- I cannot convert all data including training data and testing data to a matrix in one time. 
+- I cannot convert all data including training data and testing data to a model matrix at once.
 
-    To make the matrix consistent, I need to synchronize the mapping between the position and the feature. Feature hashing makes my life easier.
+    To make the model matrix consistent, I need to synchronize the indices between different conversions. Feature
+    hashing automatically synchronize the indices via the hash function.
 
-- You get a concatenated data in one column.
+- I need to handle concatenated data.
 
-    Feature Hashing supports the splitting of concatenated data and the user only need to specify the concatenated data and the delimiter in the formula.
+    Converting concatenated data to model matrix requires splitting the feature and building some temporal data with `model.matrix`. Feature Hashing supports the splitting of the concatenated data on the fly with simple formula interface. The user does not need to call `strsplit` and spend a lot of memory for temporal data.
 
 ## Demo
 
 ### Feature Hashing
 
 ```{r}
+library(methods)
 library(FeatureHashing)
 # Construct the model matrix. The transposed matrix is returned by default.
 m <- hashed.model.matrix(~ ., CO2, 2^6, keep.hashing_mapping = TRUE)

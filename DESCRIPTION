@@ -21,3 +21,5 @@ Imports:
 LinkingTo: Rcpp
 Suggests: pack
 SystemRequirements: C++11
+BugReports: https://github.com/wush978/FeatureHashing/issues
+URL: https://github.com/rstats-db/RSQLite

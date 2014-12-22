@@ -1,7 +1,7 @@
 Package: FeatureHashing
 Type: Package
 Title: Implement Feature Hashing for a Model Matrix
-Version: 0.7.1
+Version: 0.8
 Date: 2014-08-01
 Authors@R:   as.person(c( "Wush Wu <wush978@gmail.com> [aut, cre]", "Austin Appleby (for the included Murmurhash3 sources) [ctb]"))
 Author: Wush Wu [aut, cre], Austin Appleby [ctb] (for the included Murmurhash3 sources)
@@ -17,7 +17,7 @@ Depends: methods
 Imports: 
   Rcpp (>= 0.11),
   Matrix
-LinkingTo: Rcpp
+LinkingTo: Rcpp, digest(>= 0.6.7)
 Suggests: pack
 SystemRequirements: C++11
 BugReports: https://github.com/wush978/FeatureHashing/issues

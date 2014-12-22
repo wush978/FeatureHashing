@@ -1,6 +1,6 @@
 #include <cstring>
 #include <Rcpp.h>
-#include "MurmurHash3.h"
+#include "digestlocal.h"
 using namespace Rcpp;
 
 //'@export hash_xi
@@ -10,7 +10,7 @@ IntegerVector xi(CharacterVector src) {
   for(int i = 0;i < src.size();i++) {
     const char* str = CHAR(src[i]);
     if (::strcmp("(Intercept)", str) == 0) continue;
-    retval[i] = (int) FeatureHashing_murmurhash3(str, ::strlen(str), MURMURHASH3_XI_SEED);
+    retval[i] = (int) PMurHash32(MURMURHASH3_XI_SEED, str, ::strlen(str));
     if (retval[i] < 0) retval[i] = -1;
     else retval[i] = 1;
   }
@@ -24,7 +24,7 @@ IntegerVector h(CharacterVector src) {
   for(int i = 0;i < src.size();i++) {
     const char* str = CHAR(src[i]);
     if (::strcmp("(Intercept)", str) == 0) continue;
-    retval[i] = FeatureHashing_murmurhash3(str, ::strlen(str), MURMURHASH3_H_SEED);
+    retval[i] = PMurHash32(MURMURHASH3_H_SEED, str, ::strlen(str));
   }
   return retval;
 }

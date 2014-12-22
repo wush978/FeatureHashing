@@ -1,6 +1,7 @@
 #'@useDynLib FeatureHashing
 #'@importFrom Rcpp evalCpp
 .onLoad <- function(libname, pkgname) {
+  requireNamespace("digest", quietly = TRUE)
 }
 
 #'@title test.tag

@@ -1,8 +1,10 @@
 #include <cstring>
 #include <memory>
 #include <Rcpp.h>
-#include "MurmurHash3.h"
+#include "digestlocal.h"
 #include "tag.h"
+
+
 
 using namespace Rcpp;
 
@@ -56,7 +58,7 @@ public :
   MurmurHash3HashFunction(uint32_t _seed) : seed(_seed) { }
 
   virtual uint32_t operator()(const char* buf, int size, bool is_interaction = false) {
-    return ::FeatureHashing_murmurhash3(buf, size, seed);
+    return ::PMurHash32(seed, buf, size);
   }
 };
 
@@ -91,7 +93,7 @@ public:
   { }
   
   virtual uint32_t operator()(const char* buf, int size, bool is_interaction = false) {
-    uint32_t retval = FeatureHashing_murmurhash3(buf, size, seed);
+    uint32_t retval = PMurHash32(seed, buf, size);
     if (is_interaction) {
       const uint32_t* src = reinterpret_cast<const uint32_t*>(buf);
       if (inverse_mapping.find(src[0]) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");

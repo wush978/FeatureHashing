@@ -1,4 +1,4 @@
-#include "digest.h"
+#include "pmurhash.h"
 
 const uint32_t 
   MURMURHASH3_H_SEED = 3120602769LL,

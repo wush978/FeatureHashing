@@ -40,3 +40,33 @@ for(index in seq_along(mapping)) {
   stopifnot(x[j] == value)
   stopifnot(x[-j] == 0)
 }
+
+# verify the result of interaction
+m <- hashed.model.matrix(~ .^2, CO2, hash_size = 2^10, keep.hashing_mapping = TRUE)
+mapping_value <- as.list(attr(m, "mapping"))
+
+all.equal(mapping_value, 
+  structure(
+    list(
+      conc = 1178743966, "PlantQn2:uptake" = 974267571, 
+      "PlantMc2:uptake" = 175028363, PlantQn1 = 3789462177, PlantQn2 = 4122940517, 
+      TypeQuebec = 1791688646, PlantQn3 = 1079927366, PlantQc1 = 2636986885, 
+      PlantMn1 = 248868694, "PlantQc2:uptake" = 3035200074, PlantQc2 = 1980993114, 
+      PlantMn2 = 2189134401, PlantQc3 = 3588767725, PlantMn3 = 1321560276, 
+      PlantMc1 = 3437882550, TypeMississippi = 4103768016, PlantMc2 = 1125161513, 
+      PlantMc3 = 875000041, "PlantMn1:uptake" = 3186749149, "PlantMn3:uptake" = 4053818018, 
+      uptake = 1505155248, "PlantQn1:uptake" = 3757368420, "PlantMc1:uptake" = 4172577474, 
+      "PlantQn3:uptake" = 4247950021, "PlantMc3:uptake" = 712540968, 
+      Treatmentnonchilled = 3873367263, Treatmentchilled = 1576910802, 
+      "PlantQc1:uptake" = 946686067, "conc:uptake" = 375043273, 
+      "PlantQc3:uptake" = 3937745018, "PlantMn2:uptake" = 342355816), 
+    .Names = c(
+      "conc", 
+      "PlantQn2:uptake", "PlantMc2:uptake", "PlantQn1", "PlantQn2", 
+      "TypeQuebec", "PlantQn3", "PlantQc1", "PlantMn1", "PlantQc2:uptake", 
+      "PlantQc2", "PlantMn2", "PlantQc3", "PlantMn3", "PlantMc1", "TypeMississippi", 
+      "PlantMc2", "PlantMc3", "PlantMn1:uptake", "PlantMn3:uptake", 
+      "uptake", "PlantQn1:uptake", "PlantMc1:uptake", "PlantQn3:uptake", 
+      "PlantMc3:uptake", "Treatmentnonchilled", "Treatmentchilled", 
+      "PlantQc1:uptake", "conc:uptake", "PlantQc3:uptake", "PlantMn2:uptake"
+    )))

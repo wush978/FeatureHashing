@@ -561,7 +561,7 @@ const ConvertersVec get_converters(
   for(int i = 0;i < feature_name.size();i++) {
     bool is_interaction = false;
     for(int j = 0;j < reference_name.size();j++) {
-      if (tfactors(i, j) == 0) continue;
+      if (tfactors(j, i) == 0) continue;
       std::string rname(as<std::string>(reference_name[j]));
       #ifdef NOISY_DEBUG
       Rprintf("%s -> ", rname.c_str());

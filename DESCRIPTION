@@ -19,7 +19,7 @@ Depends:
 Imports: 
   Rcpp (>= 0.11),
   Matrix
-LinkingTo: Rcpp
+LinkingTo: Rcpp, BH
 Suggests: pack
 SystemRequirements: C++11
 BugReports: https://github.com/wush978/FeatureHashing/issues

@@ -1,5 +1,7 @@
+#include <byteswap.h>
 #include <cstring>
 #include <memory>
+#include <boost/detail/endian.hpp>
 #include <Rcpp.h>
 #include "MurmurHash3.h"
 #include "tag.h"
@@ -94,8 +96,13 @@ public:
     uint32_t retval = FeatureHashing_murmurhash3(buf, size, seed);
     if (is_interaction) {
       const uint32_t* src = reinterpret_cast<const uint32_t*>(buf);
+      #ifdef BOOST_BIG_ENDIAN
+      if (inverse_mapping.find(bswap_32(src[0])) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
+      if (inverse_mapping.find(bswap_32(src[1])) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
+      #else
       if (inverse_mapping.find(src[0]) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
       if (inverse_mapping.find(src[1]) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
+      #endif
       std::string key(inverse_mapping[src[0]]);
       key.append(":");
       key.append(inverse_mapping[src[1]]);
@@ -526,8 +533,13 @@ private:
 
   uint32_t get_hashed_feature(HashFunction *h, uint32_t a, uint32_t b) {
     uint32_t buf[2];
+    #ifdef BOOST_BIG_ENDIAN
+    buf[0] = bswap_32(a);
+    buf[1] = bswap_32(b);
+    #else
     buf[0] = a;
     buf[1] = b;
+    #endif
     return (*h)(reinterpret_cast<char*>(buf), sizeof(uint32_t) * 2, true);
   }
   

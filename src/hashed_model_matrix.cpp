@@ -558,9 +558,9 @@ const ConvertersVec get_converters(
     feature_name = CharacterVector(tmp[1]); // colnames
   }
   std::vector< pVectorConverter > retval;
-  for(int i = 0;i < feature_name.size();i++) {
+  for(int i = 0;i < reference_name.size();i++) {
     bool is_interaction = false;
-    for(int j = 0;j < reference_name.size();j++) {
+    for(int j = 0;j < feature_name.size();j++) {
       if (tfactors(i, j) == 0) continue;
       std::string rname(as<std::string>(reference_name[j]));
       #ifdef NOISY_DEBUG

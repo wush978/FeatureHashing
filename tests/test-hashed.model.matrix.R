@@ -1,6 +1,0 @@
-library(FeatureHashing)
-m2 <- hashed.model.matrix(~ ., data = CO2, hash_size = 32)
-stopifnot(!all(m2@i == 0))
-stopifnot(sum(m2 %*% rep(1, ncol(m2)) != 0) > 1)
-m3 <- hashed.model.matrix(~ ., data = CO2, hash_size = 8, keep.hashing_mapping = TRUE)
-ls(attr(m3, "mapping"))

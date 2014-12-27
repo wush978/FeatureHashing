@@ -101,13 +101,16 @@ public:
       #ifdef BOOST_BIG_ENDIAN
       if (inverse_mapping.find(bswap_32(src[0])) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
       if (inverse_mapping.find(bswap_32(src[1])) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
+      std::string key(inverse_mapping[bswap_32(src[0])]);
+      key.append(":");
+      key.append(inverse_mapping[bswap_32(src[1])]);
       #else
       if (inverse_mapping.find(src[0]) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
       if (inverse_mapping.find(src[1]) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
-      #endif
       std::string key(inverse_mapping[src[0]]);
       key.append(":");
       key.append(inverse_mapping[src[1]]);
+      #endif
       e[key.c_str()] = wrap(retval);
       inverse_mapping[retval] = key;
     } 

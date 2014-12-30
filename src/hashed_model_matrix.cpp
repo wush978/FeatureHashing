@@ -1,5 +1,7 @@
+#include <byteswap.h>
 #include <cstring>
 #include <memory>
+#include <boost/detail/endian.hpp>
 #include <Rcpp.h>
 #include "digestlocal.h"
 #include "tag.h"
@@ -96,11 +98,19 @@ public:
     uint32_t retval = PMurHash32(seed, buf, size);
     if (is_interaction) {
       const uint32_t* src = reinterpret_cast<const uint32_t*>(buf);
+      #ifdef BOOST_BIG_ENDIAN
+      if (inverse_mapping.find(bswap_32(src[0])) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
+      if (inverse_mapping.find(bswap_32(src[1])) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
+      std::string key(inverse_mapping[bswap_32(src[0])]);
+      key.append(":");
+      key.append(inverse_mapping[bswap_32(src[1])]);
+      #else
       if (inverse_mapping.find(src[0]) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
       if (inverse_mapping.find(src[1]) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
       std::string key(inverse_mapping[src[0]]);
       key.append(":");
       key.append(inverse_mapping[src[1]]);
+      #endif
       e[key.c_str()] = wrap(retval);
       inverse_mapping[retval] = key;
     } 
@@ -528,8 +538,13 @@ private:
 
   uint32_t get_hashed_feature(HashFunction *h, uint32_t a, uint32_t b) {
     uint32_t buf[2];
+    #ifdef BOOST_BIG_ENDIAN
+    buf[0] = bswap_32(a);
+    buf[1] = bswap_32(b);
+    #else
     buf[0] = a;
     buf[1] = b;
+    #endif
     return (*h)(reinterpret_cast<char*>(buf), sizeof(uint32_t) * 2, true);
   }
   
@@ -563,7 +578,7 @@ const ConvertersVec get_converters(
   for(int i = 0;i < feature_name.size();i++) {
     bool is_interaction = false;
     for(int j = 0;j < reference_name.size();j++) {
-      if (tfactors(i, j) == 0) continue;
+      if (tfactors(j, i) == 0) continue;
       std::string rname(as<std::string>(reference_name[j]));
       #ifdef NOISY_DEBUG
       Rprintf("%s -> ", rname.c_str());

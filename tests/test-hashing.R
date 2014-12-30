@@ -106,7 +106,7 @@ mapping_value.expected <- structure(list(PlantQc1 = 2636986885, PlantQn1 = 37894
                                                                    "PlantMc1:TypeMississippi", "PlantMn2:TypeMississippi", "PlantMn1:TypeMississippi", 
                                                                    "TypeMississippi"))
 
-checkTrue(isTRUE(all.equal(mapping_value, mapping_value.expected)),
+checkTrue(isTRUE(all.equal(mapping_value[names(mapping_value.expected)], mapping_value.expected)),
           "Unexpected hashing result of interaction term")
 
 m2 <- hashed.model.matrix(~ . ^ 2, data = CO2, hash_size = 32, keep.hashing_mapping = TRUE)

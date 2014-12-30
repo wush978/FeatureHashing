@@ -1,4 +1,3 @@
-#include <byteswap.h>
 #include <cstring>
 #include <memory>
 #include <boost/detail/endian.hpp>
@@ -6,7 +5,22 @@
 #include "digestlocal.h"
 #include "tag.h"
 
+#ifdef linux
+#include <byteswap.h>
+#endif
 
+#ifndef bswap_32
+#ifdef __APPLE__
+#include <libkern/OSByteOrder.h>
+#else
+uint32_t bswap_32(uint32_t x) {
+  return ((x & 0xff000000) >> 24) |
+         ((x & 0x00ff0000) >>  8) |
+         ((x & 0x0000ff00) <<  8) |
+         ((x & 0x000000ff) << 24);
+}
+#endif
+#endif
 
 using namespace Rcpp;
 

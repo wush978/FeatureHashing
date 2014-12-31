@@ -1,3 +1,4 @@
+library(RUnit)
 library(FeatureHashing)
 data(test.tag)
 system.time(tmp1 <- FeatureHashing:::tag.character1(test.tag, ",", type = "existence"))

@@ -137,7 +137,6 @@ for(i in grep(":", names(mapping), fixed = TRUE)) {
 
 # check handling of NA
 tryCatch(m <- hashed.model.matrix(~ PlAnT, CO2, 8), error = function(e) {
-  browser()
   if (class(e)[1] != "std::invalid_argument") stop(e)
   if (conditionMessage(e) != "Failed to find the column:PlAnT") stop(e)
 })

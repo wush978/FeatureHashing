@@ -32,12 +32,54 @@ check the help of `test.tag` for explanation of concatenated data, during the co
 
 ## Demo
 
-### Feature Hashing
+### Concatenated Data
 
 
 ```r
 library(methods)
 library(FeatureHashing)
+
+# The tag-like feature
+data(test.tag)
+df <- data.frame(a = test.tag, b = rnorm(length(test.tag)))
+head(df)
+```
+
+```
+##                                        a        b
+## 1                       1,27,19,25,tp,tw  1.72226
+## 2                       1,27,19,25,tp,tw -0.83017
+## 3 25,1,19,6,29,17,16,21,26,23,27,4,ty,tw  0.02199
+## 4                               19,tp,tw  0.22165
+## 5                                  19,tw  0.79661
+## 6                                 ,ch,tw -1.10220
+```
+
+```r
+m <- hashed.model.matrix(~ tag(a, split = ",", type = "existence"):b, df, 2^6,
+ keep.hashing_mapping = TRUE)
+# The column `a` is splitted by "," and have an interaction with "b":
+mapping <- unlist(as.list(attr(m, "mapping")))
+names(mapping)
+```
+
+```
+##  [1] "a20"    "a"      "a21"    "atn:b"  "ant:b"  "a19:b"  "akh:b" 
+##  [8] "a25:b"  "a16:b"  "atw:b"  "b"      "a4:b"   "a10:b"  "a1:b"  
+## [15] "ahc"    "atc"    "a23"    "a24"    "a25"    "a26"    "a27"   
+## [22] "antw"   "akh"    "a29"    "atn"    "a30"    "atp"    "a1"    
+## [29] "a11:b"  "a8:b"   "a23:b"  "ach:b"  "a20:b"  "ahc:b"  "atc:b" 
+## [36] "a29:b"  "a26:b"  "a17:b"  "a3"     "ant"    "a4"     "a6"    
+## [43] "atw"    "a8"     "ach"    "aty"    "a9"     "ail"    "a10"   
+## [50] "a11"    "ail:b"  "a3:b"   "a9:b"   "atp:b"  "a12"    "a27:b" 
+## [57] "a:b"    "antw:b" "aty:b"  "a15:b"  "a24:b"  "a21:b"  "a6:b"  
+## [64] "a12:b"  "a30:b"  "a15"    "a16"    "a17"    "a19"
+```
+
+### Feature Hashing
+
+
+```r
 # Construct the model matrix. The transposed matrix is returned by default.
 m <- hashed.model.matrix(~ ., CO2, 2^6, keep.hashing_mapping = TRUE)
 mapping <- as.list(attr(m, "mapping"))
@@ -138,8 +180,8 @@ mapping2[2] # PlantQn2:uptake
 ```
 
 ```
-## PlantQn2:uptake 
-##       974267571
+##  PlantQn1 
+## 3.789e+09
 ```
 
 ```r
@@ -153,44 +195,4 @@ hash_h(rawToChar(c(numToRaw(h1, 4), numToRaw(h2, 4)))) # should be mapping2[2]
 ## [1] 974267571
 ```
 
-### Concatenated Data
-
-
-```r
-# The tag-like feature
-data(test.tag)
-df <- data.frame(a = test.tag, b = rnorm(length(test.tag)))
-head(df)
-```
-
-```
-##                                        a       b
-## 1                       1,27,19,25,tp,tw  1.5894
-## 2                       1,27,19,25,tp,tw  0.8825
-## 3 25,1,19,6,29,17,16,21,26,23,27,4,ty,tw  0.3350
-## 4                               19,tp,tw  0.8781
-## 5                                  19,tw -0.5642
-## 6                                 ,ch,tw -0.5567
-```
-
-```r
-m <- hashed.model.matrix(~ tag(a, split = ",", type = "existence"):b, df, 2^6,
- keep.hashing_mapping = TRUE)
-# The column `a` is splitted by "," and have an interaction with "b":
-mapping <- unlist(as.list(attr(m, "mapping")))
-names(mapping)
-```
-
-```
-##  [1] "a20"    "a"      "a21"    "atn:b"  "ant:b"  "a19:b"  "akh:b" 
-##  [8] "a25:b"  "a16:b"  "atw:b"  "b"      "a4:b"   "a10:b"  "a1:b"  
-## [15] "ahc"    "atc"    "a23"    "a24"    "a25"    "a26"    "a27"   
-## [22] "antw"   "akh"    "a29"    "atn"    "a30"    "atp"    "a1"    
-## [29] "a11:b"  "a8:b"   "a23:b"  "ach:b"  "a20:b"  "ahc:b"  "atc:b" 
-## [36] "a29:b"  "a26:b"  "a17:b"  "a3"     "ant"    "a4"     "a6"    
-## [43] "atw"    "a8"     "ach"    "aty"    "a9"     "ail"    "a10"   
-## [50] "a11"    "ail:b"  "a3:b"   "a9:b"   "atp:b"  "a12"    "a27:b" 
-## [57] "a:b"    "antw:b" "aty:b"  "a15:b"  "a24:b"  "a21:b"  "a6:b"  
-## [64] "a12:b"  "a30:b"  "a15"    "a16"    "a17"    "a19"
-```
 

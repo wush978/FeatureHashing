@@ -1,3 +1,4 @@
+library(RUnit)
 library(FeatureHashing)
 data(test.tag)
 df <- data.frame(a = test.tag, b = rnorm(length(test.tag)))

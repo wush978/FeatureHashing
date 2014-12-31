@@ -1,4 +1,5 @@
 library(methods)
+library(RUnit)
 library(FeatureHashing)
 m1 <- as(hashed.model.matrix(~ ., CO2, 2^5), "dgCMatrix")
 m2 <- as(hashed.model.matrix(~ ., CO2, 2^5, F), "dgCMatrix")

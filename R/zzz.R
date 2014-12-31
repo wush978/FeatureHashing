@@ -1,8 +1,7 @@
 #'@useDynLib FeatureHashing
 #'@importFrom Rcpp evalCpp
-.onLoad <- function(libname, pkgname) {
-  requireNamespace("digest", quietly = TRUE)
-}
+#'@import digest
+.onLoad <- function(libname, pkgname) { }
 
 #'@title test.tag
 #'@description This is a vector to demo the concatenated feature.

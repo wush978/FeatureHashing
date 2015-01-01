@@ -3,8 +3,8 @@ Type: Package
 Title: Implement Feature Hashing for a Model Matrix
 Version: 0.8
 Date: 2014-08-01
-Authors@R:   as.person(c( "Wush Wu <wush978@gmail.com> [aut, cre]", "Austin Appleby (for the included Murmurhash3 sources) [ctb]"))
-Author: Wush Wu [aut, cre], Austin Appleby [ctb] (for the included Murmurhash3 sources)
+Authors@R:   as.person(c( "Wush Wu <wush978@gmail.com> [aut, cre]"))
+Author: Wush Wu [aut, cre]
 Maintainer: Wush Wu <wush978@gmail.com>
 Description: Feature hashing, also called as the hashing trick, is a method to 
   transform features to vector. Without looking up the indices in an 

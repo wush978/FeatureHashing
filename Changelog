@@ -1,0 +1,10 @@
+2015-01-01  Wush Wu <wush978@gmail.com>
+
+- Version 0.8
+- Use the implementation of murmurhash3 from the package digest
+    - Update the author list
+- Fix the following bugs
+    - Undefined behavior due to big endian system
+    - Inconsistent interaction result due to big endian system
+    - Incorrect indices when expanding tag feature. See #27
+- Correct some document errors in DESCRIPTION and Manual

@@ -1,0 +1,58 @@
+---
+title       : 
+subtitle    : 
+author      : Wush Wu
+job         : 
+framework   : io2012-wush
+highlighter : highlight.js
+hitheme     : zenburn
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+## Read-And-Delete
+
+1. Edit YAML front matter
+2. Write using R Markdown
+3. Use an empty line followed by three dashes to separate slides!
+
+--- .class #id 
+
+## Slide 2
+
+--- .segue .dark
+
+## Slide 3
+
+--- &vcenter
+
+## Slide 4
+
+- 1
+- 2
+- 3
+
+--- &vcenter .largecontent
+
+## Slide 5
+
+- 1
+- 2
+- 3
+- 4
+- 5
+
+--- &vcenter .largecontent
+
+## Slide 6
+
+Please press "p"
+
+*** =pnotes
+
+This is the notes
+
+---
+
+

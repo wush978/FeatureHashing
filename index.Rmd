@@ -2,7 +2,7 @@
 title       : Introduction of Feature Hashing
 subtitle    : Creates a Model Matrix via Feature Hashing With a Formula Interface
 author      : Wush Wu
-job         : 
+job         : Taiwan R User Group
 framework   : io2012-wush
 highlighter : highlight.js
 hitheme     : zenburn
@@ -16,48 +16,40 @@ library(knitr)
 opts_chunk$set(echo = FALSE)
 ```
 
-## Read-And-Delete
+## Outline
 
-1. Edit YAML front matter
-2. Write using R Markdown
-3. Use an empty line followed by three dashes to separate slides!
-
---- .class #id 
-
-## Slide 2
+1. Feature Vectorization in R
+1. Distributed Feature Vectorization in R
+1. Handling New Feature
+1. Feature Hashing
+1. Linear Regression with Feature Hashing
+1. Logistic Regression with Feature Hashing
+1. Gradient Boosted Decision Tree with Feature Hashing
 
 --- .segue .dark
 
-## Slide 3
+## Feature Vectorization in R
 
---- &vcenter
+--- .segue .dark
 
-## Slide 4
+## Distributed Feature Vectorization in R
 
-- 1
-- 2
-- 3
+--- .segue .dark
 
---- &vcenter .largecontent
+## Handling New Feature
 
-## Slide 5
+--- .segue .dark
 
-- 1
-- 2
-- 3
-- 4
-- 5
+## Feature Hashing
 
---- &vcenter .largecontent
+--- .segue .dark
 
-## Slide 6
+## Linear Regression with Feature Hashing
 
-Please press "p"
+--- .segue .dark
 
-*** =pnotes
+## Logistic Regression with Feature Hashing
 
-This is the notes
+--- .segue .dark
 
----
-
-
+## Gradient Boosted Decision Tree with Feature Hashing

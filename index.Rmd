@@ -1,6 +1,6 @@
 ---
-title       : 
-subtitle    : 
+title       : Introduction of Feature Hashing
+subtitle    : Creates a Model Matrix via Feature Hashing With a Formula Interface
 author      : Wush Wu
 job         : 
 framework   : io2012-wush
@@ -10,6 +10,11 @@ widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
 mode        : selfcontained # {standalone, draft}
 knit        : slidify::knit2slides
 ---
+
+```{r setup, include=FALSE}
+library(knitr)
+opts_chunk$set(echo = FALSE)
+```
 
 ## Read-And-Delete
 

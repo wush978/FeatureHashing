@@ -88,10 +88,20 @@ $$\begin{bmatrix}
 
 --- &vcenter .largecontent
 
-```{r model.matrix}
-library(Lahman)
+## IPinYou Dataset
 
+- A Competition of Real Time Bidding in 2013
 
+<http://data.computational-advertising.org/>
+
+```{r load_ipinyou, echo=FALSE}
+library(bit64)
+library(data.table)
+library(magrittr)
+suppressWarnings({
+  imp.20130606 <- fread("imp.20130606.part.txt", sep = "\t", select = c(2, 6)) %>% `colnames<-`(c("time", "ip"))
+  imp.20130607 <- fread("imp.20130607.part.txt", sep = "\t", select = c(2, 6)) %>% `colnames<-`(c("time", "ip"))
+})
 ```
 
 --- .segue .dark

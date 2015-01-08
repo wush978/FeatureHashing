@@ -11,9 +11,12 @@ mode        : selfcontained # {standalone, draft}
 knit        : slidify::knit2slides
 ---
 
-```{r setup, include=FALSE}
-library(knitr)
-opts_chunk$set(echo = FALSE)
+```{r setup, include=FALSE, cache=FALSE}
+suppressPackageStartupMessages({
+  library(knitr)
+  library(ggplot2)
+})
+opts_chunk$set(echo = FALSE, cache = FALSE)
 ```
 
 ## Outline
@@ -30,9 +33,72 @@ opts_chunk$set(echo = FALSE)
 
 ## Feature Vectorization in R
 
+--- &vcenter .largecontent
+
+## Feature Vectorization
+
+- Lots of machine learning algorithm involves numerical matrix
+    - Linear Regression
+    - Logistic Regression
+    - Support Vector Machine
+    - Decision Tree
+
+--- &vcenter .largecontent
+
+## Linear Regression
+
+```{r lr, cache = TRUE}
+# http://stackoverflow.com/questions/7549694/ggplot2-adding-regression-line-equation-and-r2-on-graph
+df <- data.frame(x = c(1:100))
+df$y <- 2 + 3 * df$x + rnorm(100, sd = 40)
+p <- ggplot(data = df, aes(x = x, y = y)) +
+            geom_smooth(method = "lm", se=FALSE, color="black", formula = y ~ x) +
+            geom_point()
+lm_eqn = function(df){
+    m = lm(y ~ x, df);
+    eq <- substitute(italic(y) == a + b %.% italic(x)*","~~italic(r)^2~"="~r2, 
+         list(a = format(coef(m)[1], digits = 2), 
+              b = format(coef(m)[2], digits = 2), 
+             r2 = format(summary(m)$r.squared, digits = 3)))
+    as.character(as.expression(eq));                 
+}
+g <- lm(y ~ ., df)
+p + geom_text(aes(x = 25, y = 300, label = lm_eqn(df)), parse = TRUE)
+```
+
+--- &vcenter .largecontent
+
+## Linear Regression
+
+$$X = \begin{bmatrix}
+1 & 1\\
+1 & 2\\
+1 & 3\\
+\vdots \end{bmatrix},
+y = \begin{bmatrix}
+`r df$y[1]`\\
+`r df$y[2]`\\
+`r df$y[3]`\\
+\vdots \end{bmatrix}$$
+
+$$\begin{bmatrix}
+`r format(coef(g)[1], digits = 2)`\\
+`r format(coef(g)[2], digits = 2)` \end{bmatrix}
+= (X^T X)^{-1}X y$$
+
+--- &vcenter .largecontent
+
+```{r model.matrix}
+library(Lahman)
+
+
+```
+
 --- .segue .dark
 
 ## Distributed Feature Vectorization in R
+
+
 
 --- .segue .dark
 

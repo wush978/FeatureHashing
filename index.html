@@ -69,7 +69,60 @@
   </article>
   <!-- Presenter Notes -->
 </slide>
-<slide class="segue dark" id="slide-3" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+<slide class="largecontent" id="slide-3" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Feature Vectorization</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>Lots of machine learning algorithm involves numerical matrix
+
+<ul>
+<li>Linear Regression</li>
+<li>Logistic Regression</li>
+<li>Support Vector Machine</li>
+<li>Decision Tree</li>
+</ul></li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-4" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Linear Regression</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p><img src="assets/fig/lr.png" alt="plot of chunk lr"> </p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-5" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Linear Regression</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>\[X = \begin{bmatrix}
+1 & 1\\
+1 & 2\\
+1 & 3\\
+\vdots \end{bmatrix},
+y = \begin{bmatrix}
+52.0182\\
+53.8087\\
+48.7756\\
+\vdots \end{bmatrix}\]</p>
+
+<p>\[\begin{bmatrix}
+-5.1\\
+3.2 \end{bmatrix}
+= (X^T X)^{-1}X y\]</p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="segue dark" id="slide-6" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
   <hgroup>
     <h2>Distributed Feature Vectorization in R</h2>
   </hgroup>
@@ -78,7 +131,7 @@
   </article>
   <!-- Presenter Notes -->
 </slide>
-<slide class="segue dark" id="slide-4" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+<slide class="segue dark" id="slide-7" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
   <hgroup>
     <h2>Handling New Feature</h2>
   </hgroup>
@@ -87,7 +140,7 @@
   </article>
   <!-- Presenter Notes -->
 </slide>
-<slide class="segue dark" id="slide-5" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+<slide class="segue dark" id="slide-8" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
   <hgroup>
     <h2>Feature Hashing</h2>
   </hgroup>
@@ -96,7 +149,7 @@
   </article>
   <!-- Presenter Notes -->
 </slide>
-<slide class="segue dark" id="slide-6" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+<slide class="segue dark" id="slide-9" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
   <hgroup>
     <h2>Linear Regression with Feature Hashing</h2>
   </hgroup>
@@ -105,7 +158,7 @@
   </article>
   <!-- Presenter Notes -->
 </slide>
-<slide class="segue dark" id="slide-7" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+<slide class="segue dark" id="slide-10" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
   <hgroup>
     <h2>Logistic Regression with Feature Hashing</h2>
   </hgroup>
@@ -114,7 +167,7 @@
   </article>
   <!-- Presenter Notes -->
 </slide>
-<slide class="segue dark" id="slide-8" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+<slide class="segue dark" id="slide-11" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
   <hgroup>
     <h2>Gradient Boosted Decision Tree with Feature Hashing</h2>
   </hgroup>
@@ -141,38 +194,56 @@
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=3 title='Distributed Feature Vectorization in R'>
+        data-slide=3 title='Feature Vectorization'>
          3
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=4 title='Handling New Feature'>
+        data-slide=4 title='Linear Regression'>
          4
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=5 title='Feature Hashing'>
+        data-slide=5 title='Linear Regression'>
          5
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=6 title='Linear Regression with Feature Hashing'>
+        data-slide=6 title='Distributed Feature Vectorization in R'>
          6
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=7 title='Logistic Regression with Feature Hashing'>
+        data-slide=7 title='Handling New Feature'>
          7
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=8 title='Gradient Boosted Decision Tree with Feature Hashing'>
+        data-slide=8 title='Feature Hashing'>
          8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='Linear Regression with Feature Hashing'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='Logistic Regression with Feature Hashing'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='Gradient Boosted Decision Tree with Feature Hashing'>
+         11
       </a>
     </li>
   </ul>

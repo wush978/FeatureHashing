@@ -62,7 +62,7 @@
 </slide>
 <slide class="segue dark" id="slide-2" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
   <hgroup>
-    <h2>Feature Vectorization in R</h2>
+    <h2>Feature Vectorization in R with Formula</h2>
   </hgroup>
   <article data-timings="">
     
@@ -103,7 +103,11 @@
   <h2>Linear Regression</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
-<p>\[X = \begin{bmatrix}
+<ul>
+<li>Fitting</li>
+</ul>
+
+<p>\[X_1 = \begin{bmatrix}
 1 & 1\\
 1 & 2\\
 1 & 3\\
@@ -114,33 +118,248 @@ y = \begin{bmatrix}
 48.7756\\
 \vdots \end{bmatrix}\]</p>
 
-<p>\[\begin{bmatrix}
+<p>\[\hat{\beta} = \begin{bmatrix}
 -5.1\\
 3.2 \end{bmatrix}
-= (X^T X)^{-1}X y\]</p>
+= (X_1^T X_1)^{-1}X_1 y\]</p>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="segue dark" id="slide-6" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+<slide class="largecontent" id="slide-6" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Linear Regression</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>Predicting</li>
+</ul>
+
+<p>\[X_2 \hat{\beta}\]</p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-7" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>IPinYou Dataset</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>A Competition of Real Time Bidding in 2013</li>
+</ul>
+
+<p><a href="http://data.computational-advertising.org/">http://data.computational-advertising.org/</a></p>
+
+<!-- html table generated in R 3.1.2 by xtable 1.7-3 package -->
+
+<!-- Mon Jan 12 19:38:09 2015 -->
+
+<TABLE border=1>
+<TR> <TH>  </TH> <TH> time </TH> <TH> ip </TH> <TH> usertag </TH>  </TR>
+  <TR> <TD align="right"> 1 </TD> <TD> 20130606000104252 </TD> <TD> 222.220.35.* </TD> <TD> 13800,10024 </TD> </TR>
+  <TR> <TD align="right"> 2 </TD> <TD> 20130606000104253 </TD> <TD> 58.100.240.* </TD> <TD> 10059,13866,10063,10111 </TD> </TR>
+  <TR> <TD align="right"> 3 </TD> <TD> 20130606000104308 </TD> <TD> 122.233.40.* </TD> <TD> 10057,10063,10024,13800,13866,10110 </TD> </TR>
+  <TR> <TD align="right"> 4 </TD> <TD> 20130606000104329 </TD> <TD> 58.67.157.* </TD> <TD> 13866,10111 </TD> </TR>
+  <TR> <TD align="right"> 5 </TD> <TD> 20130606000104371 </TD> <TD> 180.107.223.* </TD> <TD> 10063,10059,13776,10111 </TD> </TR>
+   </TABLE>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-8" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Model Matrix</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="r">m1 &lt;- model.matrix(~ ip, imp.20130606)
+</code></pre>
+
+<!-- html table generated in R 3.1.2 by xtable 1.7-3 package -->
+
+<!-- Mon Jan 12 20:31:05 2015 -->
+
+<TABLE border=1>
+<TR> <TH>  </TH> <TH> (Intercept) </TH> <TH> ip180.107.223.* </TH> <TH> ip222.220.35.* </TH> <TH> ip58.100.240.* </TH> <TH> ip58.67.157.* </TH>  </TR>
+  <TR> <TD align="right"> 1 </TD> <TD align="right"> 1 </TD> <TD align="right"> 0 </TD> <TD align="right"> 1 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> </TR>
+  <TR> <TD align="right"> 2 </TD> <TD align="right"> 1 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 1 </TD> <TD align="right"> 0 </TD> </TR>
+  <TR> <TD align="right"> 3 </TD> <TD align="right"> 1 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> </TR>
+  <TR> <TD align="right"> 4 </TD> <TD align="right"> 1 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 1 </TD> </TR>
+  <TR> <TD align="right"> 5 </TD> <TD align="right"> 1 </TD> <TD align="right"> 1 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> </TR>
+   </TABLE>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-9" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Formula</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>Formula provides a convenient interface of vetorizing features
+
+<ul>
+<li><code>~ ip</code></li>
+<li><code>~ ip * weekday</code> = <code>~ ip+weekday+ip:weekday</code></li>
+<li><code>~ .</code></li>
+</ul></li>
+<li>Formula interfaces let us easily automate feature selection procedure (danger zone)
+
+<ul>
+<li><code>step(object, scope)</code>, use the formula to define the testing area of possible combination of features.</li>
+<li>We can write our own feature selection procedure like <code>step</code>.</li>
+</ul></li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-10" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Model Matrix</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="r">m2 &lt;- model.matrix(~ ip, imp.20130607)
+</code></pre>
+
+<!-- html table generated in R 3.1.2 by xtable 1.7-3 package -->
+
+<!-- Mon Jan 12 20:31:05 2015 -->
+
+<TABLE border=1>
+<TR> <TH>  </TH> <TH> (Intercept) </TH> <TH> ip210.30.109.* </TH> <TH> ip221.207.122.* </TH>  </TR>
+  <TR> <TD align="right"> 1 </TD> <TD align="right"> 1 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> </TR>
+  <TR> <TD align="right"> 2 </TD> <TD align="right"> 1 </TD> <TD align="right"> 0 </TD> <TD align="right"> 1 </TD> </TR>
+  <TR> <TD align="right"> 3 </TD> <TD align="right"> 1 </TD> <TD align="right"> 1 </TD> <TD align="right"> 0 </TD> </TR>
+   </TABLE>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-11" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Model Matrix</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li><code>m1</code> has 5 columns</li>
+<li><code>m2</code> has 3 columns</li>
+</ul>
+
+<h3>Synchronization is required!</h3>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-12" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Factor</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>We usually load <em>all</em> data and use the <code>factor</code> to build an association index
+
+<ul>
+<li><code>levels(ip)[1]</code> ==&gt; 1, <code>levels(ip)[2]</code> ==&gt; 2, ...</li>
+</ul></li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-13" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Contrasts</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<!-- html table generated in R 3.1.2 by xtable 1.7-3 package -->
+
+<!-- Mon Jan 12 20:31:05 2015 -->
+
+<TABLE border=1>
+<TR> <TH>  </TH> <TH> 180.107.223.* </TH> <TH> 183.134.57.* </TH> <TH> 210.30.109.* </TH> <TH> 221.207.122.* </TH> <TH> 222.220.35.* </TH> <TH> 58.100.240.* </TH> <TH> 58.67.157.* </TH>  </TR>
+  <TR> <TD align="right"> 122.233.40.* </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> </TR>
+  <TR> <TD align="right"> 180.107.223.* </TD> <TD align="right"> 1 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> </TR>
+  <TR> <TD align="right"> 183.134.57.* </TD> <TD align="right"> 0 </TD> <TD align="right"> 1 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> </TR>
+  <TR> <TD align="right"> 210.30.109.* </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 1 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> </TR>
+  <TR> <TD align="right"> 221.207.122.* </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 1 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> </TR>
+  <TR> <TD align="right"> 222.220.35.* </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 1 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> </TR>
+  <TR> <TD align="right"> 58.100.240.* </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 1 </TD> <TD align="right"> 0 </TD> </TR>
+  <TR> <TD align="right"> 58.67.157.* </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 0 </TD> <TD align="right"> 1 </TD> </TR>
+   </TABLE>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="segue dark" id="slide-14" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
   <hgroup>
-    <h2>Distributed Feature Vectorization in R</h2>
+    <h2>If we are processing Big Data...</h2>
   </hgroup>
   <article data-timings="">
     
   </article>
   <!-- Presenter Notes -->
 </slide>
-<slide class="segue dark" id="slide-7" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
-  <hgroup>
-    <h2>Handling New Feature</h2>
-  </hgroup>
-  <article data-timings="">
-    
-  </article>
-  <!-- Presenter Notes -->
+<slide class="largecontent" id="slide-15" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Factor requires...</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>The information of <em>all</em> possible values...</li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
 </slide>
-<slide class="segue dark" id="slide-8" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+<slide class="largecontent" id="slide-16" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>For Big Data ...</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>Data Stream</li>
+<li>Distributed System</li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-17" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Data Stream</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>We only observe a small part of the data at the same time.
+
+<ul>
+<li>Scanning all data is infeasible</li>
+<li>New values might occur any time</li>
+</ul></li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-18" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Distributed System</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>Every R process only observes a small part of the data
+
+<ul>
+<li>Synchronization is required</li>
+</ul></li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="segue dark" id="slide-19" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
   <hgroup>
     <h2>Feature Hashing</h2>
   </hgroup>
@@ -149,7 +368,61 @@ y = \begin{bmatrix}
   </article>
   <!-- Presenter Notes -->
 </slide>
-<slide class="segue dark" id="slide-9" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+<slide class="largecontent" id="slide-20" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>Feature Hashing</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>We use a hash function \(h\) to map the feature to indeces</li>
+</ul>
+
+<pre><code class="r">mapping %% 8 + 1
+</code></pre>
+
+<pre><code>##   ip58.67.157.*  ip122.233.40.*  ip222.220.35.* ip180.107.223.* 
+##               4               2               7               3 
+##  ip58.100.240.* 
+##               5
+</code></pre>
+
+<div style='float:left;width:48%;' class='centered'>
+  <pre><code>## 8 x 5 sparse Matrix of class &quot;dgCMatrix&quot;
+##      1  2  3  4  5
+## [1,] 1  1  1  1  1
+## [2,] .  . -1  .  .
+## [3,] .  .  .  . -1
+## [4,] .  .  . -1  .
+## [5,] . -1  .  .  .
+## [6,] .  .  .  .  .
+## [7,] 1  .  .  .  .
+## [8,] .  .  .  .  .
+</code></pre>
+
+</div>
+<div style='float:right;width:48%;' class='centered'>
+  <pre><code>##      [,1]           
+## [1,] &quot;222.220.35.*&quot; 
+## [2,] &quot;58.100.240.*&quot; 
+## [3,] &quot;122.233.40.*&quot; 
+## [4,] &quot;58.67.157.*&quot;  
+## [5,] &quot;180.107.223.*&quot;
+</code></pre>
+
+</div>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-21" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Hash Function</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="segue dark" id="slide-22" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
   <hgroup>
     <h2>Linear Regression with Feature Hashing</h2>
   </hgroup>
@@ -158,7 +431,7 @@ y = \begin{bmatrix}
   </article>
   <!-- Presenter Notes -->
 </slide>
-<slide class="segue dark" id="slide-10" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+<slide class="segue dark" id="slide-23" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
   <hgroup>
     <h2>Logistic Regression with Feature Hashing</h2>
   </hgroup>
@@ -167,7 +440,7 @@ y = \begin{bmatrix}
   </article>
   <!-- Presenter Notes -->
 </slide>
-<slide class="segue dark" id="slide-11" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+<slide class="segue dark" id="slide-24" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
   <hgroup>
     <h2>Gradient Boosted Decision Tree with Feature Hashing</h2>
   </hgroup>
@@ -188,7 +461,7 @@ y = \begin{bmatrix}
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=2 title='Feature Vectorization in R'>
+        data-slide=2 title='Feature Vectorization in R with Formula'>
          2
       </a>
     </li>
@@ -212,38 +485,116 @@ y = \begin{bmatrix}
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=6 title='Distributed Feature Vectorization in R'>
+        data-slide=6 title='Linear Regression'>
          6
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=7 title='Handling New Feature'>
+        data-slide=7 title='IPinYou Dataset'>
          7
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=8 title='Feature Hashing'>
+        data-slide=8 title='Model Matrix'>
          8
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=9 title='Linear Regression with Feature Hashing'>
+        data-slide=9 title='Formula'>
          9
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=10 title='Logistic Regression with Feature Hashing'>
+        data-slide=10 title='Model Matrix'>
          10
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=11 title='Gradient Boosted Decision Tree with Feature Hashing'>
+        data-slide=11 title='Model Matrix'>
          11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='Factor'>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='Contrasts'>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='If we are processing Big Data...'>
+         14
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='Factor requires...'>
+         15
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='For Big Data ...'>
+         16
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='Data Stream'>
+         17
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='Distributed System'>
+         18
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title='Feature Hashing'>
+         19
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=20 title='Feature Hashing'>
+         20
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=21 title='Hash Function'>
+         21
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=22 title='Linear Regression with Feature Hashing'>
+         22
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=23 title='Logistic Regression with Feature Hashing'>
+         23
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=24 title='Gradient Boosted Decision Tree with Feature Hashing'>
+         24
       </a>
     </li>
   </ul>

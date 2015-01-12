@@ -31,7 +31,7 @@ opts_chunk$set(echo = FALSE, cache = FALSE)
 
 --- .segue .dark
 
-## Feature Vectorization in R
+## Feature Vectorization in R with Formula
 
 --- &vcenter .largecontent
 
@@ -98,18 +98,6 @@ $$X_2 \hat{\beta}$$
 
 --- &vcenter .largecontent
 
-## In General, We Want ...
-
-```{r hope, echo=TRUE, eval=FALSE}
-...
-X1 <- get_matrix(data1)
-g <- get_model(y, X1)
-X2 <- get_matrix(data2)
-predict(g, X2)
-```
-
---- &vcenter .largecontent
-
 ## IPinYou Dataset
 
 - A Competition of Real Time Bidding in 2013
@@ -145,6 +133,18 @@ print.xtable(xtable(model.matrix(~ ip, imp.20130606), digits = 0), type = "html"
 
 --- &vcenter .largecontent
 
+## Formula
+
+- Formula provides a convenient interface of vetorizing features
+    - `~ ip`
+    - `~ ip * weekday` = `~ ip+weekday+ip:weekday`
+    - `~ .`
+- Formula interfaces let us easily automate feature selection procedure (danger zone)
+    - `step(object, scope)`, use the formula to define the testing area of possible combination of features.
+    - We can write our own feature selection procedure like `step`.
+
+--- &vcenter .largecontent
+
 ## Model Matrix
 
 ```{r model.matrix.echo2, echo=TRUE, eval=FALSE}
@@ -167,19 +167,105 @@ print.xtable(xtable(model.matrix(~ ip, imp.20130607), digits = 0), type = "html"
 
 --- &vcenter .largecontent
 
+## Factor
+
+```{r factor, dependson="load_ipinyou"}
+ip <- factor(c(imp.20130606$ip, imp.20130607$ip))
+```
+
+- We usually load *all* data and use the `factor` to build a mapping
+    - `levels(ip)[1]` ==> 1, `levels(ip)[2]` ==> 2, ...
+
+--- &vcenter .largecontent
+
+## Contrasts
+
+```{r contrasts, dependson="factor", results='asis'}
+print.xtable(xtable(contrasts(ip), digits = 0), type = "html")
+```
+
 --- .segue .dark
 
-## Distributed Feature Vectorization in R
+## If we are processing Big Data...
 
+--- &vcenter .largecontent
 
+## Factor requires...
 
---- .segue .dark
+- The information of *all* possible values...
 
-## Handling New Feature
+--- &vcenter .largecontent
+
+## For Big Data ...
+
+- Data Stream
+- Distributed System
+
+--- &vcenter .largecontent
+
+## Data Stream
+
+- We only observe a small part of the data at the same time.
+    - Scanning all data is infeasible
+    - New values might occur any time
+
+--- &vcenter .largecontent
+
+## Distributed System
+
+- Every R process only observes a small part of the data
+    - Synchronization is required
 
 --- .segue .dark
 
 ## Feature Hashing
+
+--- &twocol .largecontent
+
+## Feature Hashing
+
+- We use a hash function $h$ to map the feature to indeces
+
+```{r h0, dependson="load_ipinyou"}
+library(FeatureHashing)
+m <- hashed.model.matrix(~ ip, imp.20130606, hash_size = 8, keep.hashing_mapping = TRUE)
+mapping <- unlist(as.list(attr(m, "mapping")))
+```
+```{r h1, dependson="h0", echo=TRUE}
+mapping %% 8 + 1
+```
+
+*** =left
+
+```{r h2, dependson="h1"}
+as(m, "dgCMatrix")
+```
+
+*** =right
+
+```{r h3, dependson="h2"}
+matrix(imp.20130606$ip, ncol = 1)
+```
+
+--- &vcenter .largecontent
+
+## Hash Function
+
+- Determinism
+- Uniformity
+- Continuity
+- Randomness
+
+--- &vcenter .largecontent
+
+## Major Pros and Cons
+
+- (Major Pros) Do not require global information of the data
+- (Major Cons) Different features might be mapped to the same indices (collision)
+
+--- &vcenter .largecontent
+
+
 
 --- .segue .dark
 

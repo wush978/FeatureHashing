@@ -47,8 +47,9 @@ opts_chunk$set(echo = FALSE, cache = FALSE)
 
 ## Linear Regression
 
+[source](http://stackoverflow.com/questions/7549694/ggplot2-adding-regression-line-equation-and-r2-on-graph)
+
 ```{r lr, cache = TRUE}
-# http://stackoverflow.com/questions/7549694/ggplot2-adding-regression-line-equation-and-r2-on-graph
 df <- data.frame(x = c(1:100))
 df$y <- 2 + 3 * df$x + rnorm(100, sd = 40)
 p <- ggplot(data = df, aes(x = x, y = y)) +
@@ -258,18 +259,29 @@ matrix(imp.20130606$ip, ncol = 1)
 
 --- &vcenter .largecontent
 
-## Major Pros and Cons
+## Pros
 
-- (Major Pros) Do not require global information of the data
-- (Major Cons) Different features might be mapped to the same indices (collision)
+- Do not require global information of the data
 
 --- &vcenter .largecontent
 
+## Cons
 
+- Different features might be mapped to the same indices (collision)
+- Hard to interpret the model 
 
 --- .segue .dark
 
 ## Linear Regression with Feature Hashing
+
+--- &vcenter .largecontent
+
+## Linear Regression
+
+```{r linear_regression_hidden, echo=FALSE}
+library(data.table)
+imp.20130606 <- fread("imp.20130606.part.txt", colClasses = "character")
+```
 
 --- .segue .dark
 

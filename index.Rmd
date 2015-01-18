@@ -385,7 +385,7 @@ plot(cv.g.lr)
 
 *** =right
 
-```{r lr2, cache=TRU0E}
+```{r lr2, cache=TRUE}
 cv.g.lr$lambda.min
 # coef(cv.g.lm, s = "lambda.min")
 p.lr <- predict(cv.g.lr, m.test, s = "lambda.min")
@@ -394,48 +394,33 @@ auc(imp.test$is_click, p.lr)
 
 --- &vcenter .largecontent
 
-## Change the Model of Logistic Regression
+## Gradient Boosted Decision Tree with Feature Hashing
 
-```{r lr3, echo = TRUE}
+```{r gdbt.echo, eval = FALSE, echo = TRUE}
 suppressPackageStartupMessages({
-  library(FeatureHashing)
-})
-f2 <- ~ IP + Region + City + AdExchange + Domain +
-                           URL + AdSlotId + AdSlotWidth + AdSlotHeight +
-                           AdSlotVisibility + AdSlotFormat + CreativeID +
-                           weekday + hour + adid + tag(usertag, split = ",")
-m.train2 <- hashed.model.matrix(f2, imp.train, 2^20, FALSE) %>%
-  as("dgCMatrix")
-m.test2 <- hashed.model.matrix(f2, imp.test, 2^20, FALSE) %>%
-  as("dgCMatrix")
-```
-
---- &vcneter .largecontent
-
-## Logistic Regression with L2 Regularization
-
-```{r lr4, echo=TRUE}
-suppressPackageStartupMessages({
-  library(glmnet)
-})
-cv.g.lr2 <- cv.glmnet(m.train2, imp.train$is_click, alpha = 0,
-                     family = "binomial", type.measure = "auc")
-# coef(cv.g.lm, s = "lambda.min")
-p.lr2 <- predict(cv.g.lr2, m.test2, s = "lambda.min")
-auc(imp.test$is_click, p.lr2)
+  library(xgboost)
+  })
+cv.g.gdbt <- xgboost(m.train, imp.train$is_click, max.depth = 7, eta = 0.1, 
+                     nround = 100, objective = "binary:logistic")
+p.lm <- predict(cv.g.gdbt, m.test)
+glmnet::auc(imp.test$is_click, p.lm)
 ```
 
 --- &vcenter .largecontent
 
 ## Gradient Boosted Decision Tree with Feature Hashing
 
-```{r}
-library(glmnet)
-cv.g.lm <- cv.glmnet(m.train, imp.train$is_click)
-plot(cv.g.lm)
-cv.g.lm$lambda.min
-# coef(cv.g.lm, s = "lambda.min")
-p.lm <- predict(cv.g.lm, m.test, s = "lambda.min")
+```{r gdbt, eval = TRUE, cache=TRUE, results='markup'}
+suppressPackageStartupMessages({
+  library(xgboost)
+  })
+log <- capture.output(cv.g.gdbt <- xgboost(m.train, imp.train$is_click, max.depth = 7, eta = 0.1, 
+                     nround = 100, objective = "binary:logistic")
+               )
+cat(head(log), sep="\n")
+cat(tail(log), sep="\n")
+p.lm <- predict(cv.g.gdbt, m.test)
+glmnet::auc(imp.test$is_click, p.lm)
 ```
 
 --- &vcenter .largecontent

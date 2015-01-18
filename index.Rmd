@@ -49,7 +49,7 @@ opts_chunk$set(echo = FALSE, cache = FALSE)
 
 [source](http://stackoverflow.com/questions/7549694/ggplot2-adding-regression-line-equation-and-r2-on-graph)
 
-```{r lr, cache = TRUE}
+```{r, cache = TRUE}
 df <- data.frame(x = c(1:100))
 df$y <- 2 + 3 * df$x + rnorm(100, sd = 40)
 p <- ggplot(data = df, aes(x = x, y = y)) +
@@ -254,8 +254,7 @@ matrix(imp.20130606$ip, ncol = 1)
 
 - Determinism
 - Uniformity
-- Continuity
-- Randomness
+- Avalanche Effect
 
 --- &vcenter .largecontent
 
@@ -270,23 +269,175 @@ matrix(imp.20130606$ip, ncol = 1)
 - Different features might be mapped to the same indices (collision)
 - Hard to interpret the model 
 
+--- &vcenter .largecontent
+
+## Bounds of Error
+
+- Weinberger et al. (2009) Feature Hashing for Large Scale Multitask Learning. ICML.
+
+$$\|x^T x' - \phi(x)^T \phi(x')\|$$
+
 --- .segue .dark
 
-## Linear Regression with Feature Hashing
+## Model Fitting with Feature Hashing in R
 
 --- &vcenter .largecontent
 
-## Linear Regression
+## Prepare Data
 
-```{r linear_regression_hidden, echo=FALSE}
-library(data.table)
-imp.20130606 <- fread("imp.20130606.part.txt", colClasses = "character")
+```{r etl, echo=TRUE}
+suppressPackageStartupMessages({
+  library(FeatureHashing)
+  library(dplyr)
+})
+df <- readRDS("bidimpclk.20131020.Rds")
+imp.train <- head(df, 227103) %>%
+  filter(!is.na(PayingPrice))
+imp.test <- tail(df, 100000) %>%
+  filter(!is.na(PayingPrice))
 ```
 
---- .segue .dark
+--- &vcenter .largecontent
 
-## Logistic Regression with Feature Hashing
+## Feature Hashing
 
---- .segue .dark
+```{r feature_hashing, echo=TRUE}
+f <- ~ IP + Region + City + AdExchange + Domain +
+                           URL + AdSlotId + AdSlotWidth + AdSlotHeight +
+                           AdSlotVisibility + AdSlotFormat + CreativeID +
+                           weekday + hour
+m.train <- hashed.model.matrix(f, imp.train, 2^20, FALSE) %>%
+  as("dgCMatrix")
+m.test <- hashed.model.matrix(f, imp.test, 2^20, FALSE) %>%
+  as("dgCMatrix")
+```
+
+--- &vcenter .largecontent
+
+## Linear Regression with L1 Regularization
+
+```{r lm.echo, eval=FALSE, echo=TRUE}
+suppressPackageStartupMessages({
+  library(glmnet)
+})
+cv.g.lm <- cv.glmnet(m.train, imp.train$PayingPrice)
+plot(cv.g.lm)
+cv.g.lm$lambda.min
+# coef(cv.g.lm, s = "lambda.min")
+p.lm <- predict(cv.g.lm, m.test, s = "lambda.min")
+mean((imp.test$PayingPrice - p.lm)^2)
+```
+
+--- &twocolvcenter .largecontent
+
+## Linear Regression with L1 Regularization
+
+*** =left
+
+```{r lm1, cache=TRUE}
+suppressPackageStartupMessages({
+  library(glmnet)
+})
+cv.g.lm <- cv.glmnet(m.train, imp.train$PayingPrice)
+plot(cv.g.lm)
+```
+
+*** =right
+
+```{r lm2, cache=TRUE}
+cv.g.lm$lambda.min
+# coef(cv.g.lm, s = "lambda.min")
+p.lm <- predict(cv.g.lm, m.test, s = "lambda.min")
+mean((imp.test$PayingPrice - p.lm)^2)
+```
+
+--- &vcenter .largecontent
+
+## Logistic Regression with L2 Regularization
+
+```{r lr.echo, echo=TRUE, eval = FALSE}
+suppressPackageStartupMessages({
+  library(glmnet)
+})
+cv.g.lr <- cv.glmnet(m.train, imp.train$is_click, alpha = 0,
+                     family = "binomial", type.measure = "auc")
+plot(cv.g.lr)
+cv.g.lr$lambda.min
+# coef(cv.g.lm, s = "lambda.min")
+p.lr <- predict(cv.g.lr, m.test, s = "lambda.min")
+auc(imp.test$is_click, p.lr)
+```
+
+--- &twocolvcenter .largecontent
+
+## Logistic Regression with L2 Regularization
+
+*** =left
+
+```{r lr1, cache=TRUE}
+suppressPackageStartupMessages({
+  library(glmnet)
+})
+cv.g.lr <- cv.glmnet(m.train, imp.train$is_click, alpha = 0,
+                     family = "binomial", type.measure = "auc")
+plot(cv.g.lr)
+```
+
+*** =right
+
+```{r lr2, cache=TRU0E}
+cv.g.lr$lambda.min
+# coef(cv.g.lm, s = "lambda.min")
+p.lr <- predict(cv.g.lr, m.test, s = "lambda.min")
+auc(imp.test$is_click, p.lr)
+```
+
+--- &vcenter .largecontent
+
+## Change the Model of Logistic Regression
+
+```{r lr3, echo = TRUE}
+suppressPackageStartupMessages({
+  library(FeatureHashing)
+})
+f2 <- ~ IP + Region + City + AdExchange + Domain +
+                           URL + AdSlotId + AdSlotWidth + AdSlotHeight +
+                           AdSlotVisibility + AdSlotFormat + CreativeID +
+                           weekday + hour + adid + tag(usertag, split = ",")
+m.train2 <- hashed.model.matrix(f2, imp.train, 2^20, FALSE) %>%
+  as("dgCMatrix")
+m.test2 <- hashed.model.matrix(f2, imp.test, 2^20, FALSE) %>%
+  as("dgCMatrix")
+```
+
+--- &vcneter .largecontent
+
+## Logistic Regression with L2 Regularization
+
+```{r lr4, echo=TRUE}
+suppressPackageStartupMessages({
+  library(glmnet)
+})
+cv.g.lr2 <- cv.glmnet(m.train2, imp.train$is_click, alpha = 0,
+                     family = "binomial", type.measure = "auc")
+# coef(cv.g.lm, s = "lambda.min")
+p.lr2 <- predict(cv.g.lr2, m.test2, s = "lambda.min")
+auc(imp.test$is_click, p.lr2)
+```
+
+--- &vcenter .largecontent
 
 ## Gradient Boosted Decision Tree with Feature Hashing
+
+```{r}
+library(glmnet)
+cv.g.lm <- cv.glmnet(m.train, imp.train$is_click)
+plot(cv.g.lm)
+cv.g.lm$lambda.min
+# coef(cv.g.lm, s = "lambda.min")
+p.lm <- predict(cv.g.lm, m.test, s = "lambda.min")
+```
+
+--- &vcenter .largecontent
+
+## Q&A

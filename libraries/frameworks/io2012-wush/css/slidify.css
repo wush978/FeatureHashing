@@ -395,14 +395,6 @@ pre > code {
   text-align: left;  
 }
 
-.title-slide {
-  background-color: #FFFFFF; /* #EDE0CF; ; #CA9F9D*/
-  background-image: url('libraries/frameworks/io2012-wush/images/background.png'); 
-  background-repeat:no-repeat; 
-  background-position:center; 
-  background-size: 100% 100%;
-}
-
 .title-slide hgroup {
   position:relative; 
   top: 50%; 

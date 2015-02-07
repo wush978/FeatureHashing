@@ -74,7 +74,7 @@
 #'@importFrom methods checkAtAssignment
 #'@importClassesFrom Matrix dgCMatrix
 #'@aliases hash_h hash_xi
-hashed.model.matrix <- function(object, data, hash_size = 2^24, transpose = TRUE, keep.hashing_mapping = FALSE) {
+hashed.model.matrix <- function(object, data, hash_size = 2^24, transpose = FALSE, keep.hashing_mapping = FALSE, is.dgCMatrix = TRUE) {
   stopifnot(hash_size >= 0)
   stopifnot(is.data.frame(data))
   tf <- terms.formula(object, data = data, specials = "tag")
@@ -82,7 +82,7 @@ hashed.model.matrix <- function(object, data, hash_size = 2^24, transpose = TRUE
   .hashed.model.matrix.dataframe(tf, data, hash_size, transpose, retval, keep.hashing_mapping)
   class(retval) <- .CSCMatrix
   retval@Dimnames[[2]] <- paste(seq_len(retval@Dim[2]))
-  retval
+  if (is.dgCMatrix) as(retval, "dgCMatrix") else retval
 }
 
 parse_tag <- function(text) {

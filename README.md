@@ -26,7 +26,7 @@ In general, feature hashing is useful in the following environment:
 
 Because it is expensive or impossible to scan entire dataset.
 
-## Getting Start
+## Getting Started
 
 The following scripts show how to use the `FeatureHashing` to construct `Matrix::dgCMatrix` and train a model in other packages which supports `Matrix::dgCMatrix` as input.
 

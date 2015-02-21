@@ -30,7 +30,7 @@ Because it is expensive or impossible to scan entire dataset.
 
 The following scripts show how to use the `FeatureHashing` to construct `Matrix::dgCMatrix` and train a model in other packages which supports `Matrix::dgCMatrix` as input.
 
-### Logistic Regression with `[glmnet](http://cran.r-project.org/web/packages/glmnet/index.html)`
+### Logistic Regression with [`glmnet`](http://cran.r-project.org/web/packages/glmnet/index.html)
 
 ```r
 # The following script assumes that the data.frame
@@ -60,7 +60,7 @@ p.lr <- predict(cv.g.lr, m.test, s="lambda.min")
 auc(imp.test$is_click, p.lr)
 ```
 
-### Gradient Boosted Decision Tree with [xgboost](http://cran.r-project.org/web/packages/xgboost/index.html)
+### Gradient Boosted Decision Tree with [`xgboost`](http://cran.r-project.org/web/packages/xgboost/index.html)
 
 Following the script above, 
 

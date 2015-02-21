@@ -12,7 +12,8 @@ if (require(pack) & require(RUnit)) {
   checkTrue(all(hash_h(names(mapping_value)) %% 2^32 == mapping_value),
             "Unexpected hashing result by hash_h")
   
-  m <- hashed.model.matrix(~ ., CO2, hash_size = 2^10, keep.hashing_mapping = T)
+  m <- hashed.model.matrix(~ ., CO2, hash_size = 2^10, keep.hashing_mapping = T,
+                           transpose = TRUE, is.dgCMatrix = FALSE)
   mapping <- as.list(attr(m, "mapping"))
   checkTrue(all(!duplicated(unlist(mapping) %% 2^10 + 1)),
             "Unexpected collision of hashing example")
@@ -40,7 +41,8 @@ if (require(pack) & require(RUnit)) {
     checkTrue(all(x[-j] == 0), "Inconsistent hash value between hash_h, hash_xi and hashed.model.matrix")
   }
   
-  m <- hashed.model.matrix(~ .^2, CO2, hash_size = 2^10, keep.hashing_mapping = TRUE)
+  m <- hashed.model.matrix(~ .^2, CO2, hash_size = 2^10, keep.hashing_mapping = TRUE,
+                           transpose = TRUE, is.dgCMatrix = FALSE)
   mapping_value <- as.list(attr(m, "mapping"))
   
   mapping_value.expected <- structure(list(PlantQc1 = 2636986885, PlantQn1 = 3789462177, 
@@ -108,7 +110,8 @@ if (require(pack) & require(RUnit)) {
   checkTrue(isTRUE(all.equal(mapping_value[names(mapping_value.expected)], mapping_value.expected)),
             "Unexpected hashing result of interaction term")
   
-  m2 <- hashed.model.matrix(~ . ^ 2, data = CO2, hash_size = 32, keep.hashing_mapping = TRUE)
+  m2 <- hashed.model.matrix(~ . ^ 2, data = CO2, hash_size = 32, keep.hashing_mapping = TRUE,
+                            transpose = TRUE, is.dgCMatrix = FALSE)
   checkTrue(!all(m2@i == 0),
             "All hashed indices created by hashed.model.matrix are zero")
   checkTrue(sum(m2 %*% rep(1, ncol(m2)) != 0) > 1,
@@ -135,7 +138,8 @@ if (require(pack) & require(RUnit)) {
   }
   
   # check handling of NA
-  tryCatch(m <- hashed.model.matrix(~ PlAnT, CO2, 8), error = function(e) {
+  tryCatch(m <- hashed.model.matrix(~ PlAnT, CO2, 8,
+                                    transpose = TRUE, is.dgCMatrix = FALSE), error = function(e) {
     if (class(e)[1] != "std::invalid_argument") stop(e)
     if (conditionMessage(e) != "Failed to find the column:PlAnT") stop(e)
   })

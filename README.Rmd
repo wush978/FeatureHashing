@@ -15,71 +15,57 @@ a `data.frame` to sparse matrix. The package provides a formula interface simila
 in R and Matrix::sparse.model.matrix in the package Matrix. Splitting of concatenated data, 
 check the help of `test.tag` for explanation of concatenated data, during the construction of the model matrix.
 
-### When will I use Feature Hashing?
+### When should we use Feature Hashing?
 
-- I don't need to know the meaning of the cofficients.
+Feature hashing is useful when the user do not easy to know the dimension of the feature vector. For example, the bag-of-word representation in document classification problem requires scanning entire dataset to know how many words we have, i.e. the dimension of the feature vector.
 
-    After feature hashing, it is hard to connect the trained cofficients to the original data.
+In general, feature hashing is useful in the following environment:
 
-- I cannot convert all data including training data and testing data to a model matrix at once.
+- Streaming Environment
+- Distirbuted Environment
 
-    To make the model matrix consistent, I need to synchronize the indices between different conversions. Feature
-    hashing automatically synchronize the indices via the hash function.
-
-- I need to handle concatenated data.
-
-    Converting concatenated data to model matrix requires splitting the feature and building some temporal data with `model.matrix`. Feature Hashing supports the splitting of the concatenated data on the fly with simple formula interface. The user does not need to call `strsplit` and spend a lot of memory for temporal data.
+Because it is expensive or impossible to scan entire dataset.
 
 ## Demo
 
-### Concatenated Data
+The following script shows how to train the logistic regression with [glmnet](http://cran.r-project.org/web/packages/glmnet/index.html) and gradient boosted decision tree with [xgboost](http://cran.r-project.org/web/packages/xgboost/index.html) on the [ipinyou dataset](http://data.computational-advertising.org/).
 
-```{r}
-library(methods)
+### Logistic Regression with `glmnet`
+
+```r
+# The following script assumes that the data.frame
+# of the training dataset and testing dataset are 
+# assigned to variable `imp.train` and `imp.test`
+# respectively
+
 library(FeatureHashing)
+ 
+f <- ~ ip + region + city + adexchange + domain +
+  URL + AdSlotId + AdSlotWidth + AdSlotHeight +
+  AdSlotVisibility + AdSlotFormat + CreativeID +
+  weekday + hour + tag(usertag, split = ",")
+m.train <- hashed.model.matrix(f, imp.train, 2^20)
+m.test <- hashed.model.matrix(f, imp.test, 2^20)
 
-# The tag-like feature
-data(test.tag)
-df <- data.frame(a = test.tag, b = rnorm(length(test.tag)))
-head(df)
-m <- hashed.model.matrix(~ tag(a, split = ",", type = "existence"):b, df, 2^6,
- keep.hashing_mapping = TRUE)
-# The column `a` is splitted by "," and have an interaction with "b":
-mapping <- unlist(as.list(attr(m, "mapping")))
-names(mapping)
+# logistic regression with glmnet
+
+library(glmnet)
+
+cv.g.lr <- cv.glmnet(m.train, imp.train$is_click,
+  family = "binomial", type.measure = "auc")
+plot(cv.g.lr)
+cv.g.lr$lambda.min
+# coef(cv.g.lm, s = "lambda.min")
+p.lr <- predict(cv.g.lr, m.test, s="lambda.min")
+auc(imp.test$is_click, p.lr)
+
+# GBDT with xgboost
+
+library(xgboost)
+
+cv.g.gdbt <- xgboost(m.train, imp.train$is_click, max.depth=7, eta=0.1,
+  nround = 100, objective = "binary:logistic")
+p.lm <- predict(cv.g.gdbt, m.test)
+glmnet::auc(imp.test$is_click, p.lm)
 ```
-
-### Feature Hashing
-
-```{r}
-# Construct the model matrix. The transposed matrix is returned by default.
-m <- hashed.model.matrix(~ ., CO2, 2^6, keep.hashing_mapping = TRUE)
-mapping <- as.list(attr(m, "mapping"))
-# Print the matrix via dgCMatrix
-as(m, "dgCMatrix")[1:20,1:17]
-
-# Check the result of hashing
-mapping <- unlist(as.list(attr(m, "mapping")))
-mapping %% 2^6 # the 9-th row is conc
-# Check the rate of collision
-mean(duplicated(mapping %% 2^6))
-# The result is CSCMatrix which supports simple subsetting and matrix-vector
-# multiplication
-# rnorm(2^6) %*% m
-
-# Detail of the hashing
-## The main effect is hashed via `hash_h`
-all(hash_h(names(mapping)) %% 2^6 == mapping %% 2^6)
-## The sign is corrected by `hash_xi`
-hash_xi(names(mapping))
-## The interaction term is implemented as follow:
-m2 <- hashed.model.matrix(~ .^2, CO2, 2^6, keep.hashing_mapping = TRUE)
-mapping2 <- unlist(as.list(attr(m2, "mapping")))
-mapping2[2] # PlantQn2:uptake
-h1 <- mapping2["PlantQn2"]
-h2 <- mapping2["uptake"]
-library(pack)
-hash_h(rawToChar(c(numToRaw(h1, 4), numToRaw(h2, 4)))) # should be mapping2[2]
-```
-
 

@@ -75,10 +75,6 @@ p.lm <- predict(cv.g.gdbt, m.test)
 glmnet::auc(imp.test$is_click, p.lm)
 ```
 
-### Logistic Regression with [Follow The Proximal Regularized Leader](http://research.google.com/pubs/pub41159.html)
-
-
-
 ## Supported Data Structure
 
 - character and factor

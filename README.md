@@ -26,11 +26,11 @@ In general, feature hashing is useful in the following environment:
 
 Because it is expensive or impossible to scan entire dataset.
 
-## Demo
+## Getting Start
 
-The following script shows how to train the logistic regression with [glmnet](http://cran.r-project.org/web/packages/glmnet/index.html) and gradient boosted decision tree with [xgboost](http://cran.r-project.org/web/packages/xgboost/index.html) on the [ipinyou dataset](http://data.computational-advertising.org/).
+The following scripts show how to use the `FeatureHashing` to construct `Matrix::dgCMatrix` and train a model in other packages which supports `Matrix::dgCMatrix` as input.
 
-### Logistic Regression with `glmnet`
+### Logistic Regression with [`glmnet`](http://cran.r-project.org/web/packages/glmnet/index.html)
 
 ```r
 # The following script assumes that the data.frame
@@ -58,7 +58,13 @@ cv.g.lr$lambda.min
 # coef(cv.g.lm, s = "lambda.min")
 p.lr <- predict(cv.g.lr, m.test, s="lambda.min")
 auc(imp.test$is_click, p.lr)
+```
 
+### Gradient Boosted Decision Tree with [`xgboost`](http://cran.r-project.org/web/packages/xgboost/index.html)
+
+Following the script above, 
+
+```r
 # GBDT with xgboost
 
 library(xgboost)
@@ -69,3 +75,8 @@ p.lm <- predict(cv.g.gdbt, m.test)
 glmnet::auc(imp.test$is_click, p.lm)
 ```
 
+## Supported Data Structure
+
+- character and factor
+- numeric and integer
+- array, i.e. concatenated strings such as `c("a,b", "a,b,c", "a,c", "")`

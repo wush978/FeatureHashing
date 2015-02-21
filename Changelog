@@ -1,5 +1,10 @@
 2015-01-01  Wush Wu <wush978@gmail.com>
 
+- Version 0.8.1
+- Change the API
+    - Default `transpose` to `FALSE`
+    - Add the argument `is.dgCMatrix` and the default value is `TRUE`
+
 - Version 0.8
 - Use the implementation of murmurhash3 from the package digest
     - Update the author list

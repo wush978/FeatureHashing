@@ -26,7 +26,7 @@ In general, feature hashing is useful in the following environment:
 
 Because it is expensive or impossible to scan entire dataset.
 
-## Getting Start
+## Getting Started
 
 The following scripts show how to use the `FeatureHashing` to construct `Matrix::dgCMatrix` and train a model in other packages which supports `Matrix::dgCMatrix` as input.
 
@@ -39,11 +39,16 @@ The following scripts show how to use the `FeatureHashing` to construct `Matrix:
 # respectively
 
 library(FeatureHashing)
+
+# Checking version.
+stopifnot(packageVersion("FeatureHashing") >= package_version("0.8.1"))
  
 f <- ~ ip + region + city + adexchange + domain +
   URL + AdSlotId + AdSlotWidth + AdSlotHeight +
   AdSlotVisibility + AdSlotFormat + CreativeID +
   weekday + hour + tag(usertag, split = ",")
+# if the version of FeatureHashing is 0.8, please use the following command:
+# m.train <- as(hashed.model.matrix(f, imp.train, 2^20, transpose = FALSE), "dgCMatrix")
 m.train <- hashed.model.matrix(f, imp.train, 2^20)
 m.test <- hashed.model.matrix(f, imp.test, 2^20)
 

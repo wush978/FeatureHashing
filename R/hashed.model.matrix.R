@@ -36,7 +36,8 @@
 #'
 #'@examples
 #'# Construct the model matrix. The transposed matrix is returned by default.
-#'m <- hashed.model.matrix(~ ., CO2, 2^6, keep.hashing_mapping = TRUE, transpose = TRUE, is.dgCMatrix = FALSE)
+#'m <- hashed.model.matrix(~ ., CO2, 2^6, keep.hashing_mapping = TRUE, 
+#'  transpose = TRUE, is.dgCMatrix = FALSE)
 #'# Print the matrix via dgCMatrix
 #'as(m, "dgCMatrix")
 #'# Check the result of hashing
@@ -53,7 +54,8 @@
 #'## The sign is corrected by `hash_xi`
 #'hash_xi(names(mapping))
 #'## The interaction term is implemented as follow:
-#'m2 <- hashed.model.matrix(~ .^2, CO2, 2^6, keep.hashing_mapping = TRUE, transpose = TRUE, is.dgCMatrix = FALSE)
+#'m2 <- hashed.model.matrix(~ .^2, CO2, 2^6, keep.hashing_mapping = TRUE, 
+#'  transpose = TRUE, is.dgCMatrix = FALSE)
 #'mapping2 <- unlist(as.list(attr(m2, "mapping")))
 #'mapping2[2] # PlantQn2:uptake 
 #'h1 <- mapping2["PlantQn2"]

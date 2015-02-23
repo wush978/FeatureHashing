@@ -12,7 +12,7 @@ if (require(pack) & require(RUnit)) {
   checkTrue(all(hash_h(names(mapping_value)) %% 2^32 == mapping_value),
             "Unexpected hashing result by hash_h")
   
-  m <- hashed.model.matrix(~ ., CO2, hash_size = 2^10, keep.hashing_mapping = T)
+  m <- hashed.model.matrix(~ ., CO2, hash_size = 2^10, keep.hashing_mapping = TRUE, transpose = TRUE, is.dgCMatrix = FALSE)
   mapping <- as.list(attr(m, "mapping"))
   checkTrue(all(!duplicated(unlist(mapping) %% 2^10 + 1)),
             "Unexpected collision of hashing example")
@@ -40,7 +40,7 @@ if (require(pack) & require(RUnit)) {
     checkTrue(all(x[-j] == 0), "Inconsistent hash value between hash_h, hash_xi and hashed.model.matrix")
   }
   
-  m <- hashed.model.matrix(~ .^2, CO2, hash_size = 2^10, keep.hashing_mapping = TRUE)
+  m <- hashed.model.matrix(~ .^2, CO2, hash_size = 2^10, keep.hashing_mapping = TRUE, transpose = TRUE, is.dgCMatrix = TRUE)
   mapping_value <- as.list(attr(m, "mapping"))
   
   mapping_value.expected <- structure(list(PlantQc1 = 2636986885, PlantQn1 = 3789462177, 

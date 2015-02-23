@@ -1,7 +1,7 @@
 Package: FeatureHashing
 Type: Package
 Title: Creates a Model Matrix via Feature Hashing With a Formula Interface
-Version: 0.8
+Version: 0.8.1
 Date: 2014-08-01
 Authors@R:   as.person(c( "Wush Wu <wush978@gmail.com> [aut, cre]"))
 Author: Wush Wu [aut, cre]

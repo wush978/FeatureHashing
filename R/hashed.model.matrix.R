@@ -82,7 +82,13 @@ hashed.model.matrix <- function(object, data, hash_size = 2^24, transpose = FALS
   .hashed.model.matrix.dataframe(tf, data, hash_size, transpose, retval, keep.hashing_mapping)
   class(retval) <- .CSCMatrix
   retval@Dimnames[[2]] <- paste(seq_len(retval@Dim[2]))
-  if (is.dgCMatrix) as(retval, "dgCMatrix") else retval
+  if (is.dgCMatrix) {
+    retval2 <- as(retval, "dgCMatrix") 
+    for(name in setdiff(names(attributes(retval)), names(attributes(retval2)))) {
+      attr(retval2, name) <- attr(retval, name)
+    }
+    retval2
+  } else retval
 }
 
 parse_tag <- function(text) {

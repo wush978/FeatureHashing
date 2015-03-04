@@ -1,4 +1,12 @@
-/* number of R header files (possibly listing too many) */
+/**
+ * 
+ * MurmurHash3 was written by Austin Appleby, and is placed in the public.
+ * 
+ * This header links the implementation of murmurhash3 in digest3 to FeatureHashing.
+ * This was writting by Wush Wu, and also public domain.
+ * 
+ */
+ 
 #include <R.h>
 #include <Rinternals.h>
 #include <Rdefines.h>

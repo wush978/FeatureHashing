@@ -5,3 +5,5 @@ FeatureHashing.Rproj
 .Rproj.user
 .git
 README.Rmd
+^.*\.Rproj$
+^\.Rproj\.user$

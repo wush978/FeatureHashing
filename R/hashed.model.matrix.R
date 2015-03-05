@@ -53,10 +53,15 @@
 #'all(hash_h(names(mapping)) %% 2^6 == mapping %% 2^6)
 #'## The sign is corrected by `hash_xi`
 #'hash_xi(names(mapping))
+#'
 #'## The interaction term is implemented as follow:
 #'m2 <- hashed.model.matrix(~ .^2, CO2, 2^6, keep.hashing_mapping = TRUE, 
 #'  transpose = TRUE, is.dgCMatrix = FALSE)
-#'  
+#'# The ^ operator indicates crossing to the specified degree. 
+#'# For example (a+b+c)^2 is identical to (a+b+c)*(a+b+c) 
+#'# which in turn expands to a formula containing the main effects
+#'# for a, b and c together with their second-order interactions. 
+#'      
 #'# Extract the mapping
 #'mapping2 <- unlist(as.list(attr(m2, "mapping")))
 #'

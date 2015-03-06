@@ -15,6 +15,19 @@ a `data.frame` to sparse matrix. The package provides a formula interface simila
 in R and Matrix::sparse.model.matrix in the package Matrix. Splitting of concatenated data, 
 check the help of `test.tag` for explanation of concatenated data, during the construction of the model matrix.
 
+## Installation
+
+To install the stable version from Cran, run this command:
+```r
+install.packages("FeatureHashing")
+```
+
+For up-to-date version, please install from github. Windows user will need to install [RTools](http://cran.r-project.org/bin/windows/Rtools/) first.
+
+```r
+devtools::install_github('wush978/FeatureHashing')
+```
+
 ### When should we use Feature Hashing?
 
 Feature hashing is useful when the user do not easy to know the dimension of the feature vector. For example, the bag-of-word representation in document classification problem requires scanning entire dataset to know how many words we have, i.e. the dimension of the feature vector.
@@ -39,11 +52,16 @@ The following scripts show how to use the `FeatureHashing` to construct `Matrix:
 # respectively
 
 library(FeatureHashing)
+
+# Checking version.
+stopifnot(packageVersion("FeatureHashing") >= package_version("0.8.1"))
  
 f <- ~ ip + region + city + adexchange + domain +
   URL + AdSlotId + AdSlotWidth + AdSlotHeight +
   AdSlotVisibility + AdSlotFormat + CreativeID +
   weekday + hour + tag(usertag, split = ",")
+# if the version of FeatureHashing is 0.8, please use the following command:
+# m.train <- as(hashed.model.matrix(f, imp.train, 2^20, transpose = FALSE), "dgCMatrix")
 m.train <- hashed.model.matrix(f, imp.train, 2^20)
 m.test <- hashed.model.matrix(f, imp.test, 2^20)
 

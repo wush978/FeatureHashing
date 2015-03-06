@@ -3,7 +3,7 @@
 #'@param data data.frame. The original data.
 #'@param hash_size positive integer. The hash size of feature hashing.
 #'@param transpose logical value. Indicating if the transpose should be returned.
-#'@param keep.hashing_mapping logical value. The indicator of whether storing the hash mapping or not.
+#'@param is.mapping logical value. The indicator of whether storing the hash mapping or not.
 #'@param is.dgCMatrix logical value. Indicating if the result is \code{dgCMatrix} or \code{CSCMatrix}
 #'
 #'
@@ -36,7 +36,7 @@
 #'
 #'@examples
 #'# Construct the model matrix. The transposed matrix is returned by default.
-#'m <- hashed.model.matrix(~ ., CO2, 2^6, keep.hashing_mapping = TRUE, 
+#'m <- hashed.model.matrix(~ ., CO2, 2^6, is.mapping = TRUE, 
 #'  transpose = TRUE, is.dgCMatrix = FALSE)
 #'# Print the matrix via dgCMatrix
 #'as(m, "dgCMatrix")
@@ -55,7 +55,7 @@
 #'hash_xi(names(mapping))
 #'
 #'## The interaction term is implemented as follow:
-#'m2 <- hashed.model.matrix(~ .^2, CO2, 2^6, keep.hashing_mapping = TRUE, 
+#'m2 <- hashed.model.matrix(~ .^2, CO2, 2^6, is.mapping = TRUE, 
 #'  transpose = TRUE, is.dgCMatrix = FALSE)
 #'# The ^ operator indicates crossing to the specified degree. 
 #'# For example (a+b+c)^2 is identical to (a+b+c)*(a+b+c) 
@@ -80,7 +80,7 @@
 #'data(test.tag)
 #'df <- data.frame(a = test.tag, b = rnorm(length(test.tag)))
 #'m <- hashed.model.matrix(~ tag(a, split = ",", type = "existence"):b, df, 2^6,
-#'  keep.hashing_mapping = TRUE)
+#'  is.mapping = TRUE)
 #'# The column `a` is splitted by "," and have an interaction with "b":
 #'mapping <- unlist(as.list(attr(m, "mapping")))
 #'names(mapping)

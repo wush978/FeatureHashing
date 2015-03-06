@@ -91,7 +91,7 @@ class NullHashFunction : public HashFunction {
     return 1;
   }
   
-}
+};
 
 class MurmurHash3HashFunction : public HashFunction {
   

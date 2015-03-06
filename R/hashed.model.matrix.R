@@ -102,13 +102,9 @@ hashed.model.matrix <- function(object, data, hash_size = 2^24, transpose = FALS
   retval@Dimnames[[2]] <- paste(seq_len(retval@Dim[2]))
   if (is.dgCMatrix) {
     retval2 <- as(retval, "dgCMatrix") 
-<<<<<<< HEAD
     for(name in setdiff(names(attributes(retval)), names(attributes(retval2)))) {
       attr(retval2, name) <- attr(retval, name)
     }
-=======
-    attributes(retval2) <- attributes(retval)
->>>>>>> origin/master
     retval2
   } else retval
 }

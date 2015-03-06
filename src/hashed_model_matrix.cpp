@@ -83,6 +83,16 @@ public:
 //
 //};
 
+class NullHashFunction : public HashFunction {
+  
+  public:
+  
+  virtual uint32_t operator()(const char* buf, int size, bool is_interaction = false) {
+    return 1;
+  }
+  
+}
+
 class MurmurHash3HashFunction : public HashFunction {
   
   uint32_t seed;
@@ -722,7 +732,7 @@ const ConvertersVec get_converters(
 } 
 
 template<typename DataFrameLike>
-SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size, bool transpose, S4 retval, bool keep_hashing_mapping) {
+SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size, bool transpose, S4 retval, bool keep_hashing_mapping, bool is_xi) {
   if (hash_size > 4294967296) throw std::invalid_argument("hash_size is too big!");
   NameClassMapping reference_class(get_class(data));
   Environment e(Environment::base_env().new_child(wrap(true)));
@@ -732,7 +742,8 @@ SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size
   } else {
     pHF.reset(new MurmurHash3HashFunction(MURMURHASH3_H_SEED));
   }
-  pBHF.reset(new MurmurHash3HashFunction(MURMURHASH3_XI_SEED));
+  if (is_xi) pBHF.reset(new MurmurHash3HashFunction(MURMURHASH3_XI_SEED));
+  else pBHF.reset(new NullHashFunction);
   ConvertersVec converters(get_converters(reference_class, tf, data, pHF.get(), pBHF.get()));
   #ifdef NOISY_DEBUG
   Rprintf("The size of convertres is %d\n", converters.size());
@@ -833,7 +844,7 @@ SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size
 }
 
 //[[Rcpp::export(".hashed.model.matrix.dataframe")]]
-SEXP hashed_model_matrix_dataframe(RObject tf, DataFrame data, unsigned long hash_size, bool transpose, S4 retval, bool keep_hashing_mapping) {
-  return hashed_model_matrix<DataFrame>(tf, data, hash_size, transpose, retval, keep_hashing_mapping);
+SEXP hashed_model_matrix_dataframe(RObject tf, DataFrame data, unsigned long hash_size, bool transpose, S4 retval, bool keep_hashing_mapping, bool is_xi) {
+  return hashed_model_matrix<DataFrame>(tf, data, hash_size, transpose, retval, keep_hashing_mapping, is_xi);
 }
 

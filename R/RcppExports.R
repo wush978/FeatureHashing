@@ -17,10 +17,6 @@ tomatrix <- function(m) {
     .Call('FeatureHashing_tomatrix', PACKAGE = 'FeatureHashing', m)
 }
 
-.hashed.model.matrix.dataframe <- function(tf, data, hash_size, transpose, retval, keep_hashing_mapping) {
-    .Call('FeatureHashing_hashed_model_matrix_dataframe', PACKAGE = 'FeatureHashing', tf, data, hash_size, transpose, retval, keep_hashing_mapping)
-}
-
 #'@export hash_xi
 hash_xi <- function(src) {
     .Call('FeatureHashing_xi', PACKAGE = 'FeatureHashing', src)
@@ -29,6 +25,10 @@ hash_xi <- function(src) {
 #'@export hash_h
 hash_h <- function(src) {
     .Call('FeatureHashing_h', PACKAGE = 'FeatureHashing', src)
+}
+
+.hashed.model.matrix.dataframe <- function(tf, data, hash_size, transpose, retval, keep_hashing_mapping, is_xi) {
+    .Call('FeatureHashing_hashed_model_matrix_dataframe', PACKAGE = 'FeatureHashing', tf, data, hash_size, transpose, retval, keep_hashing_mapping, is_xi)
 }
 
 Xv <- function(m, v, retval) {

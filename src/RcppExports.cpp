@@ -64,26 +64,6 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// hashed_model_matrix_dataframe
-SEXP hashed_model_matrix_dataframe(RObject tf, DataFrame data, unsigned long hash_size, bool transpose, S4 retval, bool keep_hashing_mapping);
-RcppExport SEXP FeatureHashing_hashed_model_matrix_dataframe(SEXP tfSEXP, SEXP dataSEXP, SEXP hash_sizeSEXP, SEXP transposeSEXP, SEXP retvalSEXP, SEXP keep_hashing_mappingSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< RObject >::type tf(tfSEXP );
-        Rcpp::traits::input_parameter< DataFrame >::type data(dataSEXP );
-        Rcpp::traits::input_parameter< unsigned long >::type hash_size(hash_sizeSEXP );
-        Rcpp::traits::input_parameter< bool >::type transpose(transposeSEXP );
-        Rcpp::traits::input_parameter< S4 >::type retval(retvalSEXP );
-        Rcpp::traits::input_parameter< bool >::type keep_hashing_mapping(keep_hashing_mappingSEXP );
-        SEXP __result = hashed_model_matrix_dataframe(tf, data, hash_size, transpose, retval, keep_hashing_mapping);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
 // xi
 IntegerVector xi(CharacterVector src);
 RcppExport SEXP FeatureHashing_xi(SEXP srcSEXP) {
@@ -108,6 +88,27 @@ BEGIN_RCPP
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< CharacterVector >::type src(srcSEXP );
         IntegerVector __result = h(src);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// hashed_model_matrix_dataframe
+SEXP hashed_model_matrix_dataframe(RObject tf, DataFrame data, unsigned long hash_size, bool transpose, S4 retval, bool keep_hashing_mapping, bool is_xi);
+RcppExport SEXP FeatureHashing_hashed_model_matrix_dataframe(SEXP tfSEXP, SEXP dataSEXP, SEXP hash_sizeSEXP, SEXP transposeSEXP, SEXP retvalSEXP, SEXP keep_hashing_mappingSEXP, SEXP is_xiSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< RObject >::type tf(tfSEXP );
+        Rcpp::traits::input_parameter< DataFrame >::type data(dataSEXP );
+        Rcpp::traits::input_parameter< unsigned long >::type hash_size(hash_sizeSEXP );
+        Rcpp::traits::input_parameter< bool >::type transpose(transposeSEXP );
+        Rcpp::traits::input_parameter< S4 >::type retval(retvalSEXP );
+        Rcpp::traits::input_parameter< bool >::type keep_hashing_mapping(keep_hashing_mappingSEXP );
+        Rcpp::traits::input_parameter< bool >::type is_xi(is_xiSEXP );
+        SEXP __result = hashed_model_matrix_dataframe(tf, data, hash_size, transpose, retval, keep_hashing_mapping, is_xi);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

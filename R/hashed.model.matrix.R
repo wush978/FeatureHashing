@@ -66,7 +66,7 @@
 #'mapping2 <- unlist(as.list(attr(m2, "mapping")))
 #'
 #'# Get the hash of combination of two items, PlantQn2 and uptake 
-#'mapping2[54] # PlantQn2:uptake hash is 974267571
+#'mapping2['PlantQn2:uptake'] # PlantQn2:uptake hash is 974267571
 #'
 #'# Extract hash of each item
 #'h1 <- mapping2["PlantQn2"]
@@ -74,7 +74,7 @@
 #'
 #'# Computation of hash of both items combined
 #'library(pack) # convert values from / to raw format
-#'hash_h(rawToChar(c(numToRaw(h1, 4), numToRaw(h2, 4)))) # should be 974267571 == mapping2[54]
+#'hash_h(rawToChar(c(numToRaw(h1, 4), numToRaw(h2, 4)))) # should be 974267571 == mapping2['PlantQn2:uptake']
 #'
 #'# The tag-like feature
 #'data(test.tag)

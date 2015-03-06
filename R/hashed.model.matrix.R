@@ -3,8 +3,9 @@
 #'@param data data.frame. The original data.
 #'@param hash_size positive integer. The hash size of feature hashing.
 #'@param transpose logical value. Indicating if the transpose should be returned.
-#'@param keep.hashing_mapping logical value. 
-#'The indicator of whether storing the hash mapping or not.
+#'@param keep.hashing_mapping logical value. The indicator of whether storing the hash mapping or not.
+#'@param is.dgCMatrix logical value. Indicating if the result is \code{dgCMatrix} or \code{CSCMatrix}
+#'
 #'
 #'@details
 #'The \code{hashed.model.matrix} hashes the feature automatically during
@@ -35,13 +36,14 @@
 #'
 #'@examples
 #'# Construct the model matrix. The transposed matrix is returned by default.
-#'m <- hashed.model.matrix(~ ., CO2, 2^6, keep.hashing_mapping = TRUE)
+#'m <- hashed.model.matrix(~ ., CO2, 2^6, keep.hashing_mapping = TRUE, 
+#'  transpose = TRUE, is.dgCMatrix = FALSE)
 #'# Print the matrix via dgCMatrix
 #'as(m, "dgCMatrix")
 #'# Check the result of hashing
 #'mapping <- unlist(as.list(attr(m, "mapping")))
 #'# Check the rate of collision
-#'# mean(duplicated(mapping %% 2^6))
+#'mean(duplicated(mapping %% 2^6))
 #'# The result is CSCMatrix which supports simple subsetting and matrix-vector
 #'# multiplication
 #'# rnorm(2^6) %*% m
@@ -51,14 +53,28 @@
 #'all(hash_h(names(mapping)) %% 2^6 == mapping %% 2^6)
 #'## The sign is corrected by `hash_xi`
 #'hash_xi(names(mapping))
+#'
 #'## The interaction term is implemented as follow:
-#'m2 <- hashed.model.matrix(~ .^2, CO2, 2^6, keep.hashing_mapping = TRUE)
+#'m2 <- hashed.model.matrix(~ .^2, CO2, 2^6, keep.hashing_mapping = TRUE, 
+#'  transpose = TRUE, is.dgCMatrix = FALSE)
+#'# The ^ operator indicates crossing to the specified degree. 
+#'# For example (a+b+c)^2 is identical to (a+b+c)*(a+b+c) 
+#'# which in turn expands to a formula containing the main effects
+#'# for a, b and c together with their second-order interactions. 
+#'      
+#'# Extract the mapping
 #'mapping2 <- unlist(as.list(attr(m2, "mapping")))
-#'mapping2[2] # PlantQn2:uptake 
+#'
+#'# Get the hash of combination of two items, PlantQn2 and uptake 
+#'mapping2[54] # PlantQn2:uptake hash is 974267571
+#'
+#'# Extract hash of each item
 #'h1 <- mapping2["PlantQn2"]
 #'h2 <- mapping2["uptake"]
-#'library(pack)
-#'hash_h(rawToChar(c(numToRaw(h1, 4), numToRaw(h2, 4)))) # should be mapping2[2]
+#'
+#'# Computation of hash of both items combined
+#'library(pack) # convert values from / to raw format
+#'hash_h(rawToChar(c(numToRaw(h1, 4), numToRaw(h2, 4)))) # should be 974267571 == mapping2[54]
 #'
 #'# The tag-like feature
 #'data(test.tag)
@@ -86,9 +102,13 @@ hashed.model.matrix <- function(object, data, hash_size = 2^24, transpose = FALS
   retval@Dimnames[[2]] <- paste(seq_len(retval@Dim[2]))
   if (is.dgCMatrix) {
     retval2 <- as(retval, "dgCMatrix") 
+<<<<<<< HEAD
     for(name in setdiff(names(attributes(retval)), names(attributes(retval2)))) {
       attr(retval2, name) <- attr(retval, name)
     }
+=======
+    attributes(retval2) <- attributes(retval)
+>>>>>>> origin/master
     retval2
   } else retval
 }

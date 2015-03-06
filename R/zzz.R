@@ -3,6 +3,17 @@
 #'@import digest
 .onLoad <- function(libname, pkgname) { }
 
+.onAttach <- function(libname, pkgname) {
+  if (interactive()) {
+    packageStartupMessage(
+"The default behavior of the hashed.model.matrix is changed:
+    - The default output is converted to dgCMatrix
+    - The default value of `transpose` is FALSE
+"
+)
+  }
+}
+
 #'@title test.tag
 #'@description This is a vector to demo the concatenated feature.
 #'@format For each element, the string represents the occurrence

@@ -14,6 +14,7 @@ if (require(pack) & require(RUnit)) {
   
   m <- hashed.model.matrix(~ ., CO2, hash_size = 2^10, keep.hashing_mapping = T,
                            transpose = TRUE, is.dgCMatrix = FALSE)
+  m <- hashed.model.matrix(~ ., CO2, hash_size = 2^10, keep.hashing_mapping = TRUE, transpose = TRUE, is.dgCMatrix = FALSE)
   mapping <- as.list(attr(m, "mapping"))
   checkTrue(all(!duplicated(unlist(mapping) %% 2^10 + 1)),
             "Unexpected collision of hashing example")

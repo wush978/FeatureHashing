@@ -36,22 +36,36 @@
 #'
 #'@examples
 #'# Construct the model matrix. The transposed matrix is returned by default.
+#'# Below the original values will be project in a space of 2^6 dimensions
 #'m <- hashed.model.matrix(~ ., CO2, 2^6, keep.hashing_mapping = TRUE, 
 #'  transpose = TRUE, is.dgCMatrix = FALSE)
+#'  
 #'# Print the matrix via dgCMatrix
 #'as(m, "dgCMatrix")
-#'# Check the result of hashing
+#'
+#'# Extraction of the dictionary: values with their hash
 #'mapping <- unlist(as.list(attr(m, "mapping")))
-#'# Check the rate of collision
+#'
+#'# To check the rate of collisions, we will extract the indices of the hash
+#'# values through the modulo-division method, count how many duplicates 
+#'# we have (in best case it should be zero) and perform a mean.
 #'mean(duplicated(mapping %% 2^6))
-#'# The result is CSCMatrix which supports simple subsetting and matrix-vector
-#'# multiplication
-#'# rnorm(2^6) %*% m
+#'
+#'# The type of the result produced by the function `hashed.model.matrix` 
+#'# is a CSCMatrix. It supports simple subsetting and matrix-vector multiplication
+#'rnorm(2^6) %*% m
 #'
 #'# Detail of the hashing
-#'## The main effect is hashed via `hash_h`
-#'all(hash_h(names(mapping)) %% 2^6 == mapping %% 2^6)
-#'## The sign is corrected by `hash_xi`
+#'# To hash one specific value, we can use the `hash_h` function
+#'# Below we will apply this function to the feature names
+#'vectHash <- hash_h(names(mapping))
+#'
+#'# Now we will check that the result is the same than the one got with 
+#'# the more generation `hashed.model.matrix` function.
+#'# We will use the Modulo-division method (that's the [%% 2^6] below) to find the address in hash table easily.
+#'all(vectHash %% 2^6 == mapping %% 2^6)
+#'
+#'# The sign is corrected by `hash_xi`
 #'hash_xi(names(mapping))
 #'
 #'## The interaction term is implemented as follow:

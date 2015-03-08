@@ -66,7 +66,8 @@ mapping <- unlist(as.list(attr(m, "mapping")))
 mean(duplicated(mapping \%\% 2^6))
 
 # The type of the result produced by the function `hashed.model.matrix`
-# is a CSCMatrix. It supports simple subsetting and matrix-vector multiplication
+# is a CSCMatrix. It supports simple subsetting
+# and matrix-vector multiplication
 rnorm(2^6) \%*\% m
 
 # Detail of the hashing
@@ -76,7 +77,8 @@ vectHash <- hash_h(names(mapping))
 
 # Now we will check that the result is the same than the one got with
 # the more generation `hashed.model.matrix` function.
-# We will use the Modulo-division method (that's the [\%\% 2^6] below) to find the address in hash table easily.
+# We will use the Modulo-division method (that's the [\%\% 2^6] below)
+# to find the address in hash table easily.
 all(vectHash \%\% 2^6 == mapping \%\% 2^6)
 
 # The sign is corrected by `hash_xi`

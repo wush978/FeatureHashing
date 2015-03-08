@@ -3,6 +3,7 @@
 #'@aliases hash_h hash_xi
 #'
 #'@importFrom magrittr %>%
+#'@importFrom magrittr %<>%
 #'@importFrom methods new
 #'@importFrom methods checkAtAssignment
 #'@importClassesFrom Matrix dgCMatrix

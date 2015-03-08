@@ -61,7 +61,8 @@
 #'mean(duplicated(mapping %% 2^6))
 #'
 #'# The type of the result produced by the function `hashed.model.matrix` 
-#'# is a CSCMatrix. It supports simple subsetting and matrix-vector multiplication
+#'# is a CSCMatrix. It supports simple subsetting 
+#'# and matrix-vector multiplication
 #'rnorm(2^6) %*% m
 #'
 #'# Detail of the hashing
@@ -71,7 +72,8 @@
 #'
 #'# Now we will check that the result is the same than the one got with 
 #'# the more generation `hashed.model.matrix` function.
-#'# We will use the Modulo-division method (that's the [%% 2^6] below) to find the address in hash table easily.
+#'# We will use the Modulo-division method (that's the [%% 2^6] below) 
+#'# to find the address in hash table easily.
 #'all(vectHash %% 2^6 == mapping %% 2^6)
 #'
 #'# The sign is corrected by `hash_xi`
@@ -152,3 +154,8 @@ parse_tag <- function(text) {
     list(reference_name = reference_name, split = split, type = type)
   }, finally = {options(keep.source = origin.keep.source)})
 }
+
+# Avoid error messages during CRAN check.
+# The reason is that these variables are never declared
+# They are mainly column names inferred by Data.table...
+globalVariables(c("."))

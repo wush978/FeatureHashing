@@ -1,5 +1,13 @@
 #'@title Create a model matrix with feature hashing
-#'@param object formula. A model formula.
+#'
+#'@aliases hash_h hash_xi
+#'
+#'@importFrom magrittr %>%
+#'@importFrom methods new
+#'@importFrom methods checkAtAssignment
+#'@importClassesFrom Matrix dgCMatrix
+#'
+#'@param formula \code{formula} or a \code{character} vector of column names (will be expanded to a \code{formula})
 #'@param data data.frame. The original data.
 #'@param hash_size positive integer. The hash size of feature hashing.
 #'@param transpose logical value. Indicating if the transpose should be returned.
@@ -16,7 +24,7 @@
 #'respectively. Different seeds are used to implement the hashing function 
 #'\eqn{h} and \eqn{\xi} with MurmurHash3.
 #'
-#'The object formula is parsed via \code{\link{terms.formula}} with "tag" as special
+#'The formula is parsed via \code{\link{terms.formula}} with "tag" as special
 #'keyword. The interaction term is hashed in different ways. Please see example for 
 #'the detailed implementation. The "tag" is used to expand the concatenated feature
 #'such as "1,27,19,25,tp,tw" which represents the occurrence of multiple categorical
@@ -100,14 +108,16 @@
 #'names(mapping)
 #'
 #'@export
-#'@importFrom methods new
-#'@importFrom methods checkAtAssignment
-#'@importClassesFrom Matrix dgCMatrix
-#'@aliases hash_h hash_xi
-hashed.model.matrix <- function(object, data, hash_size = 2^24, transpose = FALSE, keep.hashing_mapping = FALSE, is.dgCMatrix = TRUE) {
+#'
+hashed.model.matrix <- function(formula, data, hash_size = 2^24, transpose = FALSE, keep.hashing_mapping = FALSE, is.dgCMatrix = TRUE) {
   stopifnot(hash_size >= 0)
   stopifnot(is.data.frame(data))
-  tf <- terms.formula(object, data = data, specials = "tag")
+  
+  if(class(formula) == "character") formula %<>% paste(collapse = " + ") %>% paste("~", .) %>% as.formula
+  
+  stopifnot(class(formula) == "formula")
+  
+  tf <- terms.formula(formula, data = data, specials = "tag")
   retval <- new(.CSCMatrix)
   .hashed.model.matrix.dataframe(tf, data, hash_size, transpose, retval, keep.hashing_mapping)
   class(retval) <- .CSCMatrix

@@ -14,7 +14,8 @@
 #'@param transpose logical value. Indicating if the transpose should be returned.
 #'@param create.mapping logical value. The indicator of whether storing the hash mapping or not.
 #'@param is.dgCMatrix logical value. Indicating if the result is \code{dgCMatrix} or \code{CSCMatrix}
-#'
+#'@param signed.hash logical value. Indicating if the hashed value is multipled by random sign.
+#'This will reduce the impact of collision.
 #'
 #'@details
 #'The \code{hashed.model.matrix} hashes the feature automatically during
@@ -116,7 +117,7 @@
 #'@importClassesFrom Matrix dgCMatrix
 #'@aliases hashed.value hash.sign
 hashed.model.matrix <- function(formula, data, hash.size = 2^24, transpose = FALSE, 
-                                create.mapping = FALSE, is.dgCMatrix = TRUE, is.xi = TRUE
+                                create.mapping = FALSE, is.dgCMatrix = TRUE, signed.hash = TRUE
                                 ) {
   stopifnot(hash.size >= 0)
   stopifnot(is.data.frame(data))
@@ -127,7 +128,7 @@ hashed.model.matrix <- function(formula, data, hash.size = 2^24, transpose = FAL
   
   tf <- terms.formula(formula, data = data, specials = "split")
   retval <- new(.CSCMatrix)
-  .hashed.model.matrix.dataframe(tf, data, hash.size, transpose, retval, create.mapping, is.xi)
+  .hashed.model.matrix.dataframe(tf, data, hash.size, transpose, retval, create.mapping, signed.hash)
   class(retval) <- .CSCMatrix
   retval@Dimnames[[2]] <- paste(seq_len(retval@Dim[2]))
   if (is.dgCMatrix) {

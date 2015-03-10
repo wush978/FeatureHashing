@@ -6,7 +6,7 @@
 \title{Create a model matrix with feature hashing}
 \usage{
 hashed.model.matrix(formula, data, hash.size = 2^24, transpose = FALSE,
-  create.mapping = FALSE, is.dgCMatrix = TRUE, is.xi = TRUE)
+  create.mapping = FALSE, is.dgCMatrix = TRUE, signed.hash = TRUE)
 }
 \arguments{
 \item{formula}{\code{formula} or a \code{character} vector of column names (will be expanded to a \code{formula})}
@@ -20,6 +20,9 @@ hashed.model.matrix(formula, data, hash.size = 2^24, transpose = FALSE,
 \item{create.mapping}{logical value. The indicator of whether storing the hash mapping or not.}
 
 \item{is.dgCMatrix}{logical value. Indicating if the result is \code{dgCMatrix} or \code{CSCMatrix}}
+
+\item{signed.hash}{logical value. Indicating if the hashed value is multipled by random sign.
+This will reduce the impact of collision.}
 }
 \description{
 Create a model matrix with feature hashing

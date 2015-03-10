@@ -12,14 +12,15 @@ Description: Feature hashing, also called as the hashing trick, is a method to
   hash values as indices directly. The method of feature hashing in this package
   was proposed in Weinberger et al. (2009). The hashing algorithm is the murmurhash3 
   from the digest package. Please see the README.md for more information.
-License: GPL(>= 3)
+License: GPL(>= 3) | file LICENSE
 Depends: 
   R (>= 3.1),
   methods
 Imports: 
   Rcpp (>= 0.11),
   Matrix,
-  digest(>= 0.6.8)
+  digest(>= 0.6.8),
+  magrittr (>= 1.5)
 LinkingTo: Rcpp, digest(>= 0.6.8), BH
 Suggests: pack, RUnit
 SystemRequirements: C++11

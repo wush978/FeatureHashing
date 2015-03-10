@@ -115,15 +115,15 @@
 #'@importFrom methods checkAtAssignment
 #'@importClassesFrom Matrix dgCMatrix
 #'@aliases hashed.value hash.sign
-hashed.model.matrix <- function(object, data, hash.size = 2^24, transpose = FALSE, 
+hashed.model.matrix <- function(formula, data, hash.size = 2^24, transpose = FALSE, 
                                 create.mapping = FALSE, is.dgCMatrix = TRUE, is.xi = TRUE
                                 ) {
   stopifnot(hash.size >= 0)
   stopifnot(is.data.frame(data))
+  stopifnot(class(formula) %in% c("formula", "character"))
   
   if(class(formula) == "character") formula %<>% paste(collapse = " + ") %>% paste("~", .) %>% as.formula
   
-  stopifnot(class(formula) == "formula")
   
   tf <- terms.formula(formula, data = data, specials = "tag")
   retval <- new(.CSCMatrix)

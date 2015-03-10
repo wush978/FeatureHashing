@@ -10,9 +10,9 @@
 #'
 #'@param formula \code{formula} or a \code{character} vector of column names (will be expanded to a \code{formula})
 #'@param data data.frame. The original data.
-#'@param hash_size positive integer. The hash size of feature hashing.
+#'@param hash.size positive integer. The hash size of feature hashing.
 #'@param transpose logical value. Indicating if the transpose should be returned.
-#'@param is.mapping logical value. The indicator of whether storing the hash mapping or not.
+#'@param create.mapping logical value. The indicator of whether storing the hash mapping or not.
 #'@param is.dgCMatrix logical value. Indicating if the result is \code{dgCMatrix} or \code{CSCMatrix}
 #'
 #'
@@ -46,7 +46,7 @@
 #'@examples
 #'# Construct the model matrix. The transposed matrix is returned by default.
 #'# Below the original values will be project in a space of 2^6 dimensions
-#'m <- hashed.model.matrix(~ ., CO2, 2^6, is.mapping = TRUE, 
+#'m <- hashed.model.matrix(~ ., CO2, 2^6, create.mapping = TRUE, 
 #'  transpose = TRUE, is.dgCMatrix = FALSE)
 #'  
 #'# Print the matrix via dgCMatrix
@@ -80,7 +80,7 @@
 #'hash_xi(names(mapping))
 #'
 #'## The interaction term is implemented as follow:
-#'m2 <- hashed.model.matrix(~ .^2, CO2, 2^6, is.mapping = TRUE, 
+#'m2 <- hashed.model.matrix(~ .^2, CO2, 2^6, create.mapping = TRUE, 
 #'  transpose = TRUE, is.dgCMatrix = FALSE)
 #'# The ^ operator indicates crossing to the specified degree. 
 #'# For example (a+b+c)^2 is identical to (a+b+c)*(a+b+c) 
@@ -105,7 +105,7 @@
 #'data(test.tag)
 #'df <- data.frame(a = test.tag, b = rnorm(length(test.tag)))
 #'m <- hashed.model.matrix(~ tag(a, split = ",", type = "existence"):b, df, 2^6,
-#'  is.mapping = TRUE)
+#'  create.mapping = TRUE)
 #'# The column `a` is splitted by "," and have an interaction with "b":
 #'mapping <- unlist(as.list(attr(m, "mapping")))
 #'names(mapping)
@@ -115,10 +115,10 @@
 #'@importFrom methods checkAtAssignment
 #'@importClassesFrom Matrix dgCMatrix
 #'@aliases hash_h hash_xi
-hashed.model.matrix <- function(object, data, hash_size = 2^24, transpose = FALSE, 
-                                is.mapping = FALSE, is.dgCMatrix = TRUE, is.xi = TRUE
+hashed.model.matrix <- function(object, data, hash.size = 2^24, transpose = FALSE, 
+                                create.mapping = FALSE, is.dgCMatrix = TRUE, is.xi = TRUE
                                 ) {
-  stopifnot(hash_size >= 0)
+  stopifnot(hash.size >= 0)
   stopifnot(is.data.frame(data))
   
   if(class(formula) == "character") formula %<>% paste(collapse = " + ") %>% paste("~", .) %>% as.formula
@@ -127,7 +127,7 @@ hashed.model.matrix <- function(object, data, hash_size = 2^24, transpose = FALS
   
   tf <- terms.formula(formula, data = data, specials = "tag")
   retval <- new(.CSCMatrix)
-  .hashed.model.matrix.dataframe(tf, data, hash_size, transpose, retval, is.mapping, is.xi)
+  .hashed.model.matrix.dataframe(tf, data, hash.size, transpose, retval, create.mapping, is.xi)
   class(retval) <- .CSCMatrix
   retval@Dimnames[[2]] <- paste(seq_len(retval@Dim[2]))
   if (is.dgCMatrix) {

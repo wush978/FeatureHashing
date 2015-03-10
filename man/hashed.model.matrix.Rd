@@ -5,24 +5,19 @@
 \alias{hashed.model.matrix}
 \title{Create a model matrix with feature hashing}
 \usage{
-<<<<<<< HEAD
-hashed.model.matrix(object, data, hash_size = 2^24, transpose = FALSE,
-  is.mapping = FALSE, is.dgCMatrix = TRUE, is.xi = TRUE)
-=======
-hashed.model.matrix(formula, data, hash_size = 2^24, transpose = FALSE,
-  keep.hashing_mapping = FALSE, is.dgCMatrix = TRUE)
->>>>>>> origin/master
+hashed.model.matrix(object, data, hash.size = 2^24, transpose = FALSE,
+  create.mapping = FALSE, is.dgCMatrix = TRUE, is.xi = TRUE)
 }
 \arguments{
 \item{formula}{\code{formula} or a \code{character} vector of column names (will be expanded to a \code{formula})}
 
 \item{data}{data.frame. The original data.}
 
-\item{hash_size}{positive integer. The hash size of feature hashing.}
+\item{hash.size}{positive integer. The hash size of feature hashing.}
 
 \item{transpose}{logical value. Indicating if the transpose should be returned.}
 
-\item{keep.hashing_mapping}{logical value. The indicator of whether storing the hash mapping or not.}
+\item{create.mapping}{logical value. The indicator of whether storing the hash mapping or not.}
 
 \item{is.dgCMatrix}{logical value. Indicating if the result is \code{dgCMatrix} or \code{CSCMatrix}}
 }
@@ -55,7 +50,7 @@ The user could explore the behavior via function \code{\link{tag}}.
 \examples{
 # Construct the model matrix. The transposed matrix is returned by default.
 # Below the original values will be project in a space of 2^6 dimensions
-m <- hashed.model.matrix(~ ., CO2, 2^6, keep.hashing_mapping = TRUE,
+m <- hashed.model.matrix(~ ., CO2, 2^6, create.mapping = TRUE,
  transpose = TRUE, is.dgCMatrix = FALSE)
 
 # Print the matrix via dgCMatrix
@@ -89,7 +84,7 @@ all(vectHash \%\% 2^6 == mapping \%\% 2^6)
 hash_xi(names(mapping))
 
 ## The interaction term is implemented as follow:
-m2 <- hashed.model.matrix(~ .^2, CO2, 2^6, keep.hashing_mapping = TRUE,
+m2 <- hashed.model.matrix(~ .^2, CO2, 2^6, create.mapping = TRUE,
  transpose = TRUE, is.dgCMatrix = FALSE)
 # The ^ operator indicates crossing to the specified degree.
 # For example (a+b+c)^2 is identical to (a+b+c)*(a+b+c)
@@ -100,7 +95,7 @@ m2 <- hashed.model.matrix(~ .^2, CO2, 2^6, keep.hashing_mapping = TRUE,
 mapping2 <- unlist(as.list(attr(m2, "mapping")))
 
 # Get the hash of combination of two items, PlantQn2 and uptake
-mapping2[54] # PlantQn2:uptake hash is 974267571
+mapping2["PlantQn2:uptake"] # PlantQn2:uptake hash is 974267571
 
 # Extract hash of each item
 h1 <- mapping2["PlantQn2"]
@@ -108,13 +103,13 @@ h2 <- mapping2["uptake"]
 
 # Computation of hash of both items combined
 library(pack) # convert values from / to raw format
-hash_h(rawToChar(c(numToRaw(h1, 4), numToRaw(h2, 4)))) # should be 974267571 == mapping2[54]
+hash_h(rawToChar(c(numToRaw(h1, 4), numToRaw(h2, 4)))) # should be 974267571 == mapping2["PlantQn2:uptake"]
 
 # The tag-like feature
 data(test.tag)
 df <- data.frame(a = test.tag, b = rnorm(length(test.tag)))
 m <- hashed.model.matrix(~ tag(a, split = ",", type = "existence"):b, df, 2^6,
- keep.hashing_mapping = TRUE)
+ create.mapping = TRUE)
 # The column `a` is splitted by "," and have an interaction with "b":
 mapping <- unlist(as.list(attr(m, "mapping")))
 names(mapping)

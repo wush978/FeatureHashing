@@ -27,13 +27,8 @@ hash_h <- function(src) {
     .Call('FeatureHashing_h', PACKAGE = 'FeatureHashing', src)
 }
 
-<<<<<<< HEAD
 .hashed.model.matrix.dataframe <- function(tf, data, hash_size, transpose, retval, keep_hashing_mapping, is_xi) {
     .Call('FeatureHashing_hashed_model_matrix_dataframe', PACKAGE = 'FeatureHashing', tf, data, hash_size, transpose, retval, keep_hashing_mapping, is_xi)
-=======
-.hashed.model.matrix.dataframe <- function(tf, data, hash_size, transpose, retval, keep_hashing_mapping) {
-    .Call('FeatureHashing_hashed_model_matrix_dataframe', PACKAGE = 'FeatureHashing', tf, data, hash_size, transpose, retval, keep_hashing_mapping)
->>>>>>> origin/master
 }
 
 Xv <- function(m, v, retval) {

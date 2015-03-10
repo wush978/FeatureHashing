@@ -12,9 +12,9 @@ if (require(pack) & require(RUnit)) {
   checkTrue(all(hashed.value(names(mapping_value)) %% 2^32 == mapping_value),
             "Unexpected hashing result by hashed.value")
   
-  m <- hashed.model.matrix(~ ., CO2, hash_size = 2^10, create.mapping = T,
+  m <- hashed.model.matrix(~ ., CO2, hash.size = 2^10, create.mapping = T,
                            transpose = TRUE, is.dgCMatrix = FALSE)
-  m <- hashed.model.matrix(~ ., CO2, hash_size = 2^10, create.mapping = TRUE, transpose = TRUE, is.dgCMatrix = FALSE)
+  m <- hashed.model.matrix(~ ., CO2, hash.size = 2^10, create.mapping = TRUE, transpose = TRUE, is.dgCMatrix = FALSE)
   mapping <- as.list(attr(m, "mapping"))
   checkTrue(all(!duplicated(unlist(mapping) %% 2^10 + 1)),
             "Unexpected collision of hashing example")
@@ -42,7 +42,7 @@ if (require(pack) & require(RUnit)) {
     checkTrue(all(x[-j] == 0), "Inconsistent hash value between hashed.value, hash.sign and hashed.model.matrix")
   }
   
-  m <- hashed.model.matrix(~ .^2, CO2, hash_size = 2^10, create.mapping = TRUE,
+  m <- hashed.model.matrix(~ .^2, CO2, hash.size = 2^10, create.mapping = TRUE,
                            transpose = TRUE, is.dgCMatrix = FALSE)
   mapping_value <- as.list(attr(m, "mapping"))
   
@@ -111,7 +111,7 @@ if (require(pack) & require(RUnit)) {
   checkTrue(isTRUE(all.equal(mapping_value[names(mapping_value.expected)], mapping_value.expected)),
             "Unexpected hashing result of interaction term")
   
-  m2 <- hashed.model.matrix(~ . ^ 2, data = CO2, hash_size = 32, create.mapping = TRUE,
+  m2 <- hashed.model.matrix(~ . ^ 2, data = CO2, hash.size = 32, create.mapping = TRUE,
                             transpose = TRUE, is.dgCMatrix = FALSE)
   checkTrue(!all(m2@i == 0),
             "All hashed indices created by hashed.model.matrix are zero")

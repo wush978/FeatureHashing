@@ -1,0 +1,13 @@
+%*%,CSCMatrix,numeric-method	CSCMatrix-class
+%*%,numeric,CSCMatrix-method	CSCMatrix-class
+CSCMatrix-class	CSCMatrix-class
+dim,CSCMatrix-method	CSCMatrix-class
+dim<-,CSCMatrix-method	CSCMatrix-class
+hashed.model.matrix	hashed.model.matrix
+hash_h	hashed.model.matrix
+hash_xi	hashed.model.matrix
+tag	tag
+test.tag	test.tag
+[,CSCMatrix,missing,numeric,ANY-method	CSCMatrix-class
+[,CSCMatrix,numeric,missing,ANY-method	CSCMatrix-class
+[,CSCMatrix,numeric,numeric,ANY-method	CSCMatrix-class

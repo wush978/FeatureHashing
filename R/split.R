@@ -5,8 +5,7 @@
 #'"count" indicates the number of occurrence of the tag. 
 #'"existence" indicates the boolean that whether the tag exist or not.
 #'@return integer vector for \code{type = "count"} and logical vector for \code{type = "existence"}.
-#'@export
-split.sim <- function(x, delim = ",", type = c("existence", "count")) {
+split.simulation <- function(x, delim = ",", type = c("existence", "count")) {
   retval <- switch(class(x), 
     "character" = split.character2(x, delim, type),
     "factor" = split.factor(x, delim, type),

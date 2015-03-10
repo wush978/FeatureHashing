@@ -25,19 +25,19 @@
 #'respectively. Different seeds are used to implement the hashing function 
 #'\eqn{h} and \eqn{\xi} with MurmurHash3.
 #'
-#'The formula is parsed via \code{\link{terms.formula}} with "tag" as special
+#'The formula is parsed via \code{\link{terms.formula}} with "split" as special
 #'keyword. The interaction term is hashed in different ways. Please see example for 
-#'the detailed implementation. The "tag" is used to expand the concatenated feature
+#'the detailed implementation. The "split" is used to expand the concatenated feature
 #'such as "1,27,19,25,tp,tw" which represents the occurrence of multiple categorical
-#'variable. The \code{hashed.model.matrix} will expand the tag feature and produce
+#'variable. The \code{hashed.model.matrix} will expand the concatenated feature and produce
 #'the related model matrix.
 #'
-#'The "tag" accepts two parameters:
+#'The "split" accepts two parameters:
 #'\itemize{
-#'  \item \code{split}, character value used for splitting.
+#'  \item \code{delim}, character value to use as delimiter for splitting.
 #'  \item \code{type}, one of \code{existence} or \code{count}.
 #'}
-#'The user could explore the behavior via function \code{\link{tag}}.
+#'The user could explore the behavior via function \code{\link{split}}.
 #'
 #'@references Kilian Q. Weinberger, Anirban Dasgupta, John Langford, 
 #'Alexander J. Smola, and Josh Attenberg. ICML, volume 382 of ACM 
@@ -104,7 +104,7 @@
 #'# The tag-like feature
 #'data(test.tag)
 #'df <- data.frame(a = test.tag, b = rnorm(length(test.tag)))
-#'m <- hashed.model.matrix(~ tag(a, split = ",", type = "existence"):b, df, 2^6,
+#'m <- hashed.model.matrix(~ split(a, delim = ",", type = "existence"):b, df, 2^6,
 #'  create.mapping = TRUE)
 #'# The column `a` is splitted by "," and have an interaction with "b":
 #'mapping <- unlist(as.list(attr(m, "mapping")))
@@ -125,7 +125,7 @@ hashed.model.matrix <- function(formula, data, hash.size = 2^24, transpose = FAL
   if(class(formula) == "character") formula %<>% paste(collapse = " + ") %>% paste("~", .) %>% as.formula
   
   
-  tf <- terms.formula(formula, data = data, specials = "tag")
+  tf <- terms.formula(formula, data = data, specials = "split")
   retval <- new(.CSCMatrix)
   .hashed.model.matrix.dataframe(tf, data, hash.size, transpose, retval, create.mapping, is.xi)
   class(retval) <- .CSCMatrix
@@ -139,26 +139,29 @@ hashed.model.matrix <- function(formula, data, hash.size = 2^24, transpose = FAL
   } else retval
 }
 
-parse_tag <- function(text) {
+# This is the function called from C to parse the \code{split} function.
+parse_split <- function(text) {
   origin.keep.source <- options()$keep.source
   tryCatch({
     options(keep.source = TRUE)
     p <- parse(text = text)
     tmp <- getParseData(p)
     reference_name <- tmp$text[which(tmp$token == "SYMBOL")]
-    if ("split" %in% tmp$text) {
-      split <- tmp$text[which(tmp$text == "split")[1] + 2]
-      split <- gsub(pattern = '"', replacement = '', split)
+    if ("delim" %in% tmp$text) {
+      delim <- tmp$text[which(tmp$text == "delim")[1] + 2]
+      delim <- gsub(pattern = '"', replacement = '', delim)
     } else {
-      split <- ","
+      # the default value of delim
+      delim <- ","
     }
     if ("type" %in% tmp$text) {
       type <- tmp$text[which(tmp$text == "type")[1] + 2]
       type <- gsub(pattern = '"', replacement = '', type)
     } else {
+      # the default value of type
       type <- "existence"
     }
-    list(reference_name = reference_name, split = split, type = type)
+    list(reference_name = reference_name, delim = delim, type = type)
   }, finally = {options(keep.source = origin.keep.source)})
 }
 

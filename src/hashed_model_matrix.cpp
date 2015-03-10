@@ -21,7 +21,7 @@
 #include <boost/detail/endian.hpp>
 #include <Rcpp.h>
 #include "digestlocal.h"
-#include "tag.h"
+#include "split.h"
 
 #ifdef linux
 #include <byteswap.h>
@@ -601,11 +601,11 @@ const ConvertersVec get_converters(
   NumericMatrix tfactors(wrap(tf.attr("factors")));
   CharacterVector reference_name, feature_name;
   Environment feature_hashing(Environment::namespace_env("FeatureHashing"));
-  Function parse_tag(feature_hashing["parse_tag"]);
+  Function parse_split(feature_hashing["parse_split"]);
   std::set<int> specials;
   {
     List tmp(tf.attr("specials"));
-    SEXP ptag = tmp["tag"];
+    SEXP ptag = tmp["split"];
     if (!Rf_isNull(ptag)) {
       IntegerVector tmpvec(ptag);
       specials.insert(tmpvec.begin(), tmpvec.end());
@@ -666,7 +666,7 @@ const ConvertersVec get_converters(
           #ifdef NOISY_DEBUG
           Rprintf(" (parsing tag..) ");
           #endif
-          List expression(parse_tag(wrap(rname)));
+          List expression(parse_split(wrap(rname)));
           rname.assign(as<std::string>(expression["reference_name"]));
           #ifdef NOISY_DEBUG
           Rprintf(" (rname ==> %s) ", rname.c_str());
@@ -677,7 +677,7 @@ const ConvertersVec get_converters(
           Rprintf("%s\n", rclass.c_str());
           #endif
           std::string 
-            delim(as<std::string>(expression["split"])), 
+            delim(as<std::string>(expression["delim"])), 
             type(as<std::string>(expression["type"]));
           #ifdef NOISY_DEBUG
           Rprintf("delim: %s type: %s\n", delim.c_str(), type.c_str());

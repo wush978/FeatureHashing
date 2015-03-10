@@ -1,20 +1,22 @@
 #'@title Expand concatenated feature
 #'@param x character vector or factor. The source of tag features.
-#'@param split character vector. The split symbol for tag features.
-#'@param type character value. Either "count" or "existence". "count" indicates the number of occurrence of the tag. "existence" indicates the boolean that whether the tag exist or not.
+#'@param delim character vector. The split symbol for tag features.
+#'@param type character value. Either "count" or "existence". 
+#'"count" indicates the number of occurrence of the tag. 
+#'"existence" indicates the boolean that whether the tag exist or not.
 #'@return integer vector for \code{type = "count"} and logical vector for \code{type = "existence"}.
 #'@export
-tag <- function(x, split = ",", type = c("count", "existence")) {
+split.sim <- function(x, delim = ",", type = c("existence", "count")) {
   retval <- switch(class(x), 
-    "character" = tag.character2(x, split, type),
-    "factor" = tag.factor(x, split, type),
+    "character" = split.character2(x, delim, type),
+    "factor" = split.factor(x, delim, type),
   )
   attr(retval, "type") <- type[1]
   retval
 }
 
-tag.character1 <- function(x, split, type) {
-  x <- strsplit(x, split = split)
+split.character1 <- function(x, delim, type) {
+  x <- strsplit(x, split = delim)
   x.levels <- sort(unique(unlist(x)))
   x.levels <- setdiff(x.levels, "")
   retval <- list()
@@ -27,15 +29,15 @@ tag.character1 <- function(x, split, type) {
   retval
 }
 
-tag.character2 <- function(x, split, type) {
+split.character2 <- function(x, delim, type) {
   switch(type[1], 
-      "count" = tag_count(x, split),
-      "existence" = tag_existence(x, split)
+      "count" = split_count(x, delim),
+      "existence" = split_existence(x, delim)
       )
 }
 
-tag.factor <- function(x, split, type) {
-  retval.levels <- tag.character1(levels(x), split, type)
+split.factor <- function(x, delim, type) {
+  retval.levels <- split.character1(levels(x), delim, type)
   retval.i <- as.integer(x)
   retval <- list()
   for(i in seq_along(retval.levels)) {

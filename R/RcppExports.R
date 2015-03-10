@@ -39,19 +39,19 @@ vX <- function(v, m, retval) {
     .Call('FeatureHashing_vX', PACKAGE = 'FeatureHashing', v, m, retval)
 }
 
+split_existence <- function(src, delim) {
+    .Call('FeatureHashing_split_existence', PACKAGE = 'FeatureHashing', src, delim)
+}
+
+split_count <- function(src, delim) {
+    .Call('FeatureHashing_split_count', PACKAGE = 'FeatureHashing', src, delim)
+}
+
 .selectColumn <- function(m, index, drop = TRUE, Rretval = NULL) {
     .Call('FeatureHashing_selectColumn', PACKAGE = 'FeatureHashing', m, index, drop, Rretval)
 }
 
 .selectRow <- function(m, index, drop = TRUE, Rretval = NULL) {
     .Call('FeatureHashing_selectRow', PACKAGE = 'FeatureHashing', m, index, drop, Rretval)
-}
-
-tag_existence <- function(src, delim) {
-    .Call('FeatureHashing_tag_existence', PACKAGE = 'FeatureHashing', src, delim)
-}
-
-tag_count <- function(src, delim) {
-    .Call('FeatureHashing_tag_count', PACKAGE = 'FeatureHashing', src, delim)
 }
 

@@ -18,7 +18,7 @@
 
 #include <cstring>
 #include <Rcpp.h>
-#include "tag.h"
+#include "split.h"
 using namespace Rcpp;
 
 std::vector<std::string> split(const std::string& src, const std::string& delim) {
@@ -35,7 +35,7 @@ std::vector<std::string> split(const std::string& src, const std::string& delim)
 }
 
 //[[Rcpp::export]]
-SEXP tag_existence(CharacterVector src, const std::string& delim) {
+SEXP split_existence(CharacterVector src, const std::string& delim) {
   std::map<std::string, LogicalVector> retval_buffer;
   for(auto i = 0;i < src.size();i++) {
     std::vector<std::string> tokens(split(CHAR(STRING_ELT(src, i)), delim));
@@ -61,7 +61,7 @@ SEXP tag_existence(CharacterVector src, const std::string& delim) {
 }
 
 //[[Rcpp::export]]
-SEXP tag_count(CharacterVector src, const std::string& delim) {
+SEXP split_count(CharacterVector src, const std::string& delim) {
   std::map<std::string, IntegerVector> retval_buffer;
   for(auto i = 0;i < src.size();i++) {
     std::vector<std::string> tokens(split(CHAR(STRING_ELT(src, i)), delim));

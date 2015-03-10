@@ -149,6 +149,38 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// split_existence
+SEXP split_existence(CharacterVector src, const std::string& delim);
+RcppExport SEXP FeatureHashing_split_existence(SEXP srcSEXP, SEXP delimSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< CharacterVector >::type src(srcSEXP );
+        Rcpp::traits::input_parameter< const std::string& >::type delim(delimSEXP );
+        SEXP __result = split_existence(src, delim);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// split_count
+SEXP split_count(CharacterVector src, const std::string& delim);
+RcppExport SEXP FeatureHashing_split_count(SEXP srcSEXP, SEXP delimSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< CharacterVector >::type src(srcSEXP );
+        Rcpp::traits::input_parameter< const std::string& >::type delim(delimSEXP );
+        SEXP __result = split_count(src, delim);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // selectColumn
 SEXP selectColumn(S4 m, IntegerVector index, bool drop = true, SEXP Rretval = R_NilValue);
 RcppExport SEXP FeatureHashing_selectColumn(SEXP mSEXP, SEXP indexSEXP, SEXP dropSEXP, SEXP RretvalSEXP) {
@@ -179,38 +211,6 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< bool >::type drop(dropSEXP );
         Rcpp::traits::input_parameter< SEXP >::type Rretval(RretvalSEXP );
         SEXP __result = selectRow(m, index, drop, Rretval);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
-// tag_existence
-SEXP tag_existence(CharacterVector src, const std::string& delim);
-RcppExport SEXP FeatureHashing_tag_existence(SEXP srcSEXP, SEXP delimSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< CharacterVector >::type src(srcSEXP );
-        Rcpp::traits::input_parameter< const std::string& >::type delim(delimSEXP );
-        SEXP __result = tag_existence(src, delim);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
-// tag_count
-SEXP tag_count(CharacterVector src, const std::string& delim);
-RcppExport SEXP FeatureHashing_tag_count(SEXP srcSEXP, SEXP delimSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< CharacterVector >::type src(srcSEXP );
-        Rcpp::traits::input_parameter< const std::string& >::type delim(delimSEXP );
-        SEXP __result = tag_count(src, delim);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

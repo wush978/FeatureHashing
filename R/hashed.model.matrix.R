@@ -1,6 +1,6 @@
 #'@title Create a model matrix with feature hashing
 #'
-#'@aliases hash_h hash_xi
+#'@aliases hashed.value hash.sign
 #'
 #'@importFrom magrittr %>%
 #'@importFrom magrittr %<>%
@@ -20,8 +20,8 @@
 #'The \code{hashed.model.matrix} hashes the feature automatically during
 #'the construction of the model matrix. It uses the 32-bit variant of MurmurHash3 
 #'\url{https://code.google.com/p/smhasher/wiki/MurmurHash3}. Weinberger 
-#'et. al. (2009) used two separate hashing function \eqn{h}(\code{hash_h}) and 
-#'\eqn{\xi}(\code{hash_xi}) to determine the indices and the sign of the values
+#'et. al. (2009) used two separate hashing function \eqn{h}(\code{hashed.value}) and 
+#'\eqn{\xi}(\code{hash.sign}) to determine the indices and the sign of the values
 #'respectively. Different seeds are used to implement the hashing function 
 #'\eqn{h} and \eqn{\xi} with MurmurHash3.
 #'
@@ -66,9 +66,9 @@
 #'rnorm(2^6) %*% m
 #'
 #'# Detail of the hashing
-#'# To hash one specific value, we can use the `hash_h` function
+#'# To hash one specific value, we can use the `hashed.value` function
 #'# Below we will apply this function to the feature names
-#'vectHash <- hash_h(names(mapping))
+#'vectHash <- hashed.value(names(mapping))
 #'
 #'# Now we will check that the result is the same than the one got with 
 #'# the more generation `hashed.model.matrix` function.
@@ -76,8 +76,8 @@
 #'# to find the address in hash table easily.
 #'all(vectHash %% 2^6 == mapping %% 2^6)
 #'
-#'# The sign is corrected by `hash_xi`
-#'hash_xi(names(mapping))
+#'# The sign is corrected by `hash.sign`
+#'hash.sign(names(mapping))
 #'
 #'## The interaction term is implemented as follow:
 #'m2 <- hashed.model.matrix(~ .^2, CO2, 2^6, create.mapping = TRUE, 
@@ -99,7 +99,7 @@
 #'
 #'# Computation of hash of both items combined
 #'library(pack) # convert values from / to raw format
-#'hash_h(rawToChar(c(numToRaw(h1, 4), numToRaw(h2, 4)))) # should be 974267571 == mapping2["PlantQn2:uptake"]
+#'hashed.value(rawToChar(c(numToRaw(h1, 4), numToRaw(h2, 4)))) # should be 974267571 == mapping2["PlantQn2:uptake"]
 #'
 #'# The tag-like feature
 #'data(test.tag)
@@ -114,7 +114,7 @@
 #'@importFrom methods new
 #'@importFrom methods checkAtAssignment
 #'@importClassesFrom Matrix dgCMatrix
-#'@aliases hash_h hash_xi
+#'@aliases hashed.value hash.sign
 hashed.model.matrix <- function(object, data, hash.size = 2^24, transpose = FALSE, 
                                 create.mapping = FALSE, is.dgCMatrix = TRUE, is.xi = TRUE
                                 ) {

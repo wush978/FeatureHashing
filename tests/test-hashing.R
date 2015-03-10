@@ -9,8 +9,8 @@ if (require(pack) & require(RUnit)) {
       "PlantMn3", "PlantQc1", "PlantQc2", "PlantQc3", "Treatmentnonchilled", 
       "PlantMc1", "PlantMc2", "PlantMc3", "conc", "TypeQuebec"))
   
-  checkTrue(all(hash_h(names(mapping_value)) %% 2^32 == mapping_value),
-            "Unexpected hashing result by hash_h")
+  checkTrue(all(hashed.value(names(mapping_value)) %% 2^32 == mapping_value),
+            "Unexpected hashing result by hashed.value")
   
   m <- hashed.model.matrix(~ ., CO2, hash_size = 2^10, create.mapping = T,
                            transpose = TRUE, is.dgCMatrix = FALSE)
@@ -26,20 +26,20 @@ if (require(pack) & require(RUnit)) {
   })
   
   for(index in seq_along(mapping)) {
-    i <- hash_h(names(mapping))[index] %% 2^10 + 1
+    i <- hashed.value(names(mapping))[index] %% 2^10 + 1
     name <- names(mapping)[index]
     col.i <- which(sapply(name.candidate, function(x) name %in% x))
     
     X <- name.candidate[[col.i]]
     j <- which(name == X)
-    value <- hash_xi(names(mapping))[index]
+    value <- hash.sign(names(mapping))[index]
     if (class(CO2[[col.i]])[1] == "numeric") {
       value <- value * CO2[[col.i]]
     }
     
     x <- m[i,]
-    checkTrue(all(x[j] == value), "Inconsistent hash value between hash_h, hash_xi and hashed.model.matrix")
-    checkTrue(all(x[-j] == 0), "Inconsistent hash value between hash_h, hash_xi and hashed.model.matrix")
+    checkTrue(all(x[j] == value), "Inconsistent hash value between hashed.value, hash.sign and hashed.model.matrix")
+    checkTrue(all(x[-j] == 0), "Inconsistent hash value between hashed.value, hash.sign and hashed.model.matrix")
   }
   
   m <- hashed.model.matrix(~ .^2, CO2, hash_size = 2^10, create.mapping = TRUE,
@@ -129,7 +129,7 @@ if (require(pack) & require(RUnit)) {
     input <- unlist(lapply(mapping[key], function(j) {
       numToRaw(j, 4)
     }), use.names = FALSE)
-    r1 <- hash_h(rawToChar(input))
+    r1 <- hashed.value(rawToChar(input))
     r2 <- mapping[[name]]
     if (r1 < 0) {
       r2 <- packBits(rawToBits(numToRaw(r2, 4)), type = "integer")

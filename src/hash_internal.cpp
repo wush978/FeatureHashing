@@ -21,8 +21,8 @@
 #include "digestlocal.h"
 using namespace Rcpp;
 
-//'@export hash_xi
-//[[Rcpp::export("hash_xi")]]
+//'@export hash.sign
+//[[Rcpp::export("hash.sign")]]
 IntegerVector xi(CharacterVector src) {
   IntegerVector retval(src.size(), 0);
   for(int i = 0;i < src.size();i++) {
@@ -35,8 +35,8 @@ IntegerVector xi(CharacterVector src) {
   return retval;
 }
 
-//'@export hash_h
-//[[Rcpp::export("hash_h")]]
+//'@export hashed.value
+//[[Rcpp::export("hashed.value")]]
 IntegerVector h(CharacterVector src) {
   IntegerVector retval(src.size(), 0);
   for(int i = 0;i < src.size();i++) {

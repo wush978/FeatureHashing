@@ -46,7 +46,7 @@ The following scripts show how to use the `FeatureHashing` to construct `Matrix:
 
 ### Logistic Regression with [`glmnet`](http://cran.r-project.org/web/packages/glmnet/index.html)
 
-```r
+```{r lr}
 # The following script assumes that the data.frame
 # of the training dataset and testing dataset are 
 # assigned to variable `imp.train` and `imp.test`
@@ -55,12 +55,13 @@ The following scripts show how to use the `FeatureHashing` to construct `Matrix:
 library(FeatureHashing)
 
 # Checking version.
-stopifnot(packageVersion("FeatureHashing") >= package_version("0.8.1"))
- 
-f <- ~ ip + region + city + adexchange + domain +
+stopifnot(packageVersion("FeatureHashing") >= package_version("0.9"))
+
+data(ipinyou)
+f <- ~ IP + Region + City + AdExchange + Domain +
   URL + AdSlotId + AdSlotWidth + AdSlotHeight +
   AdSlotVisibility + AdSlotFormat + CreativeID +
-  weekday + hour + tag(usertag, split = ",")
+  Adid + split(UserTag, delim = ",")
 # if the version of FeatureHashing is 0.8, please use the following command:
 # m.train <- as(hashed.model.matrix(f, imp.train, 2^20, transpose = FALSE), "dgCMatrix")
 m.train <- hashed.model.matrix(f, imp.train, 2^20)
@@ -70,28 +71,25 @@ m.test <- hashed.model.matrix(f, imp.test, 2^20)
 
 library(glmnet)
 
-cv.g.lr <- cv.glmnet(m.train, imp.train$is_click,
-  family = "binomial", type.measure = "auc")
-plot(cv.g.lr)
-cv.g.lr$lambda.min
-# coef(cv.g.lm, s = "lambda.min")
+cv.g.lr <- cv.glmnet(m.train, imp.train$IsClick,
+  family = "binomial")#, type.measure = "auc")
 p.lr <- predict(cv.g.lr, m.test, s="lambda.min")
-auc(imp.test$is_click, p.lr)
+auc(imp.test$IsClick, p.lr)
 ```
 
 ### Gradient Boosted Decision Tree with [`xgboost`](http://cran.r-project.org/web/packages/xgboost/index.html)
 
 Following the script above, 
 
-```r
+```{r xgboost}
 # GBDT with xgboost
 
 library(xgboost)
 
-cv.g.gdbt <- xgboost(m.train, imp.train$is_click, max.depth=7, eta=0.1,
+cv.g.gdbt <- xgboost(m.train, imp.train$IsClick, max.depth=7, eta=0.1,
   nround = 100, objective = "binary:logistic")
 p.lm <- predict(cv.g.gdbt, m.test)
-glmnet::auc(imp.test$is_click, p.lm)
+glmnet::auc(imp.test$IsClick, p.lm)
 ```
 
 ## Supported Data Structure

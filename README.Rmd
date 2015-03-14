@@ -3,6 +3,12 @@ FeatureHashing
 
 Implement feature hashing with R
 
+```{r setup, include=FALSE}
+library(knitcitations)
+bib <- read.bibtex("README.bib")
+# citet(bib[[1]])
+```
+
 ## Introduction
 
 [Feature hashing](http://en.wikipedia.org/wiki/Feature_hashing), also called as the hashing trick, is a method to
@@ -44,6 +50,8 @@ Because it is expensive or impossible to know the real dimension of the feature 
 
 The following scripts show how to use the `FeatureHashing` to construct `Matrix::dgCMatrix` and train a model in other packages which supports `Matrix::dgCMatrix` as input.
 
+The dataset is a sample from iPinYou dataset which is described in `r citet(bib[["zhang2014real"]])`.
+
 ### Logistic Regression with [`glmnet`](http://cran.r-project.org/web/packages/glmnet/index.html)
 
 ```{r lr}
@@ -64,8 +72,8 @@ f <- ~ IP + Region + City + AdExchange + Domain +
   Adid + split(UserTag, delim = ",")
 # if the version of FeatureHashing is 0.8, please use the following command:
 # m.train <- as(hashed.model.matrix(f, imp.train, 2^20, transpose = FALSE), "dgCMatrix")
-m.train <- hashed.model.matrix(f, imp.train, 2^20)
-m.test <- hashed.model.matrix(f, imp.test, 2^20)
+m.train <- hashed.model.matrix(f, imp.train, 2^16)
+m.test <- hashed.model.matrix(f, imp.test, 2^16)
 
 # logistic regression with glmnet
 
@@ -87,13 +95,36 @@ Following the script above,
 library(xgboost)
 
 cv.g.gdbt <- xgboost(m.train, imp.train$IsClick, max.depth=7, eta=0.1,
-  nround = 100, objective = "binary:logistic")
+  nround = 100, objective = "binary:logistic", verbose = ifelse(interactive(), 1, 0))
 p.lm <- predict(cv.g.gdbt, m.test)
 glmnet::auc(imp.test$IsClick, p.lm)
 ```
+
+
+### Per-Coordinate FTRL-Proximal with $L_1$ and $L_2$ Regularization for Logistic Regression
+
+The following scripts use an implementation of the FTRL-Proximal for Logistic Regresion, which is published in `r citet(bib[["DBLP:conf/kdd/McMahanHSYEGNPDGCLWHBK13"]])`, to predict the probability (1-step prediction) and update the model simultaneously.
+
+
+```{r ftprl}
+source(system.file("demo/ftprl.R", package = "FeatureHashing"))
+
+m.train <- hashed.model.matrix(f, imp.train, 2^16, transpose = TRUE)
+ftprl <- initialize.ftprl(0.1, 1, 0.1, 0.1, 2^16)
+ftprl <- update.ftprl(ftprl, m.train, imp.train$IsClick, predict = TRUE)
+auc(imp.train$IsClick, attr(ftprl, "predict"))
+```
+
+If we use the same algorithm to predict the click through rate of the 3rd season of iPinYou, the AUC will be 0.77 which is comparable to the AUC reported in `r citet(bib[["zhang2014real"]])`.
 
 ## Supported Data Structure
 
 - character and factor
 - numeric and integer
 - array, i.e. concatenated strings such as `c("a,b", "a,b,c", "a,c", "")`
+
+## Reference
+
+```{r bibliograph, results='asis', echo=FALSE}
+bibliography()
+```

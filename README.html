@@ -256,7 +256,7 @@ For example, the bag-of-word representation in document classification problem r
 
 <pre><code class="r"># The following script assumes that the data.frame
 # of the training dataset and testing dataset are 
-# assigned to variable `imp.train` and `imp.test`
+# assigned to variable `ipinyou.train` and `ipinyou.test`
 # respectively
 
 library(FeatureHashing)
@@ -274,9 +274,9 @@ f &lt;- ~ IP + Region + City + AdExchange + Domain +
   AdSlotVisibility + AdSlotFormat + CreativeID +
   Adid + split(UserTag, delim = &quot;,&quot;)
 # if the version of FeatureHashing is 0.8, please use the following command:
-# m.train &lt;- as(hashed.model.matrix(f, imp.train, 2^20, transpose = FALSE), &quot;dgCMatrix&quot;)
-m.train &lt;- hashed.model.matrix(f, imp.train, 2^16)
-m.test &lt;- hashed.model.matrix(f, imp.test, 2^16)
+# m.train &lt;- as(hashed.model.matrix(f, ipinyou.train, 2^20, transpose = FALSE), &quot;dgCMatrix&quot;)
+m.train &lt;- hashed.model.matrix(f, ipinyou.train, 2^16)
+m.test &lt;- hashed.model.matrix(f, ipinyou.test, 2^16)
 
 # logistic regression with glmnet
 
@@ -287,13 +287,13 @@ library(glmnet)
 ## Loaded glmnet 1.9-8
 </code></pre>
 
-<pre><code class="r">cv.g.lr &lt;- cv.glmnet(m.train, imp.train$IsClick,
+<pre><code class="r">cv.g.lr &lt;- cv.glmnet(m.train, ipinyou.train$IsClick,
   family = &quot;binomial&quot;)#, type.measure = &quot;auc&quot;)
 p.lr &lt;- predict(cv.g.lr, m.test, s=&quot;lambda.min&quot;)
-auc(imp.test$IsClick, p.lr)
+auc(ipinyou.test$IsClick, p.lr)
 </code></pre>
 
-<pre><code>## [1] 0.5
+<pre><code>## [1] 0.5201
 </code></pre>
 
 <h3>Gradient Boosted Decision Tree with <a href="http://cran.r-project.org/web/packages/xgboost/index.html"><code>xgboost</code></a></h3>
@@ -304,10 +304,10 @@ auc(imp.test$IsClick, p.lr)
 
 library(xgboost)
 
-cv.g.gdbt &lt;- xgboost(m.train, imp.train$IsClick, max.depth=7, eta=0.1,
+cv.g.gdbt &lt;- xgboost(m.train, ipinyou.train$IsClick, max.depth=7, eta=0.1,
   nround = 100, objective = &quot;binary:logistic&quot;, verbose = ifelse(interactive(), 1, 0))
 p.lm &lt;- predict(cv.g.gdbt, m.test)
-glmnet::auc(imp.test$IsClick, p.lm)
+glmnet::auc(ipinyou.test$IsClick, p.lm)
 </code></pre>
 
 <pre><code>## [1] 0.6555
@@ -317,12 +317,12 @@ glmnet::auc(imp.test$IsClick, p.lm)
 
 <p>The following scripts use an implementation of the FTRL-Proximal for Logistic Regresion, which is published in McMahan, Holt, Sculley, Young, Ebner, Grady, Nie, Phillips, Davydov, Golovin, Chikkerur, Liu, Wattenberg, Hrafnkelsson, Boulos, and Kubica (2013), to predict the probability (1-step prediction) and update the model simultaneously.</p>
 
-<pre><code class="r">source(system.file(&quot;demo/ftprl.R&quot;, package = &quot;FeatureHashing&quot;))
+<pre><code class="r">source(system.file(&quot;ftprl.R&quot;, package = &quot;FeatureHashing&quot;))
 
-m.train &lt;- hashed.model.matrix(f, imp.train, 2^16, transpose = TRUE)
+m.train &lt;- hashed.model.matrix(f, ipinyou.train, 2^16, transpose = TRUE)
 ftprl &lt;- initialize.ftprl(0.1, 1, 0.1, 0.1, 2^16)
-ftprl &lt;- update.ftprl(ftprl, m.train, imp.train$IsClick, predict = TRUE)
-auc(imp.train$IsClick, attr(ftprl, &quot;predict&quot;))
+ftprl &lt;- update.ftprl(ftprl, m.train, ipinyou.train$IsClick, predict = TRUE)
+auc(ipinyou.train$IsClick, attr(ftprl, &quot;predict&quot;))
 </code></pre>
 
 <pre><code>## [1] 0.5986

@@ -15,7 +15,7 @@
 #'@param create.mapping logical value. The indicator of whether storing the hash mapping or not.
 #'@param is.dgCMatrix logical value. Indicating if the result is \code{dgCMatrix} or \code{CSCMatrix}
 #'@param signed.hash logical value. Indicating if the hashed value is multipled by random sign.
-#'This will reduce the impact of collision.
+#'This will reduce the impact of collision. Disable it will enhance the speed.
 #'
 #'@details
 #'The \code{hashed.model.matrix} hashes the feature automatically during
@@ -45,7 +45,29 @@
 #'International Conference Proceeding Series, page 140. ACM, (2009)
 #'
 #'@examples
-#'# Construct the model matrix. The transposed matrix is returned by default.
+#'# The following scripts show how to fit a logistic regression 
+#'# after feature hashing
+#'data(ipinyou)
+#'f <- ~ IP + Region + City + AdExchange + Domain +
+#'  URL + AdSlotId + AdSlotWidth + AdSlotHeight +
+#'  AdSlotVisibility + AdSlotFormat + CreativeID +
+#'  Adid + split(UserTag, delim = ",")
+#'# if the version of FeatureHashing is 0.8, please use the following command:
+#'# m.train <- as(hashed.model.matrix(f, ipinyou.train, 2^16, transpose = FALSE), "dgCMatrix")
+#'m.train <- hashed.model.matrix(f, ipinyou.train, 2^16)
+#'m.test <- hashed.model.matrix(f, ipinyou.test, 2^16)
+#'
+#'# logistic regression with glmnet
+#'
+#'library(glmnet)
+#'
+#'cv.g.lr <- cv.glmnet(m.train, ipinyou.train$IsClick,
+#'  family = "binomial")#, type.measure = "auc")
+#'p.lr <- predict(cv.g.lr, m.test, s="lambda.min")
+#'auc(ipinyou.test$IsClick, p.lr)
+#'
+#'# The following scripts show the implementation of the FeatureHashing.
+#'
 #'# Below the original values will be project in a space of 2^6 dimensions
 #'m <- hashed.model.matrix(~ ., CO2, 2^6, create.mapping = TRUE, 
 #'  transpose = TRUE, is.dgCMatrix = FALSE)
@@ -100,7 +122,8 @@
 #'
 #'# Computation of hash of both items combined
 #'library(pack) # convert values from / to raw format
-#'hashed.value(rawToChar(c(numToRaw(h1, 4), numToRaw(h2, 4)))) # should be 974267571 == mapping2["PlantQn2:uptake"]
+#'hashed.value(rawToChar(c(numToRaw(h1, 4), numToRaw(h2, 4)))) 
+#'# should be 974267571 == mapping2["PlantQn2:uptake"]
 #'
 #'# The tag-like feature
 #'data(test.tag)

@@ -54,7 +54,7 @@ The dataset is a sample from iPinYou dataset which is described in Zhang, Yuan, 
 ```r
 # The following script assumes that the data.frame
 # of the training dataset and testing dataset are 
-# assigned to variable `imp.train` and `imp.test`
+# assigned to variable `ipinyou.train` and `ipinyou.test`
 # respectively
 
 library(FeatureHashing)
@@ -74,9 +74,9 @@ f <- ~ IP + Region + City + AdExchange + Domain +
   AdSlotVisibility + AdSlotFormat + CreativeID +
   Adid + split(UserTag, delim = ",")
 # if the version of FeatureHashing is 0.8, please use the following command:
-# m.train <- as(hashed.model.matrix(f, imp.train, 2^20, transpose = FALSE), "dgCMatrix")
-m.train <- hashed.model.matrix(f, imp.train, 2^16)
-m.test <- hashed.model.matrix(f, imp.test, 2^16)
+# m.train <- as(hashed.model.matrix(f, ipinyou.train, 2^20, transpose = FALSE), "dgCMatrix")
+m.train <- hashed.model.matrix(f, ipinyou.train, 2^16)
+m.test <- hashed.model.matrix(f, ipinyou.test, 2^16)
 
 # logistic regression with glmnet
 
@@ -89,14 +89,14 @@ library(glmnet)
 ```
 
 ```r
-cv.g.lr <- cv.glmnet(m.train, imp.train$IsClick,
+cv.g.lr <- cv.glmnet(m.train, ipinyou.train$IsClick,
   family = "binomial")#, type.measure = "auc")
 p.lr <- predict(cv.g.lr, m.test, s="lambda.min")
-auc(imp.test$IsClick, p.lr)
+auc(ipinyou.test$IsClick, p.lr)
 ```
 
 ```
-## [1] 0.5
+## [1] 0.5201
 ```
 
 ### Gradient Boosted Decision Tree with [`xgboost`](http://cran.r-project.org/web/packages/xgboost/index.html)
@@ -109,10 +109,10 @@ Following the script above,
 
 library(xgboost)
 
-cv.g.gdbt <- xgboost(m.train, imp.train$IsClick, max.depth=7, eta=0.1,
+cv.g.gdbt <- xgboost(m.train, ipinyou.train$IsClick, max.depth=7, eta=0.1,
   nround = 100, objective = "binary:logistic", verbose = ifelse(interactive(), 1, 0))
 p.lm <- predict(cv.g.gdbt, m.test)
-glmnet::auc(imp.test$IsClick, p.lm)
+glmnet::auc(ipinyou.test$IsClick, p.lm)
 ```
 
 ```
@@ -127,12 +127,12 @@ The following scripts use an implementation of the FTRL-Proximal for Logistic Re
 
 
 ```r
-source(system.file("demo/ftprl.R", package = "FeatureHashing"))
+source(system.file("ftprl.R", package = "FeatureHashing"))
 
-m.train <- hashed.model.matrix(f, imp.train, 2^16, transpose = TRUE)
+m.train <- hashed.model.matrix(f, ipinyou.train, 2^16, transpose = TRUE)
 ftprl <- initialize.ftprl(0.1, 1, 0.1, 0.1, 2^16)
-ftprl <- update.ftprl(ftprl, m.train, imp.train$IsClick, predict = TRUE)
-auc(imp.train$IsClick, attr(ftprl, "predict"))
+ftprl <- update.ftprl(ftprl, m.train, ipinyou.train$IsClick, predict = TRUE)
+auc(ipinyou.train$IsClick, attr(ftprl, "predict"))
 ```
 
 ```

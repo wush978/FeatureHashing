@@ -37,14 +37,10 @@ devtools::install_github('wush978/FeatureHashing')
 ### When should we use Feature Hashing?
 
 Feature hashing is useful when the user does not easy to know the dimension of the feature vector. 
-For example, the bag-of-word representation in document classification problem requires scanning entire dataset to know how many words we have, i.e. the dimension of the feature vector.
 
-In general, feature hashing is useful in the following environment:
+For instance, the bag-of-word representation in document classification problem requires scanning entire dataset to know how many words there are, i.e. the dimension of the feature matrix.
 
-- Streaming Environment
-- Distirbuted Environment
-
-Because it is expensive or impossible to know the real dimension of the feature vector.
+Hashing trick have other purposes like cross-product features where two or more features are combined to create a new one. Another well known use is dimension reduction when you setup the hash function such that the output range is significantly smaller than the number of unique features in your original dataset.
 
 ## Getting Started
 

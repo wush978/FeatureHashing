@@ -22,7 +22,7 @@ Imports:
   digest(>= 0.6.8),
   magrittr (>= 1.5)
 LinkingTo: Rcpp, digest(>= 0.6.8), BH
-Suggests: pack, RUnit
+Suggests: pack, RUnit, glmnet
 SystemRequirements: C++11
 BugReports: https://github.com/wush978/FeatureHashing/issues
 URL: https://github.com/wush978/FeatureHashing

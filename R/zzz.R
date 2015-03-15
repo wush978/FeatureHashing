@@ -6,9 +6,14 @@
 .onAttach <- function(libname, pkgname) {
   if (interactive()) {
     packageStartupMessage(
-"The default behavior of the hashed.model.matrix is changed:
-    - The default output is converted to dgCMatrix
-    - The default value of `transpose` is FALSE
+"
+The default behavior of the hashed.model.matrix is changed:
+    - The default output is converted to dgCMatrix.
+    - The default value of `transpose` is FALSE.
+The name of the arguments of the hashed.model.matrix is also changed:
+    - hash_size becomes hash.size.
+    - is.mapping becomes create.mapping.
+    - There is a new argument named signed.hash to disable the binary hash function.
 "
 )
   }
@@ -21,4 +26,33 @@
 #' of the first instance represents that the feature `1` is TRUE, the feature `27` is 
 #' TRUE, et. al. On the contrary, the missing feature such as `2` 
 #' is FALSE.
-test.tag <- NULL
+#'@name test.tag
+NULL
+
+#'iPinYou Real-Time Bidding Dataset for Computational Advertising Research
+#'
+#'This is a sample from the iPinYou dataset which
+#'has a benchmark of benchmark by Zhang, Yuan, Wang, et al. (2014).
+#'The data.frame named \code{ipinyou.train} is a sample from the data of 2013-10-19 and 
+#'the data.frame named \code{ipinyou.test} is a sample from the  data of 2013-10-20.
+#'
+#'@format
+#'The column name of the data is the description of the data in Zhang, Yuan, Wang, et al. (2014). 
+#'Most of the columns should be clearly described by their column names. 
+#'For the details of the dataset, please read the Zhang, Yuan, Wang, et al. (2014).
+#'
+#'\code{BidID}, the id of the RTB which is the unique identifier of the events.
+#'
+#'\code{Adid}, the advertiser id.
+#'
+#'\code{UserTag}, the user tags (segments) in iPinYou's proprietary audience database
+#'
+#'@usage
+#'data(ipinyou)
+#'@source \url{http://data.computational-advertising.org/}
+#'@references  W. Zhang, S. Yuan, J. Wang, et al. 
+#'"Real-Time Bidding Benchmarking with iPinYou Dataset". 
+#'In: arXiv preprint arXiv:1407.7073 (2014).
+#'@name ipinyou
+#'@aliases ipinyou.train ipinyou.test
+NULL

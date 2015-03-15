@@ -3,6 +3,8 @@ FeatureHashing
 
 Implement feature hashing with R
 
+
+
 ## Introduction
 
 [Feature hashing](http://en.wikipedia.org/wiki/Feature_hashing), also called as the hashing trick, is a method to
@@ -10,7 +12,7 @@ transform features to vector. Without looking the indices up in an
 associative array, it applies a hash function to the features and uses their
 hash values as indices directly.
   
-The package FeatureHashing implements the method in Weinberger et. al. (2009) to transform
+The package FeatureHashing implements the method in (Weinberger, Dasgupta, Langford, Smola, and Attenberg, 2009) to transform
 a `data.frame` to sparse matrix. The package provides a formula interface similar to model.matrix 
 in R and Matrix::sparse.model.matrix in the package Matrix. Splitting of concatenated data, 
 check the help of `test.tag` for explanation of concatenated data, during the construction of the model matrix.
@@ -44,13 +46,15 @@ Because it is expensive or impossible to know the real dimension of the feature 
 
 The following scripts show how to use the `FeatureHashing` to construct `Matrix::dgCMatrix` and train a model in other packages which supports `Matrix::dgCMatrix` as input.
 
+The dataset is a sample from iPinYou dataset which is described in (Zhang, Yuan, Wang, and Shen, 2014).
+
 ### Logistic Regression with [`glmnet`](http://cran.r-project.org/web/packages/glmnet/index.html)
 
 
 ```r
 # The following script assumes that the data.frame
 # of the training dataset and testing dataset are 
-# assigned to variable `imp.train` and `imp.test`
+# assigned to variable `ipinyou.train` and `ipinyou.test`
 # respectively
 
 library(FeatureHashing)
@@ -70,9 +74,9 @@ f <- ~ IP + Region + City + AdExchange + Domain +
   AdSlotVisibility + AdSlotFormat + CreativeID +
   Adid + split(UserTag, delim = ",")
 # if the version of FeatureHashing is 0.8, please use the following command:
-# m.train <- as(hashed.model.matrix(f, imp.train, 2^20, transpose = FALSE), "dgCMatrix")
-m.train <- hashed.model.matrix(f, imp.train, 2^20)
-m.test <- hashed.model.matrix(f, imp.test, 2^20)
+# m.train <- as(hashed.model.matrix(f, ipinyou.train, 2^16, transpose = FALSE), "dgCMatrix")
+m.train <- hashed.model.matrix(f, ipinyou.train, 2^16)
+m.test <- hashed.model.matrix(f, ipinyou.test, 2^16)
 
 # logistic regression with glmnet
 
@@ -85,14 +89,14 @@ library(glmnet)
 ```
 
 ```r
-cv.g.lr <- cv.glmnet(m.train, imp.train$IsClick,
+cv.g.lr <- cv.glmnet(m.train, ipinyou.train$IsClick,
   family = "binomial")#, type.measure = "auc")
 p.lr <- predict(cv.g.lr, m.test, s="lambda.min")
-auc(imp.test$IsClick, p.lr)
+auc(ipinyou.test$IsClick, p.lr)
 ```
 
 ```
-## [1] 0.5199
+## [1] 0.5
 ```
 
 ### Gradient Boosted Decision Tree with [`xgboost`](http://cran.r-project.org/web/packages/xgboost/index.html)
@@ -105,124 +109,63 @@ Following the script above,
 
 library(xgboost)
 
-cv.g.gdbt <- xgboost(m.train, imp.train$IsClick, max.depth=7, eta=0.1,
-  nround = 100, objective = "binary:logistic")
+cv.g.gdbt <- xgboost(m.train, ipinyou.train$IsClick, max.depth=7, eta=0.1,
+  nround = 100, objective = "binary:logistic", verbose = ifelse(interactive(), 1, 0))
+p.lm <- predict(cv.g.gdbt, m.test)
+glmnet::auc(ipinyou.test$IsClick, p.lm)
 ```
 
 ```
-## [0]	train-error:0.034278
-## [1]	train-error:0.034278
-## [2]	train-error:0.034278
-## [3]	train-error:0.034278
-## [4]	train-error:0.034278
-## [5]	train-error:0.035125
-## [6]	train-error:0.035125
-## [7]	train-error:0.035125
-## [8]	train-error:0.035125
-## [9]	train-error:0.035125
-## [10]	train-error:0.035125
-## [11]	train-error:0.035125
-## [12]	train-error:0.035125
-## [13]	train-error:0.035125
-## [14]	train-error:0.035125
-## [15]	train-error:0.035125
-## [16]	train-error:0.035125
-## [17]	train-error:0.035125
-## [18]	train-error:0.035125
-## [19]	train-error:0.035125
-## [20]	train-error:0.034702
-## [21]	train-error:0.034278
-## [22]	train-error:0.034278
-## [23]	train-error:0.034278
-## [24]	train-error:0.034278
-## [25]	train-error:0.034278
-## [26]	train-error:0.034278
-## [27]	train-error:0.034278
-## [28]	train-error:0.034278
-## [29]	train-error:0.034278
-## [30]	train-error:0.034278
-## [31]	train-error:0.034278
-## [32]	train-error:0.034278
-## [33]	train-error:0.034278
-## [34]	train-error:0.034278
-## [35]	train-error:0.034278
-## [36]	train-error:0.033855
-## [37]	train-error:0.034278
-## [38]	train-error:0.033855
-## [39]	train-error:0.033432
-## [40]	train-error:0.033855
-## [41]	train-error:0.033855
-## [42]	train-error:0.033855
-## [43]	train-error:0.033855
-## [44]	train-error:0.033855
-## [45]	train-error:0.033432
-## [46]	train-error:0.033432
-## [47]	train-error:0.033432
-## [48]	train-error:0.033009
-## [49]	train-error:0.032586
-## [50]	train-error:0.032586
-## [51]	train-error:0.032163
-## [52]	train-error:0.032586
-## [53]	train-error:0.032163
-## [54]	train-error:0.032163
-## [55]	train-error:0.032163
-## [56]	train-error:0.032163
-## [57]	train-error:0.032163
-## [58]	train-error:0.031739
-## [59]	train-error:0.032163
-## [60]	train-error:0.032163
-## [61]	train-error:0.032163
-## [62]	train-error:0.031739
-## [63]	train-error:0.031739
-## [64]	train-error:0.031739
-## [65]	train-error:0.030893
-## [66]	train-error:0.030893
-## [67]	train-error:0.030893
-## [68]	train-error:0.030893
-## [69]	train-error:0.030893
-## [70]	train-error:0.030893
-## [71]	train-error:0.030893
-## [72]	train-error:0.030470
-## [73]	train-error:0.030470
-## [74]	train-error:0.030470
-## [75]	train-error:0.030470
-## [76]	train-error:0.030470
-## [77]	train-error:0.030470
-## [78]	train-error:0.030470
-## [79]	train-error:0.030470
-## [80]	train-error:0.030047
-## [81]	train-error:0.029623
-## [82]	train-error:0.029200
-## [83]	train-error:0.029200
-## [84]	train-error:0.028777
-## [85]	train-error:0.028777
-## [86]	train-error:0.028777
-## [87]	train-error:0.028777
-## [88]	train-error:0.028777
-## [89]	train-error:0.028777
-## [90]	train-error:0.028777
-## [91]	train-error:0.027931
-## [92]	train-error:0.028354
-## [93]	train-error:0.027931
-## [94]	train-error:0.027931
-## [95]	train-error:0.027931
-## [96]	train-error:0.027931
-## [97]	train-error:0.027931
-## [98]	train-error:0.027931
-## [99]	train-error:0.027931
+## [1] 0.6555232
 ```
+
+
+### Per-Coordinate FTRL-Proximal with $L_1$ and $L_2$ Regularization for Logistic Regression
+
+The following scripts use an implementation of the FTRL-Proximal for Logistic Regresion, which is published in (McMahan, Holt, Sculley, Young, Ebner, Grady, Nie, Phillips, Davydov, Golovin, Chikkerur, Liu, Wattenberg, Hrafnkelsson, Boulos, and Kubica, 2013), to predict the probability (1-step prediction) and update the model simultaneously.
+
+
 
 ```r
-p.lm <- predict(cv.g.gdbt, m.test)
-glmnet::auc(imp.test$IsClick, p.lm)
+source(system.file("ftprl.R", package = "FeatureHashing"))
+
+m.train <- hashed.model.matrix(f, ipinyou.train, 2^16, transpose = TRUE)
+ftprl <- initialize.ftprl(0.1, 1, 0.1, 0.1, 2^16)
+ftprl <- update.ftprl(ftprl, m.train, ipinyou.train$IsClick, predict = TRUE)
+auc(ipinyou.train$IsClick, attr(ftprl, "predict"))
 ```
 
 ```
-## [1] 0.6497
+## [1] 0.5986472
 ```
+
+If we use the same algorithm to predict the click through rate of the 3rd season of iPinYou, the overall AUC will be 0.77 which is comparable to the overall AUC of 3rd season 0.76 reported in (Zhang, Yuan, Wang, et al., 2014).
 
 ## Supported Data Structure
 
 - character and factor
 - numeric and integer
 - array, i.e. concatenated strings such as `c("a,b", "a,b,c", "a,c", "")`
+
+## Reference
+
+[1] H. B. McMahan, G. Holt, D. Sculley, et al. "Ad click
+prediction: a view from the trenches". In: _The 19th ACM SIGKDD
+International Conference on Knowledge Discovery and Data Mining,
+KDD 2013, Chicago, IL, USA, August 11-14, 2013_. Ed. by I. S.
+Dhillon, Y. Koren, R. Ghani, T. E. Senator, P. Bradley, R. Parekh,
+J. He, R. L. Grossman and R. Uthurusamy. ACM, 2013, pp. 1222-1230.
+DOI: 10.1145/2487575.2488200. <URL:
+http://doi.acm.org/10.1145/2487575.2488200>.
+
+[2] K. Q. Weinberger, A. Dasgupta, J. Langford, et al. "Feature
+hashing for large scale multitask learning". In: _Proceedings of
+the 26th Annual International Conference on Machine Learning, ICML
+2009, Montreal, Quebec, Canada, June 14-18, 2009_. Ed. by A. P.
+Danyluk, L. Bottou and M. L. Littman. 2009, pp. 1113-1120. DOI:
+10.1145/1553374.1553516. <URL:
+http://doi.acm.org/10.1145/1553374.1553516>.
+
+[3] W. Zhang, S. Yuan, J. Wang, et al. "Real-Time Bidding
+Benchmarking with iPinYou Dataset". In: _arXiv preprint
+arXiv:1407.7073_ (2014).

@@ -215,7 +215,7 @@ transform features to vector. Without looking the indices up in an
 associative array, it applies a hash function to the features and uses their
 hash values as indices directly.</p>
 
-<p>The package FeatureHashing implements the method in Weinberger et. al. (2009) to transform
+<p>The package FeatureHashing implements the method in (Weinberger, Dasgupta, Langford, Smola, and Attenberg, 2009) to transform
 a <code>data.frame</code> to sparse matrix. The package provides a formula interface similar to model.matrix 
 in R and Matrix::sparse.model.matrix in the package Matrix. Splitting of concatenated data, 
 check the help of <code>test.tag</code> for explanation of concatenated data, during the construction of the model matrix.</p>
@@ -250,7 +250,7 @@ For example, the bag-of-word representation in document classification problem r
 
 <p>The following scripts show how to use the <code>FeatureHashing</code> to construct <code>Matrix::dgCMatrix</code> and train a model in other packages which supports <code>Matrix::dgCMatrix</code> as input.</p>
 
-<p>The dataset is a sample from iPinYou dataset which is described in Zhang, Yuan, Wang, and Shen (2014).</p>
+<p>The dataset is a sample from iPinYou dataset which is described in (Zhang, Yuan, Wang, and Shen, 2014).</p>
 
 <h3>Logistic Regression with <a href="http://cran.r-project.org/web/packages/glmnet/index.html"><code>glmnet</code></a></h3>
 
@@ -274,7 +274,7 @@ f &lt;- ~ IP + Region + City + AdExchange + Domain +
   AdSlotVisibility + AdSlotFormat + CreativeID +
   Adid + split(UserTag, delim = &quot;,&quot;)
 # if the version of FeatureHashing is 0.8, please use the following command:
-# m.train &lt;- as(hashed.model.matrix(f, ipinyou.train, 2^20, transpose = FALSE), &quot;dgCMatrix&quot;)
+# m.train &lt;- as(hashed.model.matrix(f, ipinyou.train, 2^16, transpose = FALSE), &quot;dgCMatrix&quot;)
 m.train &lt;- hashed.model.matrix(f, ipinyou.train, 2^16)
 m.test &lt;- hashed.model.matrix(f, ipinyou.test, 2^16)
 
@@ -293,7 +293,7 @@ p.lr &lt;- predict(cv.g.lr, m.test, s=&quot;lambda.min&quot;)
 auc(ipinyou.test$IsClick, p.lr)
 </code></pre>
 
-<pre><code>## [1] 0.5201
+<pre><code>## [1] 0.5
 </code></pre>
 
 <h3>Gradient Boosted Decision Tree with <a href="http://cran.r-project.org/web/packages/xgboost/index.html"><code>xgboost</code></a></h3>
@@ -310,12 +310,12 @@ p.lm &lt;- predict(cv.g.gdbt, m.test)
 glmnet::auc(ipinyou.test$IsClick, p.lm)
 </code></pre>
 
-<pre><code>## [1] 0.6555
+<pre><code>## [1] 0.6555232
 </code></pre>
 
 <h3>Per-Coordinate FTRL-Proximal with \(L_1\) and \(L_2\) Regularization for Logistic Regression</h3>
 
-<p>The following scripts use an implementation of the FTRL-Proximal for Logistic Regresion, which is published in McMahan, Holt, Sculley, Young, Ebner, Grady, Nie, Phillips, Davydov, Golovin, Chikkerur, Liu, Wattenberg, Hrafnkelsson, Boulos, and Kubica (2013), to predict the probability (1-step prediction) and update the model simultaneously.</p>
+<p>The following scripts use an implementation of the FTRL-Proximal for Logistic Regresion, which is published in (McMahan, Holt, Sculley, Young, Ebner, Grady, Nie, Phillips, Davydov, Golovin, Chikkerur, Liu, Wattenberg, Hrafnkelsson, Boulos, and Kubica, 2013), to predict the probability (1-step prediction) and update the model simultaneously.</p>
 
 <pre><code class="r">source(system.file(&quot;ftprl.R&quot;, package = &quot;FeatureHashing&quot;))
 
@@ -325,10 +325,10 @@ ftprl &lt;- update.ftprl(ftprl, m.train, ipinyou.train$IsClick, predict = TRUE)
 auc(ipinyou.train$IsClick, attr(ftprl, &quot;predict&quot;))
 </code></pre>
 
-<pre><code>## [1] 0.5986
+<pre><code>## [1] 0.5986472
 </code></pre>
 
-<p>If we use the same algorithm to predict the click through rate of the 3rd season of iPinYou, the AUC will be 0.77 which is comparable to the AUC reported in Zhang, Yuan, Wang, et al. (2014).</p>
+<p>If we use the same algorithm to predict the click through rate of the 3rd season of iPinYou, the overall AUC will be 0.77 which is comparable to the overall AUC of 3rd season 0.76 reported in (Zhang, Yuan, Wang, et al., 2014).</p>
 
 <h2>Supported Data Structure</h2>
 
@@ -349,7 +349,15 @@ J. He, R. L. Grossman and R. Uthurusamy. ACM, 2013, pp. 1222-1230.
 DOI: 10.1145/2487575.2488200. <URL:
 http://doi.acm.org/10.1145/2487575.2488200>.</p>
 
-<p>[2] W. Zhang, S. Yuan, J. Wang, et al. &ldquo;Real-Time Bidding
+<p>[2] K. Q. Weinberger, A. Dasgupta, J. Langford, et al. &ldquo;Feature
+hashing for large scale multitask learning&rdquo;. In: <em>Proceedings of
+the 26th Annual International Conference on Machine Learning, ICML
+2009, Montreal, Quebec, Canada, June 14-18, 2009</em>. Ed. by A. P.
+Danyluk, L. Bottou and M. L. Littman. 2009, pp. 1113-1120. DOI:
+10.1145/1553374.1553516. <URL:
+http://doi.acm.org/10.1145/1553374.1553516>.</p>
+
+<p>[3] W. Zhang, S. Yuan, J. Wang, et al. &ldquo;Real-Time Bidding
 Benchmarking with iPinYou Dataset&rdquo;. In: <em>arXiv preprint
 arXiv:1407.7073</em> (2014).</p>
 

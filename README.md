@@ -12,7 +12,7 @@ transform features to vector. Without looking the indices up in an
 associative array, it applies a hash function to the features and uses their
 hash values as indices directly.
   
-The package FeatureHashing implements the method in Weinberger et. al. (2009) to transform
+The package FeatureHashing implements the method in (Weinberger, Dasgupta, Langford, Smola, and Attenberg, 2009) to transform
 a `data.frame` to sparse matrix. The package provides a formula interface similar to model.matrix 
 in R and Matrix::sparse.model.matrix in the package Matrix. Splitting of concatenated data, 
 check the help of `test.tag` for explanation of concatenated data, during the construction of the model matrix.
@@ -46,7 +46,7 @@ Because it is expensive or impossible to know the real dimension of the feature 
 
 The following scripts show how to use the `FeatureHashing` to construct `Matrix::dgCMatrix` and train a model in other packages which supports `Matrix::dgCMatrix` as input.
 
-The dataset is a sample from iPinYou dataset which is described in Zhang, Yuan, Wang, and Shen (2014).
+The dataset is a sample from iPinYou dataset which is described in (Zhang, Yuan, Wang, and Shen, 2014).
 
 ### Logistic Regression with [`glmnet`](http://cran.r-project.org/web/packages/glmnet/index.html)
 
@@ -74,7 +74,7 @@ f <- ~ IP + Region + City + AdExchange + Domain +
   AdSlotVisibility + AdSlotFormat + CreativeID +
   Adid + split(UserTag, delim = ",")
 # if the version of FeatureHashing is 0.8, please use the following command:
-# m.train <- as(hashed.model.matrix(f, ipinyou.train, 2^20, transpose = FALSE), "dgCMatrix")
+# m.train <- as(hashed.model.matrix(f, ipinyou.train, 2^16, transpose = FALSE), "dgCMatrix")
 m.train <- hashed.model.matrix(f, ipinyou.train, 2^16)
 m.test <- hashed.model.matrix(f, ipinyou.test, 2^16)
 
@@ -96,7 +96,7 @@ auc(ipinyou.test$IsClick, p.lr)
 ```
 
 ```
-## [1] 0.5201
+## [1] 0.5
 ```
 
 ### Gradient Boosted Decision Tree with [`xgboost`](http://cran.r-project.org/web/packages/xgboost/index.html)
@@ -116,13 +116,13 @@ glmnet::auc(ipinyou.test$IsClick, p.lm)
 ```
 
 ```
-## [1] 0.6555
+## [1] 0.6555232
 ```
 
 
 ### Per-Coordinate FTRL-Proximal with $L_1$ and $L_2$ Regularization for Logistic Regression
 
-The following scripts use an implementation of the FTRL-Proximal for Logistic Regresion, which is published in McMahan, Holt, Sculley, Young, Ebner, Grady, Nie, Phillips, Davydov, Golovin, Chikkerur, Liu, Wattenberg, Hrafnkelsson, Boulos, and Kubica (2013), to predict the probability (1-step prediction) and update the model simultaneously.
+The following scripts use an implementation of the FTRL-Proximal for Logistic Regresion, which is published in (McMahan, Holt, Sculley, Young, Ebner, Grady, Nie, Phillips, Davydov, Golovin, Chikkerur, Liu, Wattenberg, Hrafnkelsson, Boulos, and Kubica, 2013), to predict the probability (1-step prediction) and update the model simultaneously.
 
 
 
@@ -136,10 +136,10 @@ auc(ipinyou.train$IsClick, attr(ftprl, "predict"))
 ```
 
 ```
-## [1] 0.5986
+## [1] 0.5986472
 ```
 
-If we use the same algorithm to predict the click through rate of the 3rd season of iPinYou, the AUC will be 0.77 which is comparable to the AUC reported in Zhang, Yuan, Wang, et al. (2014).
+If we use the same algorithm to predict the click through rate of the 3rd season of iPinYou, the overall AUC will be 0.77 which is comparable to the overall AUC of 3rd season 0.76 reported in (Zhang, Yuan, Wang, et al., 2014).
 
 ## Supported Data Structure
 
@@ -158,6 +158,14 @@ J. He, R. L. Grossman and R. Uthurusamy. ACM, 2013, pp. 1222-1230.
 DOI: 10.1145/2487575.2488200. <URL:
 http://doi.acm.org/10.1145/2487575.2488200>.
 
-[2] W. Zhang, S. Yuan, J. Wang, et al. "Real-Time Bidding
+[2] K. Q. Weinberger, A. Dasgupta, J. Langford, et al. "Feature
+hashing for large scale multitask learning". In: _Proceedings of
+the 26th Annual International Conference on Machine Learning, ICML
+2009, Montreal, Quebec, Canada, June 14-18, 2009_. Ed. by A. P.
+Danyluk, L. Bottou and M. L. Littman. 2009, pp. 1113-1120. DOI:
+10.1145/1553374.1553516. <URL:
+http://doi.acm.org/10.1145/1553374.1553516>.
+
+[3] W. Zhang, S. Yuan, J. Wang, et al. "Real-Time Bidding
 Benchmarking with iPinYou Dataset". In: _arXiv preprint
 arXiv:1407.7073_ (2014).

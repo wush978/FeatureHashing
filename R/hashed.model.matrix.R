@@ -47,6 +47,7 @@
 #'@examples
 #'# The following scripts show how to fit a logistic regression 
 #'# after feature hashing
+#'\dontrun{
 #'data(ipinyou)
 #'f <- ~ IP + Region + City + AdExchange + Domain +
 #'  URL + AdSlotId + AdSlotWidth + AdSlotHeight +
@@ -65,6 +66,7 @@
 #'  family = "binomial")#, type.measure = "auc")
 #'p.lr <- predict(cv.g.lr, m.test, s="lambda.min")
 #'auc(ipinyou.test$IsClick, p.lr)
+#'}
 #'
 #'# The following scripts show the implementation of the FeatureHashing.
 #'

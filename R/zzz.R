@@ -51,7 +51,7 @@ NULL
 #'data(ipinyou)
 #'@source \url{http://data.computational-advertising.org/}
 #'@references  W. Zhang, S. Yuan, J. Wang, et al. 
-#'“Real-Time Bidding Benchmarking with iPinYou Dataset”. 
+#'"Real-Time Bidding Benchmarking with iPinYou Dataset". 
 #'In: arXiv preprint arXiv:1407.7073 (2014).
 #'@name ipinyou
 #'@aliases ipinyou.train ipinyou.test

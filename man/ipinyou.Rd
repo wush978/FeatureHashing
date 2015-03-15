@@ -28,7 +28,7 @@ the data.frame named \code{ipinyou.test} is a sample from the  data of 2013-10-2
 }
 \references{
 W. Zhang, S. Yuan, J. Wang, et al.
-“Real-Time Bidding Benchmarking with iPinYou Dataset”.
+"Real-Time Bidding Benchmarking with iPinYou Dataset".
 In: arXiv preprint arXiv:1407.7073 (2014).
 }
 

@@ -141,7 +141,7 @@
 #'@importFrom methods checkAtAssignment
 #'@importClassesFrom Matrix dgCMatrix
 #'@aliases hashed.value hash.sign
-hashed.model.matrix <- function(formula, data, hash.size = 2^24, transpose = FALSE, 
+hashed.model.matrix <- function(formula, data, hash.size = 2^18, transpose = FALSE, 
                                 create.mapping = FALSE, is.dgCMatrix = TRUE, signed.hash = TRUE
                                 ) {
   stopifnot(hash.size >= 0)

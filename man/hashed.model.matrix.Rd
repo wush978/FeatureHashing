@@ -6,7 +6,7 @@
 \alias{hashed.value}
 \title{Create a model matrix with feature hashing}
 \usage{
-hashed.model.matrix(formula, data, hash.size = 2^24, transpose = FALSE,
+hashed.model.matrix(formula, data, hash.size = 2^18, transpose = FALSE,
   create.mapping = FALSE, is.dgCMatrix = TRUE, signed.hash = TRUE)
 }
 \arguments{
@@ -73,6 +73,23 @@ cv.g.lr <- cv.glmnet(m.train, ipinyou.train$IsClick,
  family = "binomial")#, type.measure = "auc")
 p.lr <- predict(cv.g.lr, m.test, s="lambda.min")
 auc(ipinyou.test$IsClick, p.lr)
+
+## Per-Coordinate FTRL-Proximal with $L_1$ and $L_2$ Regularization for Logistic Regression
+
+# The following scripts use an implementation of the FTRL-Proximal for Logistic Regresion,
+# which is published in McMahan, Holt and Sculley et al. (2013), to predict the probability
+# (1-step prediction) and update the model simultaneously.
+
+
+source(system.file("ftprl.R", package = "FeatureHashing"))
+m.train <- hashed.model.matrix(f, ipinyou.train, 2^16, transpose = TRUE)
+ftprl <- initialize.ftprl(0.1, 1, 0.1, 0.1, 2^16)
+ftprl <- update.ftprl(ftprl, m.train, ipinyou.train$IsClick, predict = TRUE)
+auc(ipinyou.train$IsClick, attr(ftprl, "predict"))
+
+# If we use the same algorithm to predict the click through rate of the 3rd season of iPinYou,
+# the overall AUC will be 0.77 which is comparable to the overall AUC of the
+# 3rd season 0.76 reported in Zhang, Yuan, Wang, et al. (2014).
 }
 
 # The following scripts show the implementation of the FeatureHashing.
@@ -144,8 +161,21 @@ mapping <- unlist(as.list(attr(m, "mapping")))
 names(mapping)
 }
 \references{
+H. B. McMahan, G. Holt, D. Sculley, et al. "Ad click
+prediction: a view from the trenches". In: _The 19th ACM SIGKDD
+International Conference on Knowledge Discovery and Data Mining,
+KDD 2013, Chicago, IL, USA, August 11-14, 2013_. Ed. by I. S.
+Dhillon, Y. Koren, R. Ghani, T. E. Senator, P. Bradley, R. Parekh,
+J. He, R. L. Grossman and R. Uthurusamy. ACM, 2013, pp. 1222-1230.
+DOI: 10.1145/2487575.2488200. <URL:
+\url{http://doi.acm.org/10.1145/2487575.2488200}>.
+
 Kilian Q. Weinberger, Anirban Dasgupta, John Langford,
 Alexander J. Smola, and Josh Attenberg. ICML, volume 382 of ACM
 International Conference Proceeding Series, page 140. ACM, (2009)
+
+W. Zhang, S. Yuan, J. Wang, et al. "Real-Time Bidding
+Benchmarking with iPinYou Dataset". In: _arXiv preprint
+arXiv:1407.7073_ (2014).
 }
 

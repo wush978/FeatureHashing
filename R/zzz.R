@@ -29,10 +29,10 @@ The name of the arguments of the hashed.model.matrix is also changed:
 #'@name test.tag
 NULL
 
-#'iPinYou Real-Time Bidding Dataset for Computational Advertising Research
+#'@title iPinYou Real-Time Bidding Dataset for Computational Advertising Research
 #'
-#'This is a sample from the iPinYou dataset which
-#'has a benchmark of benchmark by Zhang, Yuan, Wang, et al. (2014).
+#'@description
+#'This is a sample from the iPinYou Real-Time Bidding dataset.
 #'The data.frame named \code{ipinyou.train} is a sample from the data of 2013-10-19 and 
 #'the data.frame named \code{ipinyou.test} is a sample from the  data of 2013-10-20.
 #'
@@ -45,7 +45,8 @@ NULL
 #'
 #'\code{Adid}, the advertiser id.
 #'
-#'\code{UserTag}, the user tags (segments) in iPinYou's proprietary audience database
+#'\code{UserTag}, the user tags (segments) in iPinYou's proprietary audience database. 
+#'This is also a real example of the concatenated feature.
 #'
 #'@usage
 #'data(ipinyou)

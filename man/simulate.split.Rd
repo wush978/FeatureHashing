@@ -5,7 +5,7 @@
 \title{Simulate how \code{split} work in \code{hashed.model.matrix} to split the string into
 tokens}
 \usage{
-simulate.split(x, dlim = ",", type = c("existence", "count"))
+simulate.split(x, delim = ",", type = c("existence", "count"))
 }
 \arguments{
 \item{x}{character vector or factor. The source of concatenated feature.}

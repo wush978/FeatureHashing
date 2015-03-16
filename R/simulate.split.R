@@ -6,7 +6,7 @@
 #'"\code{count}" indicates the number of occurrence of the token. 
 #'"\code{existence}" indicates the boolean that whether the token exist or not.
 #'@usage
-#'simulate.split(x, dlim = ",", type = c("existence", "count"))
+#'simulate.split(x, delim = ",", type = c("existence", "count"))
 #'@return integer vector for \code{type = "count"} and logical vector for \code{type = "existence"}.
 simulate.split <- function(x, delim = ",", type = c("existence", "count")) {
   retval <- switch(class(x), 

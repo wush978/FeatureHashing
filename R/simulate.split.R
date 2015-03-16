@@ -1,11 +1,14 @@
-#'@title Expand concatenated feature
-#'@param x character vector or factor. The source of tag features.
-#'@param delim character vector. The split symbol for tag features.
-#'@param type character value. Either "count" or "existence". 
-#'"count" indicates the number of occurrence of the tag. 
-#'"existence" indicates the boolean that whether the tag exist or not.
+#'@title Simulate how \code{split} work in \code{hashed.model.matrix} to split the string into 
+#'tokens
+#'@param x character vector or factor. The source of concatenated feature.
+#'@param delim character value. The string to use for splitting.
+#'@param type character value. Either "\code{count}" or "\code{existence}". 
+#'"\code{count}" indicates the number of occurrence of the token. 
+#'"\code{existence}" indicates the boolean that whether the token exist or not.
+#'@usage
+#'simulate.split(x, dlim = ",", type = c("existence", "count"))
 #'@return integer vector for \code{type = "count"} and logical vector for \code{type = "existence"}.
-split.simulation <- function(x, delim = ",", type = c("existence", "count")) {
+simulate.split <- function(x, delim = ",", type = c("existence", "count")) {
   retval <- switch(class(x), 
     "character" = split.character2(x, delim, type),
     "factor" = split.factor(x, delim, type),

@@ -38,7 +38,7 @@
 #'  \item \code{delim}, character value to use as delimiter for splitting.
 #'  \item \code{type}, one of \code{existence} or \code{count}.
 #'}
-#'The user could explore the behavior via function \code{\link{split}}.
+#'The user could explore the behavior via function \code{\link{simulate.split}}.
 #'
 #'@references 
 #'H. B. McMahan, G. Holt, D. Sculley, et al. "Ad click

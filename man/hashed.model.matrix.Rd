@@ -49,7 +49,7 @@ The "split" accepts two parameters:
  \item \code{delim}, character value to use as delimiter for splitting.
  \item \code{type}, one of \code{existence} or \code{count}.
 }
-The user could explore the behavior via function \code{\link{split}}.
+The user could explore the behavior via function \code{\link{simulate.split}}.
 }
 \examples{
 # The following scripts show how to fit a logistic regression

@@ -115,7 +115,7 @@ ftprl <- update.ftprl(ftprl, m.train, ipinyou.train$IsClick, predict = TRUE)
 auc(ipinyou.train$IsClick, attr(ftprl, "predict"))
 ```
 
-If we use the same algorithm to predict the click through rate of the 3rd season of iPinYou, the overall AUC will be 0.77 which is comparable to the overall AUC of 3rd season 0.76 reported in `r citep(bib[["zhang2014real"]])`.
+If we use the same algorithm to predict the click through rate of the 3rd season of iPinYou, the overall AUC will be 0.77 which is comparable to the overall AUC of the 3rd season 0.76 reported in `r citep(bib[["zhang2014real"]])`.
 
 ## Supported Data Structure
 

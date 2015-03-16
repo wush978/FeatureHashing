@@ -96,7 +96,7 @@ auc(ipinyou.test$IsClick, p.lr)
 ```
 
 ```
-## [1] 0.5
+## [1] 0.5077
 ```
 
 ### Gradient Boosted Decision Tree with [`xgboost`](http://cran.r-project.org/web/packages/xgboost/index.html)
@@ -116,7 +116,7 @@ glmnet::auc(ipinyou.test$IsClick, p.lm)
 ```
 
 ```
-## [1] 0.6555232
+## [1] 0.6555
 ```
 
 
@@ -136,10 +136,10 @@ auc(ipinyou.train$IsClick, attr(ftprl, "predict"))
 ```
 
 ```
-## [1] 0.5986472
+## [1] 0.5986
 ```
 
-If we use the same algorithm to predict the click through rate of the 3rd season of iPinYou, the overall AUC will be 0.77 which is comparable to the overall AUC of 3rd season 0.76 reported in (Zhang, Yuan, Wang, et al., 2014).
+If we use the same algorithm to predict the click through rate of the 3rd season of iPinYou, the overall AUC will be 0.77 which is comparable to the overall AUC of the 3rd season 0.76 reported in (Zhang, Yuan, Wang, et al., 2014).
 
 ## Supported Data Structure
 

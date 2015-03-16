@@ -11,7 +11,8 @@
 #'@param formula \code{formula} or a \code{character} vector of column names (will be expanded to a \code{formula})
 #'@param data data.frame. The original data.
 #'@param hash.size positive integer. The hash size of feature hashing.
-#'@param transpose logical value. Indicating if the transpose should be returned.
+#'@param transpose logical value. Indicating if the transpose should be returned. It affects the space
+#'of the returned object when the dimension is imbalanced. Please see the details.
 #'@param create.mapping logical value. The indicator of whether storing the hash mapping or not.
 #'@param is.dgCMatrix logical value. Indicating if the result is \code{dgCMatrix} or \code{CSCMatrix}
 #'@param signed.hash logical value. Indicating if the hashed value is multipled by random sign.
@@ -39,6 +40,12 @@
 #'  \item \code{type}, one of \code{existence} or \code{count}.
 #'}
 #'The user could explore the behavior via function \code{\link{simulate.split}}.
+#'
+#'The argument \code{transpose} affects the size of the returned object in the following way.
+#'For a \eqn{m \times n} matrix with \eqn{k} non-zero elements, the returned \code{dgCMatrix} requires
+#'\eqn{O(n) + O(k)} space. For details, please check the documentation of 
+#'the \code{\link{dgCMatrix-class}}. Note that the \code{rownames} of the returned \code{dgCMatrix}
+#'is \code{character(0)} so the space complexity does not contain the term \eqn{O(m)}.
 #'
 #'@references 
 #'H. B. McMahan, G. Holt, D. Sculley, et al. "Ad click

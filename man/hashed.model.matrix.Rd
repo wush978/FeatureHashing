@@ -16,7 +16,8 @@ hashed.model.matrix(formula, data, hash.size = 2^18, transpose = FALSE,
 
 \item{hash.size}{positive integer. The hash size of feature hashing.}
 
-\item{transpose}{logical value. Indicating if the transpose should be returned.}
+\item{transpose}{logical value. Indicating if the transpose should be returned. It affects the space
+of the returned object when the dimension is imbalanced. Please see the details.}
 
 \item{create.mapping}{logical value. The indicator of whether storing the hash mapping or not.}
 
@@ -50,6 +51,12 @@ The "split" accepts two parameters:
  \item \code{type}, one of \code{existence} or \code{count}.
 }
 The user could explore the behavior via function \code{\link{simulate.split}}.
+
+The argument \code{transpose} affects the size of the returned object in the following way.
+For a \eqn{m \times n} matrix with \eqn{k} non-zero elements, the returned \code{dgCMatrix} requires
+\eqn{O(n) + O(k)} space. For details, please check the documentation of
+the \code{\link{dgCMatrix-class}}. Note that the \code{rownames} of the returned \code{dgCMatrix}
+is \code{character(0)} so the space complexity does not contain the term \eqn{O(m)}.
 }
 \examples{
 # The following scripts show how to fit a logistic regression

@@ -25,7 +25,7 @@ Original values are stores in the names of the vector.
 \examples{
 data(ipinyou)
 
-m <- hashed.model.matrix(~., ipinyou.train, 2^10, create.mapping = T)
+m <- hashed.model.matrix(~., ipinyou.train, 2^10, create.mapping = TRUE)
 mapping <- hash.mapping(m)
 }
 

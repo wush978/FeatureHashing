@@ -21,10 +21,10 @@
 #'
 #'@export
 hash.mapping <- function(matrix) {
-  ErrorMessage <- "No mapping embedded. Please use create.mapping = T option with hashed.model.matrix function."
+  ErrorMessage <- "No mapping embedded. Please use create.mapping = TRUE option with hashed.model.matrix function."
   
   if(!"mapping" %in% (matrix %>% attributes %>% names)) stop(ErrorMessage)
   mapping <- matrix %>% attr("mapping")
   if(length(mapping) == 0) stop(ErrorMessage)
-  mapping %>% as.list %>% unlist(recursive = F)
+  mapping %>% as.list %>% unlist(recursive = FALSE)
 }

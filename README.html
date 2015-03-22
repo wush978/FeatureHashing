@@ -293,7 +293,7 @@ p.lr &lt;- predict(cv.g.lr, m.test, s=&quot;lambda.min&quot;)
 auc(ipinyou.test$IsClick, p.lr)
 </code></pre>
 
-<pre><code>## [1] 0.5
+<pre><code>## [1] 0.5077
 </code></pre>
 
 <h3>Gradient Boosted Decision Tree with <a href="http://cran.r-project.org/web/packages/xgboost/index.html"><code>xgboost</code></a></h3>
@@ -310,7 +310,7 @@ p.lm &lt;- predict(cv.g.gdbt, m.test)
 glmnet::auc(ipinyou.test$IsClick, p.lm)
 </code></pre>
 
-<pre><code>## [1] 0.6555232
+<pre><code>## [1] 0.6555
 </code></pre>
 
 <h3>Per-Coordinate FTRL-Proximal with \(L_1\) and \(L_2\) Regularization for Logistic Regression</h3>
@@ -325,10 +325,10 @@ ftprl &lt;- update.ftprl(ftprl, m.train, ipinyou.train$IsClick, predict = TRUE)
 auc(ipinyou.train$IsClick, attr(ftprl, &quot;predict&quot;))
 </code></pre>
 
-<pre><code>## [1] 0.5986472
+<pre><code>## [1] 0.5986
 </code></pre>
 
-<p>If we use the same algorithm to predict the click through rate of the 3rd season of iPinYou, the overall AUC will be 0.77 which is comparable to the overall AUC of 3rd season 0.76 reported in (Zhang, Yuan, Wang, et al., 2014).</p>
+<p>If we use the same algorithm to predict the click through rate of the 3rd season of iPinYou, the overall AUC will be 0.77 which is comparable to the overall AUC of the 3rd season 0.76 reported in (Zhang, Yuan, Wang, et al., 2014).</p>
 
 <h2>Supported Data Structure</h2>
 

@@ -32,6 +32,11 @@
 #'mean(duplicated(mapping2 %% size))
 #'
 #'@export
-matrix.size <- function(matrix) {
-   sapply(matrix, function(x) unique(x) %>% length) %>% sum %>% log2 %>% ceiling %>% 2^.
+matrix.size <- function(df) {
+   sapply(df, function(x) unique(x) %>% length) %>% sum %>% log2 %>% ceiling %>% 2^.
 }
+
+# Avoid error messages during CRAN check.
+# The reason is that these variables are never declared
+# They are mainly column names inferred by Data.table...
+globalVariables(c("."))

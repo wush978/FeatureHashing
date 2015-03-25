@@ -20,7 +20,7 @@
 #'#Extract mapping
 #'mapping1 <- hash.mapping(mat1)
 #'#Rate of collision
-#'mean(duplicated(mapping1 %% 2^5))
+#'mean(duplicated(mapping1 %% 2^10))
 #'
 #'#Second try, the size is computed
 #'size <- matrix.size(ipinyou.train)

@@ -4,7 +4,7 @@
 \alias{matrix.size}
 \title{Compute matrix size to avoid collision}
 \usage{
-matrix.size(matrix)
+matrix.size(df)
 }
 \arguments{
 \item{df}{\code{data.frame} with data to hash}

@@ -115,7 +115,7 @@
 #'as(m, "dgCMatrix")
 #'
 #'# Extraction of the dictionary: values with their hash
-#'mapping <- unlist(as.list(attr(m, "mapping")))
+#'mapping <- hash.mapping(m)
 #'
 #'# To check the rate of collisions, we will extract the indices of the hash
 #'# values through the modulo-division method, count how many duplicates 
@@ -150,7 +150,7 @@
 #'# for a, b and c together with their second-order interactions. 
 #'      
 #'# Extract the mapping
-#'mapping2 <- unlist(as.list(attr(m2, "mapping")))
+#'mapping2 <- hash.mapping(m2)
 #'
 #'# Get the hash of combination of two items, PlantQn2 and uptake 
 #'mapping2["PlantQn2:uptake"] # PlantQn2:uptake hash is 974267571
@@ -170,7 +170,7 @@
 #'m <- hashed.model.matrix(~ split(a, delim = ",", type = "existence"):b, df, 2^6,
 #'  create.mapping = TRUE)
 #'# The column `a` is splitted by "," and have an interaction with "b":
-#'mapping <- unlist(as.list(attr(m, "mapping")))
+#'mapping <- hash.mapping(m)
 #'names(mapping)
 #'
 #'@export

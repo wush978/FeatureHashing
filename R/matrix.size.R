@@ -1,4 +1,4 @@
-#'@title Compute matrix size to avoid collision
+#'@title Compute minimum hash size to reduce collision rate
 #'
 #'@importFrom magrittr %>%
 #'
@@ -7,9 +7,26 @@
 #'@return The hash size of feature hashing as a positive integer.
 #'
 #'@details
-#'To avoid collision, the hash size should be equal or superior to 
-#'the nearest power of two to the number of unique values in 
-#'the \code{data.frame}.
+#'To reduce collision rate, the hash size should be 
+#'equal or superior to the nearest power of two to the number
+#'of unique values in the input \code{data.frame}.
+#'
+#'The value computed is a theorical minimum hash size.
+#'It just means that in the best situation it may be 
+#'possible that all computed hash can be stored with
+#'this hash size.
+#'
+#'In real life, there will be some collisions if the computed
+#'size is used. It is because of the way hashing works.
+#'
+#'If you increase the computed size (by multiplying it by \code{2^x}, 
+#'it is up to you to choose a \code{x}), you should reduce the collision rate.
+#'If you use a value under the computed size,
+#'tehre is 100% change there will be some collisions.
+#'
+#'There is a trade-off between collision rate and memory
+#'used to store hash. Machine learning algorithms usually deal
+#'well with collisions when the rate is reasonable.
 #'
 #'@examples
 #'data(ipinyou)
@@ -23,7 +40,7 @@
 #'mean(duplicated(mapping1 %% 2^10))
 #'
 #'#Second try, the size is computed
-#'size <- matrix.size(ipinyou.train)
+#'size <- hash.size(ipinyou.train)
 #'mat2 <- hashed.model.matrix(~., ipinyou.train, size, create.mapping = TRUE)
 #'
 #'#Extract mapping
@@ -32,7 +49,7 @@
 #'mean(duplicated(mapping2 %% size))
 #'
 #'@export
-matrix.size <- function(df) {
+hash.size <- function(df) {
    sapply(df, function(x) unique(x) %>% length) %>% sum %>% log2 %>% ceiling %>% 2^.
 }
 

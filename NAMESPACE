@@ -2,9 +2,9 @@
 
 export(hash.mapping)
 export(hash.sign)
+export(hash.size)
 export(hashed.model.matrix)
 export(hashed.value)
-export(matrix.size)
 import(digest)
 importClassesFrom(Matrix,dgCMatrix)
 importFrom(Rcpp,evalCpp)

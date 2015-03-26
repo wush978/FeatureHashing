@@ -63,6 +63,7 @@
 #'#Rate of collision
 #'mean(duplicated(mapping2))
 #'
+#'@author Michael Benesty
 #'@export
 hash.size <- function(df) {
    sapply(df, function(x) unique(x) %>% length) %>% sum %>% log2 %>% ceiling %>% 2^.

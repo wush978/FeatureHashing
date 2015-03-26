@@ -28,4 +28,7 @@ data(ipinyou)
 m <- hashed.model.matrix(~., ipinyou.train, 2^10, create.mapping = TRUE)
 mapping <- hash.mapping(m)
 }
+\author{
+Michael Benesty
+}
 

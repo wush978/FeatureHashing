@@ -19,6 +19,7 @@
 #'m <- hashed.model.matrix(~., ipinyou.train, 2^10, create.mapping = TRUE)
 #'mapping <- hash.mapping(m)
 #'
+#'@author Michael Benesty
 #'@export
 hash.mapping <- function(matrix) {
   ErrorMessage <- "No mapping embedded. Please use create.mapping = TRUE option with hashed.model.matrix function."

@@ -72,4 +72,7 @@ mapping2 <- hash.mapping(mat2)
 #Rate of collision
 mean(duplicated(mapping2))
 }
+\author{
+Michael Benesty
+}
 

@@ -21,10 +21,11 @@ using namespace Rcpp;
 //'@export
 //[[Rcpp::export]]
 SEXP intToRaw(int src) {
+  RawVector retval(4);
+  uint32_t *p = (uint32_t*) &retval[0];
   #ifdef BOOST_BIG_ENDIAN
-  bswap_32(src);
+  p[0] = bswap_32(src);
   #endif
-  RawVector retval(sizeof(int));
-  memcpy(&retval[0], &src, sizeof(int));
+  p[0] = src;
   return retval;
 }

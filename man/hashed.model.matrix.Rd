@@ -109,12 +109,12 @@ m <- hashed.model.matrix(~ ., CO2, 2^6, create.mapping = TRUE,
 as(m, "dgCMatrix")
 
 # Extraction of the dictionary: values with their hash
-mapping <- unlist(as.list(attr(m, "mapping")))
+mapping <- hash.mapping(m)
 
 # To check the rate of collisions, we will extract the indices of the hash
 # values through the modulo-division method, count how many duplicates
 # we have (in best case it should be zero) and perform a mean.
-mean(duplicated(mapping \%\% 2^6))
+mean(duplicated(mapping))
 
 # The type of the result produced by the function `hashed.model.matrix`
 # is a CSCMatrix. It supports simple subsetting
@@ -130,7 +130,7 @@ vectHash <- hashed.value(names(mapping))
 # the more generation `hashed.model.matrix` function.
 # We will use the Modulo-division method (that's the [\%\% 2^6] below)
 # to find the address in hash table easily.
-all(vectHash \%\% 2^6 == mapping \%\% 2^6)
+stopifnot(all(vectHash \%\% 2^6 + 1 == mapping))
 
 # The sign is corrected by `hash.sign`
 hash.sign(names(mapping))
@@ -144,27 +144,26 @@ m2 <- hashed.model.matrix(~ .^2, CO2, 2^6, create.mapping = TRUE,
 # for a, b and c together with their second-order interactions.
 
 # Extract the mapping
-mapping2 <- unlist(as.list(attr(m2, "mapping")))
+mapping2 <- hash.mapping(m2)
 
 # Get the hash of combination of two items, PlantQn2 and uptake
-mapping2["PlantQn2:uptake"] # PlantQn2:uptake hash is 974267571
+mapping2["PlantQn2:uptake"]
 
 # Extract hash of each item
-h1 <- mapping2["PlantQn2"]
-h2 <- mapping2["uptake"]
+h1 <- hashed.value("PlantQn2")
+h2 <- hashed.value("uptake")
 
 # Computation of hash of both items combined
-library(pack) # convert values from / to raw format
-hashed.value(rawToChar(c(numToRaw(h1, 4), numToRaw(h2, 4))))
-# should be 974267571 == mapping2["PlantQn2:uptake"]
+h3 <- hashed.value(rawToChar(c(intToRaw(h1), intToRaw(h2))))
+stopifnot(h3 \%\% 2^6 + 1 == mapping2["PlantQn2:uptake"])
 
-# The tag-like feature
+# The concatenated feature, i.e. the array<string> type in hive
 data(test.tag)
 df <- data.frame(a = test.tag, b = rnorm(length(test.tag)))
 m <- hashed.model.matrix(~ split(a, delim = ",", type = "existence"):b, df, 2^6,
  create.mapping = TRUE)
 # The column `a` is splitted by "," and have an interaction with "b":
-mapping <- unlist(as.list(attr(m, "mapping")))
+mapping <- hash.mapping(m)
 names(mapping)
 }
 \references{

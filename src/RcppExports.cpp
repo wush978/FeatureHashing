@@ -89,6 +89,17 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// intToRaw
+SEXP intToRaw(int src);
+RcppExport SEXP FeatureHashing_intToRaw(SEXP srcSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< int >::type src(srcSEXP);
+    __result = Rcpp::wrap(intToRaw(src));
+    return __result;
+END_RCPP
+}
 // Xv
 NumericVector Xv(S4 m, NumericVector v, NumericVector retval);
 RcppExport SEXP FeatureHashing_Xv(SEXP mSEXP, SEXP vSEXP, SEXP retvalSEXP) {

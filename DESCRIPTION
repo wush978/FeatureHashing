@@ -3,8 +3,8 @@ Type: Package
 Title: Creates a Model Matrix via Feature Hashing With a Formula Interface
 Version: 0.9
 Date: 2014-08-01
-Authors@R:   as.person(c( "Wush Wu <wush978@gmail.com> [aut, cre]"))
-Author: Wush Wu [aut, cre], Michael Benesty <michael@benesty.fr>
+Authors@R:   as.person(c( "Wush Wu <wush978@gmail.com> [aut, cre]", "Michael Benesty <michael@benesty.fr> [aut]"))
+Author: Wush Wu [aut, cre], Michael Benesty [aut]
 Maintainer: Wush Wu <wush978@gmail.com>
 Description: Feature hashing, also called as the hashing trick, is a method to 
   transform features to vector. Without looking up the indices in an 

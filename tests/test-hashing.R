@@ -1,4 +1,4 @@
-if (require(pack) & require(RUnit)) {
+if (require(RUnit)) {
   library(FeatureHashing)
   
   mapping_value <- structure(c(3789462177, 4122940517, 1079927366, 1505155248, 4103768016, 
@@ -12,8 +12,6 @@ if (require(pack) & require(RUnit)) {
   checkTrue(all(hashed.value(names(mapping_value)) %% 2^32 == mapping_value),
             "Unexpected hashing result by hashed.value")
   
-  m <- hashed.model.matrix(~ ., CO2, hash.size = 2^10, create.mapping = T,
-                           transpose = TRUE, is.dgCMatrix = FALSE)
   m <- hashed.model.matrix(~ ., CO2, hash.size = 2^10, create.mapping = TRUE, transpose = TRUE, is.dgCMatrix = FALSE)
   mapping <- as.list(attr(m, "mapping"))
   checkTrue(all(!duplicated(unlist(mapping) %% 2^10 + 1)),
@@ -44,7 +42,7 @@ if (require(pack) & require(RUnit)) {
   
   m <- hashed.model.matrix(~ .^2, CO2, hash.size = 2^10, create.mapping = TRUE,
                            transpose = TRUE, is.dgCMatrix = FALSE)
-  mapping_value <- as.list(attr(m, "mapping"))
+  mapping_value <- hash.mapping(m)
   
   mapping_value.expected <- structure(list(PlantQc1 = 2636986885, PlantQn1 = 3789462177, 
                            PlantQc2 = 1980993114, PlantQn2 = 4122940517, "PlantMc3:conc" = 3739801583, 
@@ -107,8 +105,9 @@ if (require(pack) & require(RUnit)) {
                                                                      "PlantQc1:uptake", "PlantMn1:uptake", "PlantMc2:TypeMississippi", 
                                                                      "PlantMc1:TypeMississippi", "PlantMn2:TypeMississippi", "PlantMn1:TypeMississippi", 
                                                                      "TypeMississippi"))
+  mapping_value.expected <- unlist(mapping_value.expected) %% 2^10 + 1
   
-  checkTrue(isTRUE(all.equal(mapping_value[names(mapping_value.expected)], mapping_value.expected)),
+  checkTrue(isTRUE(all.equal(mapping_value, unlist(mapping_value.expected, use.names = FALSE))),
             "Unexpected hashing result of interaction term")
   
   m2 <- hashed.model.matrix(~ . ^ 2, data = CO2, hash.size = 32, create.mapping = TRUE,
@@ -118,23 +117,20 @@ if (require(pack) & require(RUnit)) {
   checkTrue(sum(m2 %*% rep(1, ncol(m2)) != 0) > 1,
             "Incorrect hashed matrix created by hashed.model.matrix")
   
-  mapping <- as.list(attr(m2, "mapping"))
-  
+  mapping <- hash.mapping(m2)
+  mapping.raw <- hashed.value(names(mapping))
+  names(mapping.raw) <- names(mapping)
+  is.interaction <- grepl(":", names(mapping), fixed = TRUE)
+  checkTrue(all(mapping[!is.interaction] == mapping.raw[!is.interaction] %% 32 + 1))
   checkTrue(sum(is.na(unlist(lapply(names(mapping), strsplit, "")))) == 0,
             "Non-ascii name occurs!")
   
   for(i in grep(":", names(mapping), fixed = TRUE)) {
     name <- names(mapping)[i]
     key <- strsplit(name, ":")[[1]]
-    input <- unlist(lapply(mapping[key], function(j) {
-      numToRaw(j, 4)
-    }), use.names = FALSE)
+    input <- unlist(lapply(mapping.raw[key], intToRaw), use.names = FALSE)
     r1 <- hashed.value(rawToChar(input))
-    r2 <- mapping[[name]]
-    if (r1 < 0) {
-      r2 <- packBits(rawToBits(numToRaw(r2, 4)), type = "integer")
-    }
-    checkTrue(r1 == r2,
+    checkTrue(r1 %% 32 + 1== mapping[name],
               "The hashing result of interaction is not expected!")
   }
   

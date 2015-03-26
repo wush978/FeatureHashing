@@ -369,6 +369,12 @@ protected:
   CacheTagType cache_tags;
   
   virtual void get_tags(size_t i) = 0;
+  
+  std::vector<std::string> split_tags(const std::string& src) {
+    std::vector<std::string> temp(split(src, delim));
+    temp.erase(std::remove(temp.begin(), temp.end(), ""), temp.end());
+    return temp;
+  }
 
 public:
   
@@ -415,7 +421,7 @@ protected:
       cache_tags.clear();
     } else {
       const char* str = CHAR(STRING_ELT(plevels, src[i] - 1));
-      std::vector<std::string> temp(split(str, delim));
+      std::vector<std::string> temp(split_tags(str));
       cache_splitted.swap(temp);
       cache_tags.clear();
       cache_tags.insert(cache_splitted.begin(), cache_splitted.end());
@@ -447,7 +453,7 @@ protected:
       cache_tags.clear();
     } else {
       const char* str = CHAR(STRING_ELT(psrc, i));
-      std::vector<std::string> temp(split(str, delim));
+      std::vector<std::string> temp(split_tags(str));
       cache_splitted.swap(temp);
       cache_tags.clear();
       cache_tags.insert(cache_splitted.begin(), cache_splitted.end());    
@@ -478,7 +484,7 @@ protected:
       cache_tags.clear();
     } else {
       const char* str = CHAR(STRING_ELT(plevels, src[i] - 1));
-      std::vector<std::string> temp(split(str, delim));
+      std::vector<std::string> temp(split_tags(str));
       cache_tags.swap(temp);
     }
   }
@@ -507,7 +513,7 @@ protected:
       cache_tags.clear();
     } else {
       const char* str = CHAR(STRING_ELT(psrc, i));
-      std::vector<std::string> temp(split(str, delim));
+      std::vector<std::string> temp(split_tags(str));
       cache_tags.swap(temp);
     }
   }

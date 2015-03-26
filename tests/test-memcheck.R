@@ -29,8 +29,9 @@ if (require(RUnit)) {
 1.58683345454085, 0.558486425565304, -1.27659220845804, -0.573265414236886, 
 -1.22461261489836, -0.473400636439312))
   m <- hashed.model.matrix(~ split(a, delim = ",", type = "existence"):b, df, 2^6,
-    create.mapping = TRUE, transpose = TRUE, is.dgCMatrix = FALSE)
-  checkEquals(digest::digest(m@i), "365fda93b4c50de58f047984520f1040")
-  checkEquals(digest::digest(m@p), "ed469d21505d70a703d66ce8f9826c2f")
-  checkEquals(digest::digest(m@x), "b45882f83e05508dc4316f799f1858e6")
+    create.mapping = TRUE, transpose = TRUE, is.dgCMatrix = TRUE)
+  cat(paste(m@i, collapse=","));cat("\n")
+  checkEquals(digest::digest(m@x), "fd23fdd30634b57ebb8f044ff74fa762")
+  checkEquals(digest::digest(m@p), "fea11342d41629d0be3627468a288229")
+  checkEquals(digest::digest(m@i), "2ab394a9ebdf8be046f3da0305d255c8")
 }

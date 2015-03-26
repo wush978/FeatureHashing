@@ -52,7 +52,7 @@
 #'#Extract mapping
 #'mapping1 <- hash.mapping(mat1)
 #'#Rate of collision
-#'mean(duplicated(mapping1 %% 2^10))
+#'mean(duplicated(mapping1))
 #'
 #'#Second try, the size is computed
 #'size <- hash.size(ipinyou.train)
@@ -61,7 +61,7 @@
 #'#Extract mapping
 #'mapping2 <- hash.mapping(mat2)
 #'#Rate of collision
-#'mean(duplicated(mapping2 %% size))
+#'mean(duplicated(mapping2))
 #'
 #'@export
 hash.size <- function(df) {

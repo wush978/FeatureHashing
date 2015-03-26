@@ -2,6 +2,7 @@
 
 export(hash.mapping)
 export(hash.sign)
+export(hash.size)
 export(hashed.model.matrix)
 export(hashed.value)
 export(intToRaw)

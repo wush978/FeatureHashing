@@ -30,7 +30,7 @@ if (require(RUnit)) {
 -1.22461261489836, -0.473400636439312))
   m <- hashed.model.matrix(~ split(a, delim = ",", type = "existence"):b, df, 2^6,
     create.mapping = TRUE, transpose = TRUE, is.dgCMatrix = FALSE)
-  checkEquals(digest::digest(m@i), "b1990ec1a8c79130c497ab2c68909e97")
-  checkEquals(digest::digest(m@p), "1f9c7075abe8f7d15f924f37797ecf4e")
-  checkEquals(digest::digest(m@x), "9e9ea935bb854a7024de9378f64cff1b")
+  checkEquals(digest::digest(m@i), "365fda93b4c50de58f047984520f1040")
+  checkEquals(digest::digest(m@p), "ed469d21505d70a703d66ce8f9826c2f")
+  checkEquals(digest::digest(m@x), "b45882f83e05508dc4316f799f1858e6")
 }

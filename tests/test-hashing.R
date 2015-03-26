@@ -106,8 +106,9 @@ if (require(RUnit)) {
                                                                      "PlantMc1:TypeMississippi", "PlantMn2:TypeMississippi", "PlantMn1:TypeMississippi", 
                                                                      "TypeMississippi"))
   mapping_value.expected <- unlist(mapping_value.expected) %% 2^10 + 1
-  
-  checkTrue(isTRUE(all.equal(mapping_value, unlist(mapping_value.expected, use.names = FALSE))),
+  mapping_value[names(mapping_value.expected)]
+  checkTrue(isTRUE(all.equal(mapping_value[names(mapping_value.expected)], 
+                             mapping_value.expected)),
             "Unexpected hashing result of interaction term")
   
   m2 <- hashed.model.matrix(~ . ^ 2, data = CO2, hash.size = 32, create.mapping = TRUE,

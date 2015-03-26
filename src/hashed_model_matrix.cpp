@@ -153,11 +153,11 @@ public:
       key.append(":");
       key.append(inverse_mapping[src[1]]);
       #endif
-      e[key.c_str()] = wrap(retval);
+      e[key.c_str()] = wrap((int) retval);
       inverse_mapping[retval] = key;
     } 
     else {
-      e[buf] = wrap(retval);
+      e[buf] = wrap((int) retval);
       inverse_mapping[retval] = buf;
     }
     return retval;
@@ -845,6 +845,13 @@ SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size
     retval.slot("Dimnames") = dimnames;
   }
   retval.slot("factors") = List();
+  {
+    CharacterVector key(e.ls(true));
+    std::for_each(key.begin(), key.end(), [&e, &hash_size](const char* s) {
+      uint32_t *p = (uint32_t*) INTEGER(e[s]);
+      p[0] = p[0] % hash_size;
+    });
+  }
   retval.attr("mapping") = e;
   return retval;
 }

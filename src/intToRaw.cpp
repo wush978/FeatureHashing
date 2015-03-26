@@ -25,7 +25,8 @@ SEXP intToRaw(int src) {
   uint32_t *p = (uint32_t*) &retval[0];
   #ifdef BOOST_BIG_ENDIAN
   p[0] = bswap_32(src);
-  #endif
+  #else
   p[0] = src;
+  #endif
   return retval;
 }

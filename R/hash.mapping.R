@@ -26,5 +26,5 @@ hash.mapping <- function(matrix) {
   if(!"mapping" %in% (matrix %>% attributes %>% names)) stop(ErrorMessage)
   mapping <- matrix %>% attr("mapping")
   if(length(mapping) == 0) stop(ErrorMessage)
-  mapping %>% as.list %>% unlist(recursive = FALSE)
+  mapping %>% as.list %>% unlist(recursive = FALSE) %>% `+`(1)
 }

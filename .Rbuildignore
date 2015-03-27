@@ -7,5 +7,6 @@ FeatureHashing.Rproj
 README.Rmd
 README.html
 README.bib
+vignette/*.html
 ^.*\.Rproj$
 ^\.Rproj\.user$

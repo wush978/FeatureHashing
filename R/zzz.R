@@ -10,14 +10,14 @@
 The default behavior of the hashed.model.matrix is changed:
     - The default output is converted to dgCMatrix.
     - The default value of `transpose` is FALSE.
-    - The `split` function ignores the empty string now. It might make the result matrix different.
-The name of the arguments of the hashed.model.matrix is also changed:
-    - hash_size becomes hash.size.
-    - is.mapping becomes create.mapping.
-    - There is a new argument named signed.hash to disable the binary hash function.
+    - The `split`(the `tag` function in previous version) function ignores the empty string now. 
+      It might make a different matrix compared to the previous version.
+The arguments of the hashed.model.matrix is also changed:
     - The `tag` special function in the formula is renamed to `split`. 
-      The name of the argument is also changed.
-      Please check the manual.
+      The name of the argument of `split` is also changed. Please check the manual.
+    - `hash_size` becomes `hash.size`.
+    - `is.mapping` becomes `create.mapping`.
+    - There is a new argument named `signed.hash` to disable the binary hash function.
 "
 )
   }

@@ -13,7 +13,8 @@ For the details of the dataset, please read the Zhang, Yuan, Wang, et al. (2014)
 
 \code{Adid}, the advertiser id.
 
-\code{UserTag}, the user tags (segments) in iPinYou's proprietary audience database}
+\code{UserTag}, the user tags (segments) in iPinYou's proprietary audience database.
+This is also a real example of the concatenated feature.}
 \source{
 \url{http://data.computational-advertising.org/}
 }
@@ -21,8 +22,7 @@ For the details of the dataset, please read the Zhang, Yuan, Wang, et al. (2014)
 data(ipinyou)
 }
 \description{
-This is a sample from the iPinYou dataset which
-has a benchmark of benchmark by Zhang, Yuan, Wang, et al. (2014).
+This is a sample from the iPinYou Real-Time Bidding dataset.
 The data.frame named \code{ipinyou.train} is a sample from the data of 2013-10-19 and
 the data.frame named \code{ipinyou.test} is a sample from the  data of 2013-10-20.
 }

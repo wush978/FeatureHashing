@@ -32,7 +32,7 @@ This will reduce the impact of collision. Disable it will enhance the speed.}
 Create a model matrix with feature hashing
 }
 \details{
-The \code{hashed.model.matrix} hashes the feature automatically during
+The \code{hashed.model.matrix} hashes the feature during
 the construction of the model matrix. It uses the 32-bit variant of MurmurHash3
 \url{https://code.google.com/p/smhasher/wiki/MurmurHash3}. Weinberger
 et. al. (2009) used two separate hashing function \eqn{h}(\code{hashed.value}) and
@@ -42,12 +42,13 @@ respectively. Different seeds are used to implement the hashing function
 
 The formula is parsed via \code{\link{terms.formula}} with "split" as special
 keyword. The interaction term is hashed in different ways. Please see example for
-the detailed implementation. The "split" is used to expand the concatenated feature
-such as "1,27,19,25,tp,tw" which represents the occurrence of multiple categorical
-variable. The \code{hashed.model.matrix} will expand the concatenated feature and produce
+the detailed implementation. The "\code{split}" is used to expand the concatenated feature
+such as "10129,10024,13866,10111,10146,10120,10115,10063" which represents the occurrence of
+multiple categorical variable: "10129", "10024", "13866", "10111", "10146", "10120", "10115", and
+"10063". The \code{hashed.model.matrix} will expand the concatenated feature and produce
 the related model matrix.
 
-The "split" accepts two parameters:
+The "\code{split}" accepts two parameters:
 \itemize{
  \item \code{delim}, character value to use as delimiter for splitting.
  \item \code{type}, one of \code{existence} or \code{count}.
@@ -64,10 +65,9 @@ The \code{mapping} created by enabling \code{create.mapping} might miss the inte
 involves \code{split}ed features. For example, suppose there are two columns \code{a} and \code{b}
 while the value are 1 and 1,2,3 respectively. The user marks the column \code{b} with
 \code{split}. If the hashed value of \code{b1} and \code{b2} are collided, then the interaction
-\code{a1:b1} will not appear in the returned mapping table.
-
-This package is originally designed for predictive analysis and the mapping should not play an
-important role of predictive analysis. If you have a test case and want to ask us to fix it,
+\code{a1:b1} will not appear in the returned mapping table. Because this package is originally
+designed for predictive analysis and the mapping should not play an
+important role of predictive analysis. If you have a test case and want to ask us to fix this,
 please provide us a test case in \url{https://github.com/wush978/FeatureHashing/issues/67}.
 }
 \examples{

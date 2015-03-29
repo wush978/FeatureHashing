@@ -7,13 +7,13 @@ Authors@R:   c(
   person("Wush", "Wu", email = "wush978@gmail.com", role = c("aut", "cre")), 
   person("Michael", "Benesty", email = "michael@benesty.fr", role = c("aut", "ctb")))
 Maintainer: Wush Wu <wush978@gmail.com>
-Description: Feature hashing, also called as the hashing trick, is a method to 
-  transform features to numeric vectors. Without looking up the indices in an 
-  associative array, it applies a hash function to the features and uses their 
-  hash values as indices directly. The method of feature hashing in this package
-  was proposed in Weinberger et al. (2009). The hashing algorithm is the murmurhash3 
-  from the digest package. Please see the README in https://github.com/wush978/FeatureHashing 
-  for more information.
+Description: Feature hashing, also called as the hashing trick, is a method to transform 
+  features of a instance to a vector. Thus, it is a method to transform a real dataset to a matrix. 
+  Without looking up the indices in an associative array, 
+  it applies a hash function to the features and uses their hash values as indices directly.
+  The method of feature hashing in this package was proposed in Weinberger et al. (2009). 
+  The hashing algorithm is the murmurhash3 from the digest package. 
+  Please see the README in https://github.com/wush978/FeatureHashing for more information.
 License: GPL(>= 3) | file LICENSE
 Depends: 
   R (>= 3.1),

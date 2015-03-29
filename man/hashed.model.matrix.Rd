@@ -19,7 +19,9 @@ hashed.model.matrix(formula, data, hash.size = 2^18, transpose = FALSE,
 \item{transpose}{logical value. Indicating if the transpose should be returned. It affects the space
 of the returned object when the dimension is imbalanced. Please see the details.}
 
-\item{create.mapping}{logical value. The indicator of whether storing the hash mapping or not.}
+\item{create.mapping}{logical value. The indicator of whether storing the hash mapping or not.
+The mapping might miss some interaction terms which involves \code{split}ed features.
+Please see the details.}
 
 \item{is.dgCMatrix}{logical value. Indicating if the result is \code{dgCMatrix} or \code{CSCMatrix}}
 
@@ -57,6 +59,16 @@ For a \eqn{m \times n} matrix with \eqn{k} non-zero elements, the returned \code
 \eqn{O(n) + O(k)} space. For details, please check the documentation of
 the \code{\link{dgCMatrix-class}}. Note that the \code{rownames} of the returned \code{dgCMatrix}
 is \code{character(0)} so the space complexity does not contain the term \eqn{O(m)}.
+
+The \code{mapping} created by enabling \code{create.mapping} might miss the interaction term which
+involves \code{split}ed features. For example, suppose there are two columns \code{a} and \code{b}
+while the value are 1 and 1,2,3 respectively. The user marks the column \code{b} with
+\code{split}. If the hashed value of \code{b1} and \code{b2} are collided, then the interaction
+\code{a1:b1} will not appear in the returned mapping table.
+
+This package is originally designed for predictive analysis and the mapping should not play an
+important role of predictive analysis. If you have a test case and want to ask us to fix it,
+please provide us a test case in \url{https://github.com/wush978/FeatureHashing/issues/67}.
 }
 \examples{
 # The following scripts show how to fit a logistic regression

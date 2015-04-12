@@ -1,7 +1,7 @@
 Package: FeatureHashing
 Type: Package
 Title: Creates a Model Matrix via Feature Hashing with a Formula Interface
-Version: 0.9
+Version: 0.9.1
 Date: 2015-03-29
 Authors@R:   c(
   person("Wush", "Wu", email = "wush978@gmail.com", role = c("aut", "cre")), 
@@ -24,7 +24,8 @@ Imports:
   digest(>= 0.6.8),
   magrittr (>= 1.5)
 LinkingTo: Rcpp, digest(>= 0.6.8), BH
-Suggests: RUnit
+Suggests: RUnit, glmnet, knitr, xgboost
 SystemRequirements: C++11
 BugReports: https://github.com/wush978/FeatureHashing/issues
 URL: https://github.com/wush978/FeatureHashing
+VignetteBuilder: knitr

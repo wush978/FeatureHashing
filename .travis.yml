@@ -8,6 +8,7 @@ before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
+  - ./travis-tool.sh install_github dmlc/xgboost/R-package
  # - ./travis-tool.sh r_binary_install
 install:
   - ./travis-tool.sh install_deps
@@ -21,3 +22,5 @@ env:
     - WARNINGS_ARE_ERRORS=1
     - _R_CHECK_FORCE_SUGGESTS_=0
     - BOOTSTRAP_LATEX=1
+    - R_BUILD_ARGS="--no-manual"
+    - R_CHECK_ARGS="--no-manual --as-cran"

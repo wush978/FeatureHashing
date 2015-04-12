@@ -6,7 +6,7 @@ output:
     number_sections: yes
     toc: yes
 bibliography: FeatureHashing.bib
-author: Wush Wu and Michaël Benesty
+author: Wush Wu and Michael Benesty
 vignette: >
   %\VignetteIndexEntry{FeatureHashing}
   %\VignetteEngine{knitr::rmarkdown}

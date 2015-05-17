@@ -1,6 +1,10 @@
 FeatureHashing
 ==============
 
+[![Travis-ci Status](https://travis-ci.org/wush978/FeatureHashing.svg)](https://travis-ci.org/wush978/FeatureHashing)
+[![Coverage Status](https://img.shields.io/coveralls/wush978/FeatureHashing.svg)](https://coveralls.io/r/wush978/FeatureHashing?branch=master)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/FeatureHashing)](http://cran.r-project.org/web/packages/FeatureHashing)
+
 Implement feature hashing with R
 
 
@@ -96,7 +100,7 @@ auc(ipinyou.test$IsClick, p.lr)
 ```
 
 ```
-## [1] 0.5077
+## [1] 0.5200747
 ```
 
 ### Gradient Boosted Decision Tree with [`xgboost`](http://cran.r-project.org/web/packages/xgboost/index.html)
@@ -116,7 +120,7 @@ glmnet::auc(ipinyou.test$IsClick, p.lm)
 ```
 
 ```
-## [1] 0.6555
+## [1] 0.6555232
 ```
 
 
@@ -136,7 +140,7 @@ auc(ipinyou.train$IsClick, attr(ftprl, "predict"))
 ```
 
 ```
-## [1] 0.5986
+## [1] 0.5986472
 ```
 
 If we use the same algorithm to predict the click through rate of the 3rd season of iPinYou, the overall AUC will be 0.77 which is comparable to the overall AUC of the 3rd season 0.76 reported in (Zhang, Yuan, Wang, et al., 2014).

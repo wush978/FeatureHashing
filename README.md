@@ -4,6 +4,7 @@ FeatureHashing
 [![Travis-ci Status](https://travis-ci.org/wush978/FeatureHashing.svg)](https://travis-ci.org/wush978/FeatureHashing)
 [![Coverage Status](https://img.shields.io/coveralls/wush978/FeatureHashing.svg)](https://coveralls.io/r/wush978/FeatureHashing?branch=master)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/FeatureHashing)](http://cran.r-project.org/web/packages/FeatureHashing)
+[![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/FeatureHashing)](https://github.com/metacran/cranlogs.app)
 
 Implement feature hashing with R
 

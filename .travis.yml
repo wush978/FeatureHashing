@@ -9,10 +9,14 @@ before_install:
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
   - ./travis-tool.sh install_github dmlc/xgboost/R-package
+  - ./travis-tool.sh install_github jimhester/robustr
+  - ./travis-tool.sh install_github jimhester/covr
  # - ./travis-tool.sh r_binary_install
 install:
   - ./travis-tool.sh install_deps
   # Install testthat after running install_deps, otherwise devtools itself might be installed from CRAN or c2d4u
+after_success:
+  - Rscript -e 'library(covr); coveralls()'
 notifications:
   email:
     on_success: change

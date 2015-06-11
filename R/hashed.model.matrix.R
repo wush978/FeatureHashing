@@ -6,6 +6,9 @@
 #'@importFrom magrittr %<>%
 #'@importFrom methods new
 #'@importFrom methods checkAtAssignment
+#'@importFrom Matrix colSums
+#'@importFrom Matrix colSums
+#'
 #'@importClassesFrom Matrix dgCMatrix
 #'
 #'@param formula \code{formula} or a \code{character} vector of column names (will be expanded to a \code{formula})
@@ -198,6 +201,14 @@ hashed.model.matrix <- function(formula, data, hash.size = 2^18, transpose = FAL
   
   if(class(formula) == "character") formula %<>% paste(collapse = " + ") %>% paste("~", .) %>% as.formula
   
+  tf.idf.string <- "type = \"tf-idf\""
+  
+  tf.idf <- as.character(formula) %>% grep(tf.idf.string, .) %>% sum > 1
+  
+  if(tf.idf){
+    if(signed.hash) stop("If you use tf-idf, parameter signed.hash should be set to FALSE.")
+    formula <- as.character(formula) %>% gsub(pattern = tf.idf.string, replacement = "type = \"count\"", x = .) %>% paste0(collapse = " ") %>% as.formula
+  }
   
   tf <- terms.formula(formula, data = data, specials = "split")
   retval <- new(.CSCMatrix)
@@ -209,8 +220,8 @@ hashed.model.matrix <- function(formula, data, hash.size = 2^18, transpose = FAL
     for(name in setdiff(names(attributes(retval)), names(attributes(retval2)))) {
       attr(retval2, name) <- attr(retval, name)
     }
-    retval2
-  } else retval
+    if (tf.idf) tf.idf.transfo(retval2) else retval2
+  } else if (tf.idf) tf.idf.transfo(retval) else retval
 }
 
 # This is the function called from C to parse the \code{split} function.
@@ -237,6 +248,11 @@ parse_split <- function(text) {
     }
     list(reference_name = reference_name, delim = delim, type = type)
   }, finally = {options(keep.source = origin.keep.source)})
+}
+
+tf.idf.transfo <- function(hash.matrix){
+  idf.train <- log(nrow(hash.matrix)/Matrix::colSums(hash.matrix)) %>% Diagonal(x = .)
+  hash.matrix %*% idf.train
 }
 
 # Avoid error messages during CRAN check.

@@ -7,7 +7,7 @@
 #'@importFrom methods new
 #'@importFrom methods checkAtAssignment
 #'@importFrom Matrix colSums
-#'@importFrom Matrix colSums
+#'@importFrom Matrix Diagonal
 #'
 #'@importClassesFrom Matrix dgCMatrix
 #'
@@ -254,7 +254,7 @@ parse_split <- function(text) {
 }
 
 tf.idf.transfo <- function(hash.matrix){
-  idf.train <- log(nrow(hash.matrix)/Matrix::colSums(hash.matrix)) %>% Diagonal(x = .)
+  idf.train <- log(nrow(hash.matrix)/Matrix::colSums(hash.matrix)) %>% Matrix::Diagonal(x = .)
   hash.matrix %*% idf.train
 }
 

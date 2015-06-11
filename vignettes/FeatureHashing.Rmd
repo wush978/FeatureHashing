@@ -101,13 +101,13 @@ Following the script above,
 
 ```{r xgboost}
 # GBDT with xgboost
+if(require("xgboost")){
+  cv.g.gdbt <- xgboost(m.train, ipinyou.train$IsClick, max.depth=7, eta=0.1, subsample = 0.7, colsample_bytree = 0.7,
+    nround = 100, objective = "binary:logistic", verbose = ifelse(interactive(), 1, 0))
+  p.lm <- predict(cv.g.gdbt, m.test)
+  glmnet::auc(ipinyou.test$IsClick, p.lm)  
+}
 
-library(xgboost)
-
-cv.g.gdbt <- xgboost(m.train, ipinyou.train$IsClick, max.depth=7, eta=0.1,
-  nround = 100, objective = "binary:logistic", verbose = ifelse(interactive(), 1, 0))
-p.lm <- predict(cv.g.gdbt, m.test)
-glmnet::auc(ipinyou.test$IsClick, p.lm)
 ```
 
 

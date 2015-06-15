@@ -12,6 +12,7 @@ before_install:
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
   - ./travis-tool.sh install_github dmlc/xgboost/R-package
+  - Rscript -e "install.packages('rmarkdown')"
   - ./travis-tool.sh install_github jimhester/robustr
   - ./travis-tool.sh install_github jimhester/covr
   - sudo apt-get install cabal-install && cabal update && cabal install pandoc pandoc-citeproc

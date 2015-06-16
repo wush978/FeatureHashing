@@ -254,7 +254,7 @@ parse_split <- function(text) {
 }
 
 tf.idf.transfo <- function(hash.matrix){
-  idf.train <- log(nrow(hash.matrix)/Matrix::colSums(hash.matrix)) %>% Matrix::Diagonal(x = .)
+  idf.train <- log(nrow(hash.matrix)/colSums(hash.matrix)) %>% Diagonal(x = .)
   hash.matrix %*% idf.train
 }
 

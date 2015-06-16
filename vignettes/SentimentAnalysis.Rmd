@@ -44,7 +44,7 @@ First we read the training data and perform some simple text cleaning using gsub
 
 
 ```r
-imdb <- read.delim("/home/geantvert/Downloads/labeledTrainData.tsv", quote = "", as.is = T)
+imdb <- read.delim("Data/labeledTrainData.tsv", quote = "", as.is = T)
 imdb$review <- tolower(gsub("[^[:alnum:] ]", " ", imdb$review))
 ```
 

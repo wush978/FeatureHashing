@@ -44,7 +44,7 @@ First we read the training data and perform some simple text cleaning using gsub
 
 
 ```r
-imdb <- read.delim("Data/labeledTrainData.tsv", quote = "", as.is = T)
+imdb <- read.delim("/home/geantvert/Downloads/labeledTrainData.tsv", quote = "", as.is = T)
 imdb$review <- tolower(gsub("[^[:alnum:] ]", " ", imdb$review))
 ```
 
@@ -114,16 +114,16 @@ m1 <- xgb.train(booster = "gblinear", nrounds = 10, eta = 0.02,
 ```
 
 ```
-## [0]  train-error:0.075450    valid-error:0.146000
-## [1]  train-error:0.064400    valid-error:0.141200
-## [2]  train-error:0.055200    valid-error:0.136600
-## [3]  train-error:0.048050    valid-error:0.133600
-## [4]  train-error:0.042300    valid-error:0.129200
-## [5]  train-error:0.037150    valid-error:0.127800
-## [6]  train-error:0.033250    valid-error:0.126400
-## [7]  train-error:0.030300    valid-error:0.125400
-## [8]  train-error:0.026950    valid-error:0.123600
-## [9]  train-error:0.024450    valid-error:0.122600
+## [0]  train-error:0.070650    valid-error:0.145200
+## [1]  train-error:0.060400    valid-error:0.137200
+## [2]  train-error:0.053250    valid-error:0.130000
+## [3]  train-error:0.047400    valid-error:0.125400
+## [4]  train-error:0.041800    valid-error:0.122600
+## [5]  train-error:0.036750    valid-error:0.121200
+## [6]  train-error:0.032800    valid-error:0.119000
+## [7]  train-error:0.029300    valid-error:0.117200
+## [8]  train-error:0.026500    valid-error:0.115600
+## [9]  train-error:0.024000    valid-error:0.114200
 ```
 
 That code chunk runs in just a few seconds and the validation error is already down to a reasonable 12%. So FeatureHashing has kept our memory requirement to about 50MB and XGBoost's efficient approach to logistic regression has ensured we can get rapid feedback on the performance of the classifier.
@@ -139,16 +139,16 @@ m2 <- xgb.train(data = dtrain, nrounds = 10, eta = 0.02,
 ```
 
 ```
-## [0]  train-error:0.356250    valid-error:0.386800
-## [1]  train-error:0.301650    valid-error:0.346000
-## [2]  train-error:0.266350    valid-error:0.309400
-## [3]  train-error:0.246100    valid-error:0.299600
-## [4]  train-error:0.238600    valid-error:0.286000
-## [5]  train-error:0.213800    valid-error:0.256200
-## [6]  train-error:0.209600    valid-error:0.255200
-## [7]  train-error:0.201550    valid-error:0.247600
-## [8]  train-error:0.192400    valid-error:0.239600
-## [9]  train-error:0.182600    valid-error:0.227800
+## [0]  train-error:0.386600    valid-error:0.415600
+## [1]  train-error:0.301200    valid-error:0.347200
+## [2]  train-error:0.272550    valid-error:0.316200
+## [3]  train-error:0.245400    valid-error:0.288000
+## [4]  train-error:0.219400    valid-error:0.269800
+## [5]  train-error:0.204200    valid-error:0.258400
+## [6]  train-error:0.196550    valid-error:0.243200
+## [7]  train-error:0.181250    valid-error:0.241800
+## [8]  train-error:0.174900    valid-error:0.239400
+## [9]  train-error:0.176650    valid-error:0.236600
 ```
 
 The above demonstration deliberately omits steps such as model tuning but hopefully it illustrates a useful workflow that makes the most of the FeatureHashing and XGBoost packages. 

@@ -17,6 +17,8 @@
  */
 
 #include <cstring>
+#include <deque>
+#include <boost/algorithm/string.hpp>
 #include <Rcpp.h>
 #include "digestlocal.h"
 using namespace Rcpp;
@@ -43,6 +45,42 @@ IntegerVector h(CharacterVector src) {
     const char* str = CHAR(src[i]);
     if (::strcmp("(Intercept)", str) == 0) continue;
     retval[i] = PMurHash32(MURMURHASH3_H_SEED, str, ::strlen(str));
+  }
+  return retval;
+}
+
+MH_UINT32 interaction(MH_UINT32 a, MH_UINT32 b) {
+  MH_UINT32 buf[2];
+#ifdef BOOST_BIG_ENDIAN
+  buf[0] = bswap_32(a);
+  buf[1] = bswap_32(b);
+#else
+  buf[0] = a;
+  buf[1] = b;
+#endif
+  return PMurHash32(MURMURHASH3_H_SEED, reinterpret_cast<char*>(buf), sizeof(MH_UINT32) * 2);
+}
+
+//'@export hashed.interaction.value
+//[[Rcpp::export("hashed.interaction.value")]]
+IntegerVector h2(CharacterVector src) {
+  IntegerVector retval(src.size(), 0);
+  std::vector<std::string> tokens;
+  std::deque<MH_UINT32> values;
+  for(int i = 0;i < src.size();i++) {
+    const char* str = CHAR(src[i]);
+    boost::split(tokens, str, boost::is_any_of(":"));
+    values.resize(tokens.size());
+    for(int j = 0;j < tokens.size();j++) {
+      values[j] = PMurHash32(MURMURHASH3_H_SEED, tokens[j].c_str(), tokens[j].size());
+    }
+    MH_UINT32 value = values[0];
+    values.pop_front();
+    while(values.size() > 0) {
+      value = interaction(value, values[0]);
+      values.pop_front();
+    }
+    retval[i] = value;
   }
   return retval;
 }

@@ -17,6 +17,10 @@ tomatrix <- function(m) {
     .Call('FeatureHashing_tomatrix', PACKAGE = 'FeatureHashing', m)
 }
 
+.hashed.model.matrix.dataframe <- function(tf, data, hash_size, transpose, retval, keep_hashing_mapping, is_xi) {
+    .Call('FeatureHashing_hashed_model_matrix_dataframe', PACKAGE = 'FeatureHashing', tf, data, hash_size, transpose, retval, keep_hashing_mapping, is_xi)
+}
+
 #'@export hash.sign
 hash.sign <- function(src) {
     .Call('FeatureHashing_xi', PACKAGE = 'FeatureHashing', src)
@@ -27,8 +31,9 @@ hashed.value <- function(src) {
     .Call('FeatureHashing_h', PACKAGE = 'FeatureHashing', src)
 }
 
-.hashed.model.matrix.dataframe <- function(tf, data, hash_size, transpose, retval, keep_hashing_mapping, is_xi) {
-    .Call('FeatureHashing_hashed_model_matrix_dataframe', PACKAGE = 'FeatureHashing', tf, data, hash_size, transpose, retval, keep_hashing_mapping, is_xi)
+#'@export hashed.interaction.value
+hashed.interaction.value <- function(src) {
+    .Call('FeatureHashing_h2', PACKAGE = 'FeatureHashing', src)
 }
 
 #'@title Convert the integer to raw vector with endian correction

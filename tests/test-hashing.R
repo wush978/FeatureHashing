@@ -141,4 +141,10 @@ if (require(RUnit)) {
     if (class(e)[1] != "std::invalid_argument") stop(e)
     if (conditionMessage(e) != "Failed to find the column:PlAnT") stop(e)
   })
+  
+  m <- hashed.model.matrix(~ Plant:Type:Treatment, CO2, create.mapping = TRUE)
+  map <- hash.mapping(m)
+  map <- map[grepl("\\w+:\\w+:\\w+", names(map))]
+  checkTrue(all(hashed.interaction.value(names(map)) %% (2^18) + 1== map),
+            "The hashed.interaction.value gives inconsistent result of hashed.model.matrix")
 }

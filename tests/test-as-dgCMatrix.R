@@ -48,15 +48,21 @@ if (require(RUnit)) {
                             transpose = TRUE, is.dgCMatrix = FALSE)
   
   m5 <- as(m4, "dgCMatrix")
+  m6 <- hashed.model.matrix(~ ., data = CO2, hash.size = 2^4,
+                            transpose = TRUE)
   invisible(capture.output(print(m5)))
   stopifnot(isTRUE(all.equal(dim(m4), dim(m5))))
   stopifnot(isTRUE(all.equal(sum(m4@x), sum(m5@x))))
+  stopifnot(isTRUE(all.equal(dim(m4), dim(m6))))
+  stopifnot(isTRUE(all.equal(sum(m4@x), sum(m6@x))))
   for(i in seq_len(dim(m4)[2])) {
     e1 <- numeric(dim(m4)[2])
     e1[i] <- 1.0
     r4 <- m4 %*% e1
     r5 <- as.vector(m5 %*% e1)
+    r6 <- as.vector(m6 %*% e1)
     stopifnot(isTRUE(all.equal(r4, r5)))
+    stopifnot(isTRUE(all.equal(r4, r6)))
   }
   
   for(i in seq_len(dim(m4)[1])) {
@@ -64,6 +70,8 @@ if (require(RUnit)) {
     e1[i] <- 1.0
     r4 <- e1 %*% m4
     r5 <- as.vector(e1 %*% m5)
+    r6 <- as.vector(e1 %*% m6)
     stopifnot(isTRUE(all.equal(r4, r5)))
+    stopifnot(isTRUE(all.equal(r4, r6)))
   }
 }

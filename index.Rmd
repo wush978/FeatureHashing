@@ -15,414 +15,182 @@ knit        : slidify::knit2slides
 suppressPackageStartupMessages({
   library(knitr)
   library(ggplot2)
-})
-opts_chunk$set(echo = FALSE, cache = FALSE)
-```
-
-## Outline
-
-1. Feature Vectorization in R
-1. Distributed Feature Vectorization in R
-1. Handling New Feature
-1. Feature Hashing
-1. Linear Regression with Feature Hashing
-1. Logistic Regression with Feature Hashing
-1. Gradient Boosted Decision Tree with Feature Hashing
-
---- .segue .dark
-
-## Feature Vectorization in R with Formula
-
---- &vcenter .largecontent
-
-## Feature Vectorization
-
-- Lots of machine learning algorithm involves numerical matrix
-    - Linear Regression
-    - Logistic Regression
-    - Support Vector Machine
-    - Decision Tree
-
---- &vcenter .largecontent
-
-## Linear Regression
-
-[source](http://stackoverflow.com/questions/7549694/ggplot2-adding-regression-line-equation-and-r2-on-graph)
-
-```{r, cache = TRUE}
-df <- data.frame(x = c(1:100))
-df$y <- 2 + 3 * df$x + rnorm(100, sd = 40)
-p <- ggplot(data = df, aes(x = x, y = y)) +
-            geom_smooth(method = "lm", se=FALSE, color="black", formula = y ~ x) +
-            geom_point()
-lm_eqn = function(df){
-    m = lm(y ~ x, df);
-    eq <- substitute(italic(y) == a + b %.% italic(x)*","~~italic(r)^2~"="~r2, 
-         list(a = format(coef(m)[1], digits = 2), 
-              b = format(coef(m)[2], digits = 2), 
-             r2 = format(summary(m)$r.squared, digits = 3)))
-    as.character(as.expression(eq));                 
-}
-g <- lm(y ~ ., df)
-p + geom_text(aes(x = 25, y = 300, label = lm_eqn(df)), parse = TRUE)
-```
-
---- &vcenter .largecontent
-
-## Linear Regression
-
-- Fitting
-
-$$X_1 = \begin{bmatrix}
-1 & 1\\
-1 & 2\\
-1 & 3\\
-\vdots \end{bmatrix},
-y = \begin{bmatrix}
-`r df$y[1]`\\
-`r df$y[2]`\\
-`r df$y[3]`\\
-\vdots \end{bmatrix}$$
-
-$$\hat{\beta} = \begin{bmatrix}
-`r format(coef(g)[1], digits = 2)`\\
-`r format(coef(g)[2], digits = 2)` \end{bmatrix}
-= (X_1^T X_1)^{-1}X_1 y$$
-
---- &vcenter .largecontent
-
-## Linear Regression
-
-- Predicting
-
-$$X_2 \hat{\beta}$$
-
---- &vcenter .largecontent
-
-## IPinYou Dataset
-
-- A Competition of Real Time Bidding in 2013
-
-<http://data.computational-advertising.org/>
-
-```{r load_ipinyou, echo=FALSE, results='asis', cache=TRUE}
-suppressPackageStartupMessages({
-  library(bit64)
-  library(data.table)
-  library(magrittr)
   library(xtable)
 })
-suppressWarnings({
-  imp.20130606 <- fread("imp.20130606.part.txt", sep = "\t", select = c(2, 6, 24), colClasses = "character") %>% `colnames<-`(c("time", "ip", "usertag")) %>% `[`(2:6)
-  imp.20130607 <- fread("imp.20130607.part.txt", sep = "\t", select = c(2, 6, 24), colClasses = "character") %>% `colnames<-`(c("time", "ip", "usertag")) %>% `[`(2:4)
-})
-print.xtable(xtable(imp.20130606), type = "html")
+opts_chunk$set(echo = FALSE, cache = FALSE)
+fig <- function(path, size = 100, style = NULL) {
+  if (is.null(style)) sprintf('<img src="assets/img/%s" style="max-height: %d%%; max-width: %d%%;"/>', path, size, size)
+  else sprintf('<img src="assets/img/%s" style="%s"/>', path, style)
+}
+center_fig <- function(path, size = 100, style = NULL) {
+  sprintf('<center>%s</center>', fig(path, size, style))
+}
 ```
 
---- &vcenter .largecontent
+## Wush, Co-founder of Taiwan R User Group
 
-## Model Matrix
+`r center_fig("farmer.jpg")`
 
-```{r model.matrix.echo1, echo=TRUE, eval=FALSE}
-m1 <- model.matrix(~ ip, imp.20130606)
-```
+--- &twocol
 
-```{r model.matrix1, echo=FALSE, dependson="load_ipinyou", results='asis'}
-library(xtable)
-print.xtable(xtable(model.matrix(~ ip, imp.20130606), digits = 0), type = "html")
-```
-
---- &vcenter .largecontent
-
-## Formula
-
-- Formula provides a convenient interface of vetorizing features
-    - `~ ip`
-    - `~ ip * weekday` = `~ ip+weekday+ip:weekday`
-    - `~ .`
-- Formula interfaces let us easily automate feature selection procedure (danger zone)
-    - `step(object, scope)`, use the formula to define the testing area of possible combination of features.
-    - We can write our own feature selection procedure like `step`.
-
---- &vcenter .largecontent
-
-## Model Matrix
-
-```{r model.matrix.echo2, echo=TRUE, eval=FALSE}
-m2 <- model.matrix(~ ip, imp.20130607)
-```
-
-```{r model.matrix2, echo=FALSE, dependson="load_ipinyou", results='asis'}
-library(xtable)
-print.xtable(xtable(model.matrix(~ ip, imp.20130607), digits = 0), type = "html")
-```
-
---- &vcenter .largecontent
-
-## Model Matrix
-
-- `m1` has 5 columns
-- `m2` has 3 columns
-
-### Synchronization is required!
-
---- &vcenter .largecontent
-
-## Factor
-
-```{r factor, dependson="load_ipinyou"}
-ip <- factor(c(imp.20130606$ip, imp.20130607$ip))
-```
-
-- We usually load *all* data and use the `factor` to build a mapping
-    - `levels(ip)[1]` ==> 1, `levels(ip)[2]` ==> 2, ...
-
---- &vcenter .largecontent
-
-## Contrasts
-
-```{r contrasts, dependson="factor", results='asis'}
-print.xtable(xtable(contrasts(ip), digits = 0), type = "html")
-```
-
---- .segue .dark
-
-## If we are processing Big Data...
-
---- &vcenter .largecontent
-
-## Factor requires...
-
-- The information of *all* possible values...
-
---- &vcenter .largecontent
-
-## For Big Data ...
-
-- Data Stream
-- Distributed System
-
---- &vcenter .largecontent
-
-## Data Stream
-
-- We only observe a small part of the data at the same time.
-    - Scanning all data is infeasible
-    - New values might occur any time
-
---- &vcenter .largecontent
-
-## Distributed System
-
-- Every R process only observes a small part of the data
-    - Synchronization is required
-
---- .segue .dark
-
-## Feature Hashing
-
---- &twocol .largecontent
-
-## Feature Hashing
-
-- We use a hash function $h$ to map the feature to indeces
-
-```{r h0, dependson="load_ipinyou"}
-library(FeatureHashing)
-m <- hashed.model.matrix(~ ip, imp.20130606, hash_size = 8, keep.hashing_mapping = TRUE)
-mapping <- unlist(as.list(attr(m, "mapping")))
-```
-```{r h1, dependson="h0", echo=TRUE}
-mapping %% 8 + 1
-```
+## Taiwan, a Mountainous Island
 
 *** =left
 
-```{r h2, dependson="h1"}
-as(m, "dgCMatrix")
-```
+`r center_fig("TaiwanMap.png", 80)`
 
 *** =right
 
-```{r h3, dependson="h2"}
-matrix(imp.20130606$ip, ncol = 1)
+- Area: 0.5% of Australia's
+- Population: 23 M $\approx$ Australia's
+- Highest Mountain: Yushan (3952m)
+
+`r center_fig("Mount_Yu_Shan_-_Taiwan.jpg")`
+
+--- &twocol
+
+## Taipei City and Taipei 101
+
+`r center_fig("tpnightview.jpg")`
+
+---
+
+## Night Market
+
+`r center_fig("nightmarket.jpg", 90)`
+
+source: <http://edition.cnn.com/2014/01/15/travel/10-things-taiwan/>
+
+--- &vcenter .largecontent
+
+## Taiwan R User Group
+
+<http://www.meetup.com/Taiwan-R>
+
+`r center_fig("taiwan-r.jpg", 60)`
+
+--- &vcenter .largecontent
+
+## Outline
+
+1. Feature Vectorization and Formula Interface in R
+1. Feature Hashing
+
+--- .segue .dark
+
+## Feature Vectorization and Formula Interface in R
+
+--- &vcenter .largecontent
+
+## Algorithm in Text Book
+
+### Regression
+
+$$y = X \beta + \varepsilon$$
+
+### Real Data
+
+```{r iris}
+iris.demo <- iris[c(1:2,51:52,101:102),]
+kable(iris.demo)
 ```
+
+- Where is $X$ and $y$?
+
+--- &vcenter .largecontent
+
+## Feature Vectorization and Formula Interface
+
+- $X$ and $y$ are constructed via `model.matrix` in R
+
+```{r model.matrix, echo = TRUE, results='hide'}
+model.matrix(~ ., iris.demo)
+```
+
+```{r model.matrix.result}
+kable(model.matrix(~ ., iris.demo))
+```
+
+--- &vcenter .largecontent
+
+## Formula Interface
+
+- `y ~ model`: `y` is modelled by a linear predictor specified symbolically by `model`
+- Available symbol: column names of the data.frame
+    - `iris`:
+        - `Sepal.Length`
+        - `Sepal.Width`
+        - `Petal.Length`
+        - `Petal.Width`
+        - `Species`
+
+--- &vcenter .largecontent
+
+## Formula Interface
+
+- `model.matrix(~ ., iris)`
+    - `.` represents linear term of all columns except response in the data.frame
+
+```{r formula-.}
+all.equal(
+  model.matrix(~., iris),
+  model.matrix(~Sepal.Length+Sepal.Width+Petal.Length+Petal.Width+Species, iris)
+  )
+
+all.equal(
+  model.matrix(Species ~ ., iris),
+  model.matrix(Species ~ Sepal.Length+Sepal.Width+Petal.Length+Petal.Width, iris)
+  )
+```
+
+--- &vcenter .largecontent
+
+
+## Operator in Formula
+
+- `+`, the basic operator of linear predictor
+- `:`, the interaction operator of linear predictor
+
+```{r model.matrix, echo = TRUE, results='hide'}
+model.matrix(~ Sepal.Length+Sepal.Width+Sepal.Length:Sepal.Width, iris.demo)
+```
+
+```{r model.matrix.result}
+kable(model.matrix(~ Sepal.Length+Sepal.Width+Sepal.Length:Sepal.Width, iris.demo))
+```
+
+
+--- &vcenter .largecontent
+
+## Numeric Feature and Formula Operator
+
+```{r numeric.feature, echo = TRUE, results='hide'}
+model.matrix(~ Sepal.Length + Sepal.Length:Sepal.Width, iris.demo)
+```
+
+```{r numeric.feature.result}
+kable(model.matrix(~ Sepal.Length + Sepal.Length:Sepal.Width, iris.demo))
+```
+
+--- &vcenter .largecontent
+
+## Categorical Feature and Contrast
+
+--- &vcenter .largecontent
+
+## Limitation of `model.matrix`
 
 --- &vcenter .largecontent
 
 ## Hash Function
 
-- Determinism
-- Uniformity
-- Avalanche Effect
-
---- &vcenter .largecontent
-
-## Pros
-
-- Do not require global information of the data
-
---- &vcenter .largecontent
-
-## Cons
-
-- Different features might be mapped to the same indices (collision)
-- Hard to interpret the model 
-
---- &vcenter .largecontent
-
-## Bounds of Error
-
-- Weinberger et al. (2009) Feature Hashing for Large Scale Multitask Learning. ICML.
-
-$$\|x^T x' - \phi(x)^T \phi(x')\|$$
-
---- .segue .dark
-
-## Model Fitting with Feature Hashing in R
-
---- &vcenter .largecontent
-
-## Prepare Data
-
-```{r etl, echo=TRUE}
-suppressPackageStartupMessages({
-  library(FeatureHashing)
-  library(dplyr)
-})
-df <- readRDS("bidimpclk.20131020.Rds")
-imp.train <- head(df, 227103) %>%
-  filter(!is.na(PayingPrice))
-imp.test <- tail(df, 100000) %>%
-  filter(!is.na(PayingPrice))
-```
-
 --- &vcenter .largecontent
 
 ## Feature Hashing
 
-```{r feature_hashing, echo=TRUE}
-f <- ~ IP + Region + City + AdExchange + Domain +
-                           URL + AdSlotId + AdSlotWidth + AdSlotHeight +
-                           AdSlotVisibility + AdSlotFormat + CreativeID +
-                           weekday + hour
-m.train <- hashed.model.matrix(f, imp.train, 2^20, FALSE) %>%
-  as("dgCMatrix")
-m.test <- hashed.model.matrix(f, imp.test, 2^20, FALSE) %>%
-  as("dgCMatrix")
-```
+--- &vcenter .largecontent
+
+## Pros and Cons
 
 --- &vcenter .largecontent
 
-## Linear Regression with L1 Regularization
-
-```{r lm.echo, eval=FALSE, echo=TRUE}
-suppressPackageStartupMessages({
-  library(glmnet)
-})
-cv.g.lm <- cv.glmnet(m.train, imp.train$PayingPrice)
-plot(cv.g.lm)
-cv.g.lm$lambda.min
-# coef(cv.g.lm, s = "lambda.min")
-p.lm <- predict(cv.g.lm, m.test, s = "lambda.min")
-mean((imp.test$PayingPrice - p.lm)^2)
-```
-
---- &twocolvcenter .largecontent
-
-## Linear Regression with L1 Regularization
-
-*** =left
-
-```{r lm1, cache=TRUE}
-suppressPackageStartupMessages({
-  library(glmnet)
-})
-cv.g.lm <- cv.glmnet(m.train, imp.train$PayingPrice)
-plot(cv.g.lm)
-```
-
-*** =right
-
-```{r lm2, cache=TRUE}
-cv.g.lm$lambda.min
-# coef(cv.g.lm, s = "lambda.min")
-p.lm <- predict(cv.g.lm, m.test, s = "lambda.min")
-mean((imp.test$PayingPrice - p.lm)^2)
-```
-
---- &vcenter .largecontent
-
-## Logistic Regression with L2 Regularization
-
-```{r lr.echo, echo=TRUE, eval = FALSE}
-suppressPackageStartupMessages({
-  library(glmnet)
-})
-cv.g.lr <- cv.glmnet(m.train, imp.train$is_click, alpha = 0,
-                     family = "binomial", type.measure = "auc")
-plot(cv.g.lr)
-cv.g.lr$lambda.min
-# coef(cv.g.lm, s = "lambda.min")
-p.lr <- predict(cv.g.lr, m.test, s = "lambda.min")
-auc(imp.test$is_click, p.lr)
-```
-
---- &twocolvcenter .largecontent
-
-## Logistic Regression with L2 Regularization
-
-*** =left
-
-```{r lr1, cache=TRUE}
-suppressPackageStartupMessages({
-  library(glmnet)
-})
-cv.g.lr <- cv.glmnet(m.train, imp.train$is_click, alpha = 0,
-                     family = "binomial", type.measure = "auc")
-plot(cv.g.lr)
-```
-
-*** =right
-
-```{r lr2, cache=TRUE}
-cv.g.lr$lambda.min
-# coef(cv.g.lm, s = "lambda.min")
-p.lr <- predict(cv.g.lr, m.test, s = "lambda.min")
-auc(imp.test$is_click, p.lr)
-```
-
---- &vcenter .largecontent
-
-## Gradient Boosted Decision Tree with Feature Hashing
-
-```{r gdbt.echo, eval = FALSE, echo = TRUE}
-suppressPackageStartupMessages({
-  library(xgboost)
-  })
-cv.g.gdbt <- xgboost(m.train, imp.train$is_click, max.depth = 7, eta = 0.1, 
-                     nround = 100, objective = "binary:logistic")
-p.lm <- predict(cv.g.gdbt, m.test)
-glmnet::auc(imp.test$is_click, p.lm)
-```
-
---- &vcenter .largecontent
-
-## Gradient Boosted Decision Tree with Feature Hashing
-
-```{r gdbt, eval = TRUE, cache=TRUE, results='markup'}
-suppressPackageStartupMessages({
-  library(xgboost)
-  })
-log <- capture.output(cv.g.gdbt <- xgboost(m.train, imp.train$is_click, max.depth = 7, eta = 0.1, 
-                     nround = 100, objective = "binary:logistic")
-               )
-cat(head(log), sep="\n")
-cat(tail(log), sep="\n")
-p.lm <- predict(cv.g.gdbt, m.test)
-glmnet::auc(imp.test$is_click, p.lm)
-```
-
---- &vcenter .largecontent
-
-## Q&A

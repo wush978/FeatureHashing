@@ -44,598 +44,439 @@
     <!-- SLIDES -->
     <slide class="" id="slide-1" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
   <hgroup>
-    <h2>Outline</h2>
+    <h2>Wush, Co-founder of Taiwan R User Group</h2>
   </hgroup>
   <article data-timings="">
-    <ol>
-<li>Feature Vectorization in R</li>
-<li>Distributed Feature Vectorization in R</li>
-<li>Handling New Feature</li>
-<li>Feature Hashing</li>
-<li>Linear Regression with Feature Hashing</li>
-<li>Logistic Regression with Feature Hashing</li>
-<li>Gradient Boosted Decision Tree with Feature Hashing</li>
-</ol>
+    <p><center><img src="assets/img/farmer.jpg" style="max-height: 100%; max-width: 100%;"/></center></p>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
-<slide class="segue dark" id="slide-2" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+<slide class="" id="slide-2" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
   <hgroup>
-    <h2>Feature Vectorization in R with Formula</h2>
+    <h2>Taiwan, a Mountainous Island</h2>
   </hgroup>
   <article data-timings="">
     
+<div style='float:left;width:48%;' class='centered'>
+  <p><center><img src="assets/img/TaiwanMap.png" style="max-height: 80%; max-width: 80%;"/></center></p>
+
+</div>
+<div style='float:right;width:48%;' class='centered'>
+  <ul>
+<li>Area: 0.5% of Australia&#39;s</li>
+<li>Population: 23 M \(\approx\) Australia&#39;s</li>
+<li>Highest Mountain: Yushan (3952m)</li>
+</ul>
+
+<p><center><img src="assets/img/Mount_Yu_Shan_-_Taiwan.jpg" style="max-height: 100%; max-width: 100%;"/></center></p>
+
+</div>
   </article>
   <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-3" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Feature Vectorization</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<ul>
-<li>Lots of machine learning algorithm involves numerical matrix
+<slide class="" id="slide-3" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>Taipei City and Taipei 101</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><center><img src="assets/img/tpnightview.jpg" style="max-height: 100%; max-width: 100%;"/></center></p>
 
-<ul>
-<li>Linear Regression</li>
-<li>Logistic Regression</li>
-<li>Support Vector Machine</li>
-<li>Decision Tree</li>
-</ul></li>
-</ul>
-
-</article>
-<!-- Presenter Notes -->
+<div style='float:left;width:48%;' class='centered'>
+  
+</div>
+<div style='float:right;width:48%;' class='centered'>
+  
+</div>
+  </article>
+  <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-4" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Linear Regression</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p><a href="http://stackoverflow.com/questions/7549694/ggplot2-adding-regression-line-equation-and-r2-on-graph">source</a></p>
+<slide class="" id="slide-4" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>Night Market</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><center><img src="assets/img/nightmarket.jpg" style="max-height: 90%; max-width: 90%;"/></center></p>
 
-<p><img src="assets/fig/unnamed-chunk-1.png" alt="plot of chunk unnamed-chunk-1"> </p>
+<p>source: <a href="http://edition.cnn.com/2014/01/15/travel/10-things-taiwan/">http://edition.cnn.com/2014/01/15/travel/10-things-taiwan/</a></p>
 
-</article>
-<!-- Presenter Notes -->
+  </article>
+  <!-- Presenter Notes -->
 </slide>
 <slide class="largecontent" id="slide-5" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>Linear Regression</h2>
+  <h2>Taiwan R User Group</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
-<ul>
-<li>Fitting</li>
-</ul>
+<p><a href="http://www.meetup.com/Taiwan-R">http://www.meetup.com/Taiwan-R</a></p>
 
-<p>\[X_1 = \begin{bmatrix}
-1 & 1\\
-1 & 2\\
-1 & 3\\
-\vdots \end{bmatrix},
-y = \begin{bmatrix}
--34.7604\\
--42.8074\\
--2.9288\\
-\vdots \end{bmatrix}\]</p>
-
-<p>\[\hat{\beta} = \begin{bmatrix}
--5.4\\
-3.1 \end{bmatrix}
-= (X_1^T X_1)^{-1}X_1 y\]</p>
+<p><center><img src="assets/img/taiwan-r.jpg" style="max-height: 60%; max-width: 60%;"/></center></p>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
 <slide class="largecontent" id="slide-6" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>Linear Regression</h2>
+  <h2>Outline</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
-<ul>
-<li>Predicting</li>
-</ul>
-
-<p>\[X_2 \hat{\beta}\]</p>
+<ol>
+<li>Feature Vectorization and Formula Interface in R</li>
+<li>Feature Hashing</li>
+</ol>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-7" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>IPinYou Dataset</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<ul>
-<li>A Competition of Real Time Bidding in 2013</li>
-</ul>
-
-<p><a href="http://data.computational-advertising.org/">http://data.computational-advertising.org/</a></p>
-
-<!-- html table generated in R 3.1.1 by xtable 1.7-4 package -->
-
-<!-- Mon Jan 19 01:00:34 2015 -->
-
-<table border=1>
-<tr> <th>  </th> <th> time </th> <th> ip </th> <th> usertag </th>  </tr>
-  <tr> <td align="right"> 1 </td> <td> 20130606000104252 </td> <td> 222.220.35.* </td> <td> 13800,10024 </td> </tr>
-  <tr> <td align="right"> 2 </td> <td> 20130606000104253 </td> <td> 58.100.240.* </td> <td> 10059,13866,10063,10111 </td> </tr>
-  <tr> <td align="right"> 3 </td> <td> 20130606000104308 </td> <td> 122.233.40.* </td> <td> 10057,10063,10024,13800,13866,10110 </td> </tr>
-  <tr> <td align="right"> 4 </td> <td> 20130606000104329 </td> <td> 58.67.157.* </td> <td> 13866,10111 </td> </tr>
-  <tr> <td align="right"> 5 </td> <td> 20130606000104371 </td> <td> 180.107.223.* </td> <td> 10063,10059,13776,10111 </td> </tr>
-   </table>
-
-</article>
-<!-- Presenter Notes -->
+<slide class="segue dark" id="slide-7" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>Feature Vectorization and Formula Interface in R</h2>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
 </slide>
 <slide class="largecontent" id="slide-8" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>Model Matrix</h2>
+  <h2>Algorithm in Text Book</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
-<pre><code class="r">m1 &lt;- model.matrix(~ ip, imp.20130606)
-</code></pre>
+<h3>Regression</h3>
 
-<!-- html table generated in R 3.1.1 by xtable 1.7-4 package -->
+<p>\[y = X \beta + \varepsilon\]</p>
 
-<!-- Mon Jan 19 01:41:52 2015 -->
+<h3>Real Data</h3>
 
-<table border=1>
-<tr> <th>  </th> <th> (Intercept) </th> <th> ip180.107.223.* </th> <th> ip222.220.35.* </th> <th> ip58.100.240.* </th> <th> ip58.67.157.* </th>  </tr>
-  <tr> <td align="right"> 1 </td> <td align="right"> 1 </td> <td align="right"> 0 </td> <td align="right"> 1 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> </tr>
-  <tr> <td align="right"> 2 </td> <td align="right"> 1 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 1 </td> <td align="right"> 0 </td> </tr>
-  <tr> <td align="right"> 3 </td> <td align="right"> 1 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> </tr>
-  <tr> <td align="right"> 4 </td> <td align="right"> 1 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 1 </td> </tr>
-  <tr> <td align="right"> 5 </td> <td align="right"> 1 </td> <td align="right"> 1 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> </tr>
-   </table>
+<table><thead>
+<tr>
+<th align="left"></th>
+<th align="right">Sepal.Length</th>
+<th align="right">Sepal.Width</th>
+<th align="right">Petal.Length</th>
+<th align="right">Petal.Width</th>
+<th align="left">Species</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">1</td>
+<td align="right">5.1</td>
+<td align="right">3.5</td>
+<td align="right">1.4</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="right">4.9</td>
+<td align="right">3.0</td>
+<td align="right">1.4</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr>
+<td align="left">51</td>
+<td align="right">7.0</td>
+<td align="right">3.2</td>
+<td align="right">4.7</td>
+<td align="right">1.4</td>
+<td align="left">versicolor</td>
+</tr>
+<tr>
+<td align="left">52</td>
+<td align="right">6.4</td>
+<td align="right">3.2</td>
+<td align="right">4.5</td>
+<td align="right">1.5</td>
+<td align="left">versicolor</td>
+</tr>
+<tr>
+<td align="left">101</td>
+<td align="right">6.3</td>
+<td align="right">3.3</td>
+<td align="right">6.0</td>
+<td align="right">2.5</td>
+<td align="left">virginica</td>
+</tr>
+<tr>
+<td align="left">102</td>
+<td align="right">5.8</td>
+<td align="right">2.7</td>
+<td align="right">5.1</td>
+<td align="right">1.9</td>
+<td align="left">virginica</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li>Where is \(X\) and \(y\)?</li>
+</ul>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
 <slide class="largecontent" id="slide-9" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>Formula</h2>
+  <h2>Feature Vectorization and Formula Interface</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
 <ul>
-<li>Formula provides a convenient interface of vetorizing features
-
-<ul>
-<li><code>~ ip</code></li>
-<li><code>~ ip * weekday</code> = <code>~ ip+weekday+ip:weekday</code></li>
-<li><code>~ .</code></li>
-</ul></li>
-<li>Formula interfaces let us easily automate feature selection procedure (danger zone)
-
-<ul>
-<li><code>step(object, scope)</code>, use the formula to define the testing area of possible combination of features.</li>
-<li>We can write our own feature selection procedure like <code>step</code>.</li>
-</ul></li>
+<li>\(X\) and \(y\) are constructed via <code>model.matrix</code> in R</li>
 </ul>
+
+<pre><code class="r">model.matrix(~ ., iris.demo)
+</code></pre>
+
+<table><thead>
+<tr>
+<th align="left"></th>
+<th align="right">(Intercept)</th>
+<th align="right">Sepal.Length</th>
+<th align="right">Sepal.Width</th>
+<th align="right">Petal.Length</th>
+<th align="right">Petal.Width</th>
+<th align="right">Speciesversicolor</th>
+<th align="right">Speciesvirginica</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">1</td>
+<td align="right">1</td>
+<td align="right">5.1</td>
+<td align="right">3.5</td>
+<td align="right">1.4</td>
+<td align="right">0.2</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="right">1</td>
+<td align="right">4.9</td>
+<td align="right">3.0</td>
+<td align="right">1.4</td>
+<td align="right">0.2</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">51</td>
+<td align="right">1</td>
+<td align="right">7.0</td>
+<td align="right">3.2</td>
+<td align="right">4.7</td>
+<td align="right">1.4</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">52</td>
+<td align="right">1</td>
+<td align="right">6.4</td>
+<td align="right">3.2</td>
+<td align="right">4.5</td>
+<td align="right">1.5</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">101</td>
+<td align="right">1</td>
+<td align="right">6.3</td>
+<td align="right">3.3</td>
+<td align="right">6.0</td>
+<td align="right">2.5</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td align="left">102</td>
+<td align="right">1</td>
+<td align="right">5.8</td>
+<td align="right">2.7</td>
+<td align="right">5.1</td>
+<td align="right">1.9</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+</tbody></table>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
 <slide class="largecontent" id="slide-10" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>Model Matrix</h2>
+  <h2>Formula Interface</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
-<pre><code class="r">m2 &lt;- model.matrix(~ ip, imp.20130607)
-</code></pre>
+<ul>
+<li><code>y ~ model</code>: <code>y</code> is modelled by a linear predictor specified symbolically by <code>model</code></li>
+<li>Available symbol: column names of the data.frame
 
-<!-- html table generated in R 3.1.1 by xtable 1.7-4 package -->
+<ul>
+<li><code>iris</code>:
 
-<!-- Mon Jan 19 01:41:53 2015 -->
-
-<table border=1>
-<tr> <th>  </th> <th> (Intercept) </th> <th> ip210.30.109.* </th> <th> ip221.207.122.* </th>  </tr>
-  <tr> <td align="right"> 1 </td> <td align="right"> 1 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> </tr>
-  <tr> <td align="right"> 2 </td> <td align="right"> 1 </td> <td align="right"> 0 </td> <td align="right"> 1 </td> </tr>
-  <tr> <td align="right"> 3 </td> <td align="right"> 1 </td> <td align="right"> 1 </td> <td align="right"> 0 </td> </tr>
-   </table>
+<ul>
+<li><code>Sepal.Length</code></li>
+<li><code>Sepal.Width</code></li>
+<li><code>Petal.Length</code></li>
+<li><code>Petal.Width</code></li>
+<li><code>Species</code></li>
+</ul></li>
+</ul></li>
+</ul>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
 <slide class="largecontent" id="slide-11" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>Model Matrix</h2>
+  <h2>Formula Interface</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
 <ul>
-<li><code>m1</code> has 5 columns</li>
-<li><code>m2</code> has 3 columns</li>
+<li><code>model.matrix(~ ., iris)</code>
+
+<ul>
+<li><code>.</code> represents linear term of all columns except response in the data.frame</li>
+</ul></li>
 </ul>
 
-<h3>Synchronization is required!</h3>
+<pre><code class="r">all.equal(
+  model.matrix(~., iris),
+  model.matrix(~Sepal.Length+Sepal.Width+Petal.Length+Petal.Width+Species, iris)
+  )
+</code></pre>
+
+<pre><code>## [1] TRUE
+</code></pre>
+
+<pre><code class="r">all.equal(
+  model.matrix(Species ~ ., iris),
+  model.matrix(Species ~ Sepal.Length+Sepal.Width+Petal.Length+Petal.Width, iris)
+  )
+</code></pre>
+
+<pre><code>## [1] TRUE
+</code></pre>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
 <slide class="largecontent" id="slide-12" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>Factor</h2>
+  <h2>Operator in Formula</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
-<ul>
-<li>We usually load <em>all</em> data and use the <code>factor</code> to build a mapping
-
-<ul>
-<li><code>levels(ip)[1]</code> ==&gt; 1, <code>levels(ip)[2]</code> ==&gt; 2, ...</li>
-</ul></li>
-</ul>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
 <slide class="largecontent" id="slide-13" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>Contrasts</h2>
+  <h2>Numeric Feature and Formula Operator</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
-<!-- html table generated in R 3.1.1 by xtable 1.7-4 package -->
+<pre><code class="r">model.matrix(~ Sepal.Length + Sepal.Length:Sepal.Width, iris.demo)
+</code></pre>
 
-<!-- Mon Jan 19 01:41:53 2015 -->
-
-<table border=1>
-<tr> <th>  </th> <th> 180.107.223.* </th> <th> 183.134.57.* </th> <th> 210.30.109.* </th> <th> 221.207.122.* </th> <th> 222.220.35.* </th> <th> 58.100.240.* </th> <th> 58.67.157.* </th>  </tr>
-  <tr> <td align="right"> 122.233.40.* </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> </tr>
-  <tr> <td align="right"> 180.107.223.* </td> <td align="right"> 1 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> </tr>
-  <tr> <td align="right"> 183.134.57.* </td> <td align="right"> 0 </td> <td align="right"> 1 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> </tr>
-  <tr> <td align="right"> 210.30.109.* </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 1 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> </tr>
-  <tr> <td align="right"> 221.207.122.* </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 1 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> </tr>
-  <tr> <td align="right"> 222.220.35.* </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 1 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> </tr>
-  <tr> <td align="right"> 58.100.240.* </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 1 </td> <td align="right"> 0 </td> </tr>
-  <tr> <td align="right"> 58.67.157.* </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 0 </td> <td align="right"> 1 </td> </tr>
-   </table>
+<table><thead>
+<tr>
+<th align="left"></th>
+<th align="right">(Intercept)</th>
+<th align="right">Sepal.Length</th>
+<th align="right">Sepal.Length:Sepal.Width</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">1</td>
+<td align="right">1</td>
+<td align="right">5.1</td>
+<td align="right">17.85</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="right">1</td>
+<td align="right">4.9</td>
+<td align="right">14.70</td>
+</tr>
+<tr>
+<td align="left">51</td>
+<td align="right">1</td>
+<td align="right">7.0</td>
+<td align="right">22.40</td>
+</tr>
+<tr>
+<td align="left">52</td>
+<td align="right">1</td>
+<td align="right">6.4</td>
+<td align="right">20.48</td>
+</tr>
+<tr>
+<td align="left">101</td>
+<td align="right">1</td>
+<td align="right">6.3</td>
+<td align="right">20.79</td>
+</tr>
+<tr>
+<td align="left">102</td>
+<td align="right">1</td>
+<td align="right">5.8</td>
+<td align="right">15.66</td>
+</tr>
+</tbody></table>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="segue dark" id="slide-14" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
-  <hgroup>
-    <h2>If we are processing Big Data...</h2>
-  </hgroup>
-  <article data-timings="">
-    
-  </article>
-  <!-- Presenter Notes -->
+<slide class="largecontent" id="slide-14" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Categorical Feature and Contrast</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+
+</article>
+<!-- Presenter Notes -->
 </slide>
 <slide class="largecontent" id="slide-15" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>Factor requires...</h2>
+  <h2>Limitation of <code>model.matrix</code></h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
-<ul>
-<li>The information of <em>all</em> possible values...</li>
-</ul>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
 <slide class="largecontent" id="slide-16" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>For Big Data ...</h2>
+  <h2>Hash Function</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
-<ul>
-<li>Data Stream</li>
-<li>Distributed System</li>
-</ul>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
 <slide class="largecontent" id="slide-17" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>Data Stream</h2>
+  <h2>Feature Hashing</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
-<ul>
-<li>We only observe a small part of the data at the same time.
-
-<ul>
-<li>Scanning all data is infeasible</li>
-<li>New values might occur any time</li>
-</ul></li>
-</ul>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
 <slide class="largecontent" id="slide-18" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>Distributed System</h2>
+  <h2>Pros and Cons</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
-<ul>
-<li>Every R process only observes a small part of the data
-
-<ul>
-<li>Synchronization is required</li>
-</ul></li>
-</ul>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="segue dark" id="slide-19" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
-  <hgroup>
-    <h2>Feature Hashing</h2>
-  </hgroup>
-  <article data-timings="">
-    
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-20" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
-  <hgroup>
-    <h2>Feature Hashing</h2>
-  </hgroup>
-  <article data-timings="">
-    <ul>
-<li>We use a hash function \(h\) to map the feature to indeces</li>
-</ul>
-
-<pre><code class="r">mapping %% 8 + 1
-</code></pre>
-
-<pre><code>##   ip58.67.157.*  ip122.233.40.*  ip222.220.35.* ip180.107.223.* 
-##               4               2               7               3 
-##  ip58.100.240.* 
-##               5
-</code></pre>
-
-<div style='float:left;width:48%;' class='centered'>
-  <pre><code>## 8 x 5 sparse Matrix of class &quot;dgCMatrix&quot;
-##      1  2  3  4  5
-## [1,] 1  1  1  1  1
-## [2,] .  . -1  .  .
-## [3,] .  .  .  . -1
-## [4,] .  .  . -1  .
-## [5,] . -1  .  .  .
-## [6,] .  .  .  .  .
-## [7,] 1  .  .  .  .
-## [8,] .  .  .  .  .
-</code></pre>
-
-</div>
-<div style='float:right;width:48%;' class='centered'>
-  <pre><code>##      [,1]           
-## [1,] &quot;222.220.35.*&quot; 
-## [2,] &quot;58.100.240.*&quot; 
-## [3,] &quot;122.233.40.*&quot; 
-## [4,] &quot;58.67.157.*&quot;  
-## [5,] &quot;180.107.223.*&quot;
-</code></pre>
-
-</div>
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-21" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-19" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>Hash Function</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<ul>
-<li>Determinism</li>
-<li>Uniformity</li>
-<li>Avalanche Effect</li>
-</ul>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-22" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Pros</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<ul>
-<li>Do not require global information of the data</li>
-</ul>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-23" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Cons</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<ul>
-<li>Different features might be mapped to the same indices (collision)</li>
-<li>Hard to interpret the model </li>
-</ul>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-24" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Bounds of Error</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<ul>
-<li>Weinberger et al. (2009) Feature Hashing for Large Scale Multitask Learning. ICML.</li>
-</ul>
-
-<p>\[\|x^T x' - \phi(x)^T \phi(x')\|\]</p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="segue dark" id="slide-25" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
-  <hgroup>
-    <h2>Model Fitting with Feature Hashing in R</h2>
-  </hgroup>
-  <article data-timings="">
-    
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-26" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Prepare Data</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<pre><code class="r">suppressPackageStartupMessages({
-  library(FeatureHashing)
-  library(dplyr)
-})
-df &lt;- readRDS(&quot;bidimpclk.20131020.Rds&quot;)
-imp.train &lt;- head(df, 227103) %&gt;%
-  filter(!is.na(PayingPrice))
-imp.test &lt;- tail(df, 100000) %&gt;%
-  filter(!is.na(PayingPrice))
-</code></pre>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-27" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Feature Hashing</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<pre><code class="r">f &lt;- ~ IP + Region + City + AdExchange + Domain +
-                           URL + AdSlotId + AdSlotWidth + AdSlotHeight +
-                           AdSlotVisibility + AdSlotFormat + CreativeID +
-                           weekday + hour
-m.train &lt;- hashed.model.matrix(f, imp.train, 2^20, FALSE) %&gt;%
-  as(&quot;dgCMatrix&quot;)
-m.test &lt;- hashed.model.matrix(f, imp.test, 2^20, FALSE) %&gt;%
-  as(&quot;dgCMatrix&quot;)
-</code></pre>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-28" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Linear Regression with L1 Regularization</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<pre><code class="r">suppressPackageStartupMessages({
-  library(glmnet)
-})
-cv.g.lm &lt;- cv.glmnet(m.train, imp.train$PayingPrice)
-plot(cv.g.lm)
-cv.g.lm$lambda.min
-# coef(cv.g.lm, s = &quot;lambda.min&quot;)
-p.lm &lt;- predict(cv.g.lm, m.test, s = &quot;lambda.min&quot;)
-mean((imp.test$PayingPrice - p.lm)^2)
-</code></pre>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-29" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Linear Regression with L1 Regularization</h2>
-</hgroup>
-<div style='float:left;width:48%;' class='flexbox vcenter'>
-  <p><img src="assets/fig/lm1.png" alt="plot of chunk lm1"> </p>
-
-</div>
-<div style='float:right;width:48%;' class='flexbox vcenter'>
-  <pre><code>## [1] 0.3073
-</code></pre>
-
-<pre><code>## [1] 3416
-</code></pre>
-
-</div>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-30" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Logistic Regression with L2 Regularization</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<pre><code class="r">suppressPackageStartupMessages({
-  library(glmnet)
-})
-cv.g.lr &lt;- cv.glmnet(m.train, imp.train$is_click, alpha = 0,
-                     family = &quot;binomial&quot;, type.measure = &quot;auc&quot;)
-plot(cv.g.lr)
-cv.g.lr$lambda.min
-# coef(cv.g.lm, s = &quot;lambda.min&quot;)
-p.lr &lt;- predict(cv.g.lr, m.test, s = &quot;lambda.min&quot;)
-auc(imp.test$is_click, p.lr)
-</code></pre>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-31" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Logistic Regression with L2 Regularization</h2>
-</hgroup>
-<div style='float:left;width:48%;' class='flexbox vcenter'>
-  <p><img src="assets/fig/lr1.png" alt="plot of chunk lr1"> </p>
-
-</div>
-<div style='float:right;width:48%;' class='flexbox vcenter'>
-  <pre><code>## [1] 0.2121
-</code></pre>
-
-<pre><code>## [1] 0.699
-</code></pre>
-
-</div>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-32" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Gradient Boosted Decision Tree with Feature Hashing</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<pre><code class="r">suppressPackageStartupMessages({
-  library(xgboost)
-  })
-cv.g.gdbt &lt;- xgboost(m.train, imp.train$is_click, max.depth = 7, eta = 0.1, 
-                     nround = 100, objective = &quot;binary:logistic&quot;)
-p.lm &lt;- predict(cv.g.gdbt, m.test)
-glmnet::auc(imp.test$is_click, p.lm)
-</code></pre>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-33" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Gradient Boosted Decision Tree with Feature Hashing</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<pre><code>## [0]  train-error:0.000287
-## [1]  train-error:0.000287
-## [2]  train-error:0.000287
-## [3]  train-error:0.000287
-## [4]  train-error:0.000287
-## [5]  train-error:0.000287
-</code></pre>
-
-<pre><code>## [94] train-error:0.000287
-## [95] train-error:0.000287
-## [96] train-error:0.000287
-## [97] train-error:0.000287
-## [98] train-error:0.000287
-## [99] train-error:0.000287
-</code></pre>
-
-<pre><code>## [1] 0.6827
-</code></pre>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-34" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Q&amp;A</h2>
+  
 </hgroup>
 <article class = 'flexbox vcenter'>
 
@@ -648,206 +489,116 @@ glmnet::auc(imp.test$is_click, p.lm)
     <ul>
       <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=1 title='Outline'>
+        data-slide=1 title='Wush, Co-founder of Taiwan R User Group'>
          1
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=2 title='Feature Vectorization in R with Formula'>
+        data-slide=2 title='Taiwan, a Mountainous Island'>
          2
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=3 title='Feature Vectorization'>
+        data-slide=3 title='Taipei City and Taipei 101'>
          3
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=4 title='Linear Regression'>
+        data-slide=4 title='Night Market'>
          4
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=5 title='Linear Regression'>
+        data-slide=5 title='Taiwan R User Group'>
          5
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=6 title='Linear Regression'>
+        data-slide=6 title='Outline'>
          6
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=7 title='IPinYou Dataset'>
+        data-slide=7 title='Feature Vectorization and Formula Interface in R'>
          7
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=8 title='Model Matrix'>
+        data-slide=8 title='Algorithm in Text Book'>
          8
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=9 title='Formula'>
+        data-slide=9 title='Feature Vectorization and Formula Interface'>
          9
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=10 title='Model Matrix'>
+        data-slide=10 title='Formula Interface'>
          10
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=11 title='Model Matrix'>
+        data-slide=11 title='Formula Interface'>
          11
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=12 title='Factor'>
+        data-slide=12 title='Operator in Formula'>
          12
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=13 title='Contrasts'>
+        data-slide=13 title='Numeric Feature and Formula Operator'>
          13
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=14 title='If we are processing Big Data...'>
+        data-slide=14 title='Categorical Feature and Contrast'>
          14
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=15 title='Factor requires...'>
+        data-slide=15 title='Limitation of <code>model.matrix</code>'>
          15
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=16 title='For Big Data ...'>
+        data-slide=16 title='Hash Function'>
          16
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=17 title='Data Stream'>
+        data-slide=17 title='Feature Hashing'>
          17
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=18 title='Distributed System'>
+        data-slide=18 title='Pros and Cons'>
          18
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=19 title='Feature Hashing'>
+        data-slide=19 title=''>
          19
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=20 title='Feature Hashing'>
-         20
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=21 title='Hash Function'>
-         21
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=22 title='Pros'>
-         22
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=23 title='Cons'>
-         23
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=24 title='Bounds of Error'>
-         24
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=25 title='Model Fitting with Feature Hashing in R'>
-         25
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=26 title='Prepare Data'>
-         26
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=27 title='Feature Hashing'>
-         27
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=28 title='Linear Regression with L1 Regularization'>
-         28
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=29 title='Linear Regression with L1 Regularization'>
-         29
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=30 title='Logistic Regression with L2 Regularization'>
-         30
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=31 title='Logistic Regression with L2 Regularization'>
-         31
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=32 title='Gradient Boosted Decision Tree with Feature Hashing'>
-         32
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=33 title='Gradient Boosted Decision Tree with Feature Hashing'>
-         33
-      </a>
-    </li>
-    <li>
-      <a href="#" target="_self" rel='tooltip' 
-        data-slide=34 title='Q&amp;A'>
-         34
       </a>
     </li>
   </ul>

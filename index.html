@@ -122,7 +122,7 @@
 <article class = 'flexbox vcenter'>
 <ol>
 <li>Feature Vectorization and Formula Interface in R</li>
-<li>Feature Hashing</li>
+<li>Many Many Categorical Features</li>
 </ol>
 
 </article>
@@ -368,16 +368,12 @@
   <h2>Operator in Formula</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
+<ul>
+<li><code>+</code>, the basic operator of linear predictor</li>
+<li><code>:</code>, the interaction operator of linear predictor</li>
+</ul>
 
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-13" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Numeric Feature and Formula Operator</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<pre><code class="r">model.matrix(~ Sepal.Length + Sepal.Length:Sepal.Width, iris.demo)
+<pre><code class="r">model.matrix(~ Sepal.Length+Sepal.Width+Sepal.Length:Sepal.Width, iris.demo)
 </code></pre>
 
 <table><thead>
@@ -385,6 +381,7 @@
 <th align="left"></th>
 <th align="right">(Intercept)</th>
 <th align="right">Sepal.Length</th>
+<th align="right">Sepal.Width</th>
 <th align="right">Sepal.Length:Sepal.Width</th>
 </tr>
 </thead><tbody>
@@ -392,36 +389,42 @@
 <td align="left">1</td>
 <td align="right">1</td>
 <td align="right">5.1</td>
+<td align="right">3.5</td>
 <td align="right">17.85</td>
 </tr>
 <tr>
 <td align="left">2</td>
 <td align="right">1</td>
 <td align="right">4.9</td>
+<td align="right">3.0</td>
 <td align="right">14.70</td>
 </tr>
 <tr>
 <td align="left">51</td>
 <td align="right">1</td>
 <td align="right">7.0</td>
+<td align="right">3.2</td>
 <td align="right">22.40</td>
 </tr>
 <tr>
 <td align="left">52</td>
 <td align="right">1</td>
 <td align="right">6.4</td>
+<td align="right">3.2</td>
 <td align="right">20.48</td>
 </tr>
 <tr>
 <td align="left">101</td>
 <td align="right">1</td>
 <td align="right">6.3</td>
+<td align="right">3.3</td>
 <td align="right">20.79</td>
 </tr>
 <tr>
 <td align="left">102</td>
 <td align="right">1</td>
 <td align="right">5.8</td>
+<td align="right">2.7</td>
 <td align="right">15.66</td>
 </tr>
 </tbody></table>
@@ -429,56 +432,601 @@
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-14" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-13" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>Categorical Feature and Contrast</h2>
+  <h2>Operator in Formula</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
+<ul>
+<li><code>*</code>, factor crossing: a*b interpreted as a+b+a:b</li>
+<li><code>^</code>, crossing to the specified degree</li>
+</ul>
+
+<pre><code class="r">all.equal(
+  model.matrix(~ Sepal.Length+Sepal.Width+Sepal.Length:Sepal.Width, iris.demo),
+  model.matrix(~ Sepal.Length * Sepal.Width, iris.demo)
+)
+</code></pre>
+
+<pre><code>## [1] TRUE
+</code></pre>
+
+<pre><code class="r">all.equal(
+  model.matrix(~ (Sepal.Length + Sepal.Width)^2, iris.demo),
+  model.matrix(~ (Sepal.Length + Sepal.Width) * (Sepal.Length + Sepal.Width), iris.demo)
+)
+</code></pre>
+
+<pre><code>## [1] TRUE
+</code></pre>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-15" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-14" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>Limitation of <code>model.matrix</code></h2>
+  <h2>More Formula...</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
+<ul>
+<li>Please check <code>?formula</code></li>
+</ul>
 
 </article>
 <!-- Presenter Notes -->
+</slide>
+<slide class="dark segue" id="slide-15" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>Categorical Features</h2>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
 </slide>
 <slide class="largecontent" id="slide-16" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>Hash Function</h2>
+  <h2>Categorical Feature in R</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
+<ul>
+<li>A categorical variable of \(K\) categories =&gt; a sequence of \(K-1\) variables</li>
+<li>There are some built-in contrasts:
+
+<ul>
+<li><code>contr.treatment</code></li>
+<li><code>contr.poly</code></li>
+<li><code>contr.sum</code></li>
+<li><code>contr.treatment</code></li>
+<li><code>contr.SAS</code></li>
+</ul></li>
+<li><a href="http://www.ats.ucla.edu/stat/r/library/contrast_coding.htm">http://www.ats.ucla.edu/stat/r/library/contrast_coding.htm</a></li>
+</ul>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
 <slide class="largecontent" id="slide-17" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>Feature Hashing</h2>
+  <h2>Contrasts</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
+<pre><code class="r">model.matrix(~ Species, iris.demo)
+</code></pre>
+
+<pre><code>##     (Intercept) Speciesversicolor Speciesvirginica
+## 1             1                 0                0
+## 2             1                 0                0
+## 51            1                 1                0
+## 52            1                 1                0
+## 101           1                 0                1
+## 102           1                 0                1
+## attr(,&quot;assign&quot;)
+## [1] 0 1 1
+## attr(,&quot;contrasts&quot;)
+## attr(,&quot;contrasts&quot;)$Species
+## [1] &quot;contr.treatment&quot;
+</code></pre>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
 <slide class="largecontent" id="slide-18" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>Pros and Cons</h2>
+  <h2>Contrasts</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
+<pre><code class="r">contrasts(iris.demo$Species) &lt;- contr.sum(levels(iris.demo$Species))
+model.matrix(~ Species, iris.demo)
+</code></pre>
+
+<pre><code>##     (Intercept) Species1 Species2
+## 1             1        1        0
+## 2             1        1        0
+## 51            1        0        1
+## 52            1        0        1
+## 101           1       -1       -1
+## 102           1       -1       -1
+## attr(,&quot;assign&quot;)
+## [1] 0 1 1
+## attr(,&quot;contrasts&quot;)
+## attr(,&quot;contrasts&quot;)$Species
+##            [,1] [,2]
+## setosa        1    0
+## versicolor    0    1
+## virginica    -1   -1
+</code></pre>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-19" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="dark segue" id="slide-19" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>Motivation of the FeatureHashing</h2>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-20" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  
+  <h2>Modeling Many Categorical Features</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
+<ul>
+<li>Display Advertising</li>
+<li>Text Mining</li>
+</ul>
+
+<p><center><img src="assets/img/Trouble.jpg" style="max-height: 100%; max-width: 100%;"/></center></p>
+
+<p><small>source: <a href="http://seckora.com/wp-content/uploads/2014/06/computer-trouble.jpg">http://seckora.com/wp-content/uploads/2014/06/computer-trouble.jpg</a></small></p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-21" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Display Advertising</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p><center><img src="assets/img/Display_Ads_MatrixAdvertising_Wide.png" style="max-height: 100%; max-width: 100%;"/></center></p>
+
+<p><small>source: <a href="http://images.dailytech.com/nimage/Display_Ads_MatrixAdvertising_Wide.png">http://images.dailytech.com/nimage/Display_Ads_MatrixAdvertising_Wide.png</a></small></p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-22" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Kaggle: <a href="https://www.kaggle.com/c/criteo-display-ad-challenge">Display Advertising Challenge</a></h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>Training Dataset: a portion of <a href="http://www.criteo.com/">Criteo</a>&#39;s traffic over a period of 7 days.
+
+<ul>
+<li>Each instance corresponds to a display ad served by Criteo.</li>
+<li>The reponse is positive if the user click the ad and negative otherwise.</li>
+</ul></li>
+<li>Evaluation: The <a href="https://www.kaggle.com/wiki/LogarithmicLoss">Logarithmic Loss</a> of the prediction on the testing dataset.</li>
+</ul>
+
+<p><center><img src="assets/img/criteo-logo.png" style="max-height: 100%; max-width: 100%;"/></center></p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-23" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>The Size of the Dataset</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>13 integer features and 26 categorical features</li>
+<li>\(7 \times 10^7\) instances</li>
+<li>There are many levels of categorical feature does not appear in the training dataset.</li>
+<li>Dataset: <a href="http://labs.criteo.com/downloads/2014-kaggle-display-advertising-challenge-dataset/">link</a></li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-24" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Vectorize These Features in R</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>After binning the integer features, I got \(3 \times 10^7\) levels.</li>
+<li>Sparse matrix was required, and we have <code>Matrix::sparse.model.matrix</code>.
+
+<ul>
+<li>A dense matrix requires 14PB memory...</li>
+<li>A sparse matrix requires 40GB memory...</li>
+</ul></li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-25" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Estimating Computing Resources</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>Dense matrix: <code>nrow</code> (\(7 \times 10^7\)) \(\times\) <code>ncol</code> (\(3 \times 10^7)\) \(\times\) 8 bytes</li>
+<li>Sparse matrix: <code>nrow</code> (\(7 \times 10^7\)) \(\times\) (\(13 + 26\)) \(\times\) (\(4 + 4 + 8\)) bytes</li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-26" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Vectorize These Features in R</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>There was no hashing trick in R, so I use <code>sparse.model.matrix</code> with a best machine in <a href="https://aws.amazon.com/tw/">Amazon Web Service</a>.</li>
+<li>It took me many hours to vectorize these features. </li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-27" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Fit Model with Limited Memory</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>A post <a href="https://www.kaggle.com/c/criteo-display-ad-challenge/forums/t/10322/beat-the-benchmark-with-less-then-200mb-of-memory">Beat the benchmark with less then 200MB of memory</a> describes how to fit a model with limited resources.
+
+<ul>
+<li>online logistic regression</li>
+<li>feature hash trick</li>
+<li>adaptive learning rate</li>
+</ul></li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-28" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2><a href="https://en.wikipedia.org/wiki/Online_machine_learning">Online Machine Learning</a></h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>In online learning, the model parameter is updated after the arrival of every new datapoint.</li>
+<li>In batch learning, the model paramter is updated after access to the entire dataset.</li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-29" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Limitation of <code>model.matrix</code></h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li><strong>The vectorization requires all levels of categorical features</strong>.</li>
+</ul>
+
+<pre><code class="r">contr.treatment(levels(iris$Species))
+</code></pre>
+
+<pre><code>##            versicolor virginica
+## setosa              0         0
+## versicolor          1         0
+## virginica           0         1
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-30" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>What is Feature Hashing?</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>A kind of feature vectorization is a function to map feature into index.</li>
+</ul>
+
+<pre><code class="r">contr.treatment(levels(iris$Species))
+</code></pre>
+
+<pre><code>##            versicolor virginica
+## setosa              0         0
+## versicolor          1         0
+## virginica           0         1
+</code></pre>
+
+<ul>
+<li>Feature hashing is a method to do feature vectorization in this way.</li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-31" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Hash the Feature</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>A <a href="https://en.wikipedia.org/wiki/Hash_function">hash function</a> is any function that can be used to map digital data of arbitrary size to digital data of fixed size. For example:
+
+<ul>
+<li>Mod <code>%%</code></li>
+</ul></li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-32" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Feature Hashing</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>Choose a hash function and use it to hash all the categorical features.</li>
+<li>The result is the index of 1 in the feature.</li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-33" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>An Example of Feature Hashing of Criteo&#39;s Data</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<table><thead>
+<tr>
+<th align="left">V15</th>
+<th align="left">V16</th>
+<th align="left">V17</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">68fd1e64</td>
+<td align="left">80e26c9b</td>
+<td align="left">fb936136</td>
+</tr>
+<tr>
+<td align="left">68fd1e64</td>
+<td align="left">f0cf0024</td>
+<td align="left">6f67f7e5</td>
+</tr>
+<tr>
+<td align="left">287e684f</td>
+<td align="left">0a519c5c</td>
+<td align="left">02cf9876</td>
+</tr>
+<tr>
+<td align="left">68fd1e64</td>
+<td align="left">2c16a946</td>
+<td align="left">a9a87e68</td>
+</tr>
+<tr>
+<td align="left">8cf07265</td>
+<td align="left">ae46a29d</td>
+<td align="left">c81688bb</td>
+</tr>
+<tr>
+<td align="left">05db9164</td>
+<td align="left">6c9c9cf3</td>
+<td align="left">2730ec9c</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li>The categorical variables have been hashed onto 32 bits for anonymization purposes.</li>
+<li>Hash function: map the feature to the last 4 bits. </li>
+<li>The size of matrix \(X\) will be \((7 \times 10^7) \times (2^4)\)</li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-34" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>An Example of Feature Hashing of Criteo&#39;s Data</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<table><thead>
+<tr>
+<th align="left">V15</th>
+<th align="left">V16</th>
+<th align="left">V17</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">68fd1e64</td>
+<td align="left">80e26c9b</td>
+<td align="left">fb936136</td>
+</tr>
+<tr>
+<td align="left">68fd1e64</td>
+<td align="left">f0cf0024</td>
+<td align="left">6f67f7e5</td>
+</tr>
+<tr>
+<td align="left">287e684f</td>
+<td align="left">0a519c5c</td>
+<td align="left">02cf9876</td>
+</tr>
+<tr>
+<td align="left">68fd1e64</td>
+<td align="left">2c16a946</td>
+<td align="left">a9a87e68</td>
+</tr>
+<tr>
+<td align="left">8cf07265</td>
+<td align="left">ae46a29d</td>
+<td align="left">c81688bb</td>
+</tr>
+<tr>
+<td align="left">05db9164</td>
+<td align="left">6c9c9cf3</td>
+<td align="left">2730ec9c</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li><code>68fd1e64, 80e26c9b, fb936136</code> =&gt; <code>4, b, 6</code> 
+
+<ul>
+<li>\((0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)\)</li>
+</ul></li>
+<li><code>68fd1e64, f0cf0024, 6f67f7e5</code> =&gt; <code>4, 4, 5</code>
+
+<ul>
+<li>\((0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)\)</li>
+</ul></li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-35" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Hash Collision</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li><code>68fd1e64, f0cf0024, 6f67f7e5</code> =&gt; <code>4, 4, 5</code>
+
+<ul>
+<li>\((0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)\)</li>
+</ul></li>
+<li>Hash function is many to one, so different features might be mapped to the same index. This is called <em>collision</em>.</li>
+<li>In the perspective of statistics, the <em>collision</em> in hash function makes the effect of these features confounding.</li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-36" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Choosing Hash Function</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>Less collision rate
+
+<ul>
+<li>Real features, such as text features, are not uniformly distributed.</li>
+</ul></li>
+<li>High throughput</li>
+<li><code>FeatureHashing</code> uses the <a href="https://code.google.com/p/smhasher/wiki/MurmurHash3">Murmurhash3</a> algorithm implemented by <a href="https://cran.r-project.org/web/packages/digest/index.html"><code>digest</code></a></li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-37" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Pros of FeatureHashing</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<h3>A Good Companion of Online Algorithm</h3>
+
+<pre><code class="r">library(FeatureHashing)
+hash_size &lt;- 2^16
+w &lt;- numeric(hash_size)
+for(i in 1:1000) {
+  data &lt;- fread(paste0(&quot;criteo&quot;, i))
+  X &lt;- hashed.model.matrix(V1 ~ ., data, hash.size = hash_size)
+  y &lt;- data$V1
+  update_w(w, X, y)
+}
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-38" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Pros of FeatureHashing</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<h3>A Good Companion of Distributed Algorithm</h3>
+
+<pre><code class="r">library(pbdMPI)
+library(FeatureHashing)
+hash_size &lt;- 2^16
+w &lt;- numeric(hash_size)
+i &lt;- comm.rank()
+data &lt;- fread(paste0(&quot;criteo&quot;, i))
+X &lt;- hashed.model.matrix(V1 ~ ., data, hash.size = hash_size)
+y &lt;- data$V1
+# ...
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-39" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Pros of FeatureHashing</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<h3>Simple Training and Testing</h3>
+
+<pre><code class="r">library(FeatureHashing)
+model &lt;- is_click ~ ad * (url + ip)
+m_train &lt;- hashed.model.matrix(model, data_train, hash_size)
+m_test &lt;- hashed.model.matrix(model, data_test, hash_size)
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-40" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Cons of FeatureHashing</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<h3>Hash Size</h3>
+
+<p><img src="assets/fig/cons1-1.png" alt="plot of chunk cons1"> </p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-41" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Cons of FeatureHashing</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<h3>Lose Interpretation</h3>
+
+<pre><code>## Error: is.data.frame(data) is not TRUE
+</code></pre>
+
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;m&#39; not found
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-42" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Additional Pros</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<h3>Split Text Data</h3>
+
+<pre><code>## &quot;This movie is terrible but it has some good effects.&quot;
+</code></pre>
 
 </article>
 <!-- Presenter Notes -->
@@ -561,44 +1109,182 @@
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=13 title='Numeric Feature and Formula Operator'>
+        data-slide=13 title='Operator in Formula'>
          13
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=14 title='Categorical Feature and Contrast'>
+        data-slide=14 title='More Formula...'>
          14
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=15 title='Limitation of <code>model.matrix</code>'>
+        data-slide=15 title='Categorical Features'>
          15
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=16 title='Hash Function'>
+        data-slide=16 title='Categorical Feature in R'>
          16
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=17 title='Feature Hashing'>
+        data-slide=17 title='Contrasts'>
          17
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=18 title='Pros and Cons'>
+        data-slide=18 title='Contrasts'>
          18
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=19 title=''>
+        data-slide=19 title='Motivation of the FeatureHashing'>
          19
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=20 title='Modeling Many Categorical Features'>
+         20
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=21 title='Display Advertising'>
+         21
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=22 title='Kaggle: <a href="https://www.kaggle.com/c/criteo-display-ad-challenge">Display Advertising Challenge</a>'>
+         22
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=23 title='The Size of the Dataset'>
+         23
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=24 title='Vectorize These Features in R'>
+         24
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=25 title='Estimating Computing Resources'>
+         25
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=26 title='Vectorize These Features in R'>
+         26
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=27 title='Fit Model with Limited Memory'>
+         27
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=28 title='<a href="https://en.wikipedia.org/wiki/Online_machine_learning">Online Machine Learning</a>'>
+         28
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=29 title='Limitation of <code>model.matrix</code>'>
+         29
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=30 title='What is Feature Hashing?'>
+         30
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=31 title='Hash the Feature'>
+         31
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=32 title='Feature Hashing'>
+         32
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=33 title='An Example of Feature Hashing of Criteo&#39;s Data'>
+         33
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=34 title='An Example of Feature Hashing of Criteo&#39;s Data'>
+         34
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=35 title='Hash Collision'>
+         35
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=36 title='Choosing Hash Function'>
+         36
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=37 title='Pros of FeatureHashing'>
+         37
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=38 title='Pros of FeatureHashing'>
+         38
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=39 title='Pros of FeatureHashing'>
+         39
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=40 title='Cons of FeatureHashing'>
+         40
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=41 title='Cons of FeatureHashing'>
+         41
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=42 title='Additional Pros'>
+         42
       </a>
     </li>
   </ul>

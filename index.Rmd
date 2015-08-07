@@ -16,6 +16,11 @@ suppressPackageStartupMessages({
   library(knitr)
   library(ggplot2)
   library(xtable)
+  library(data.table)
+  library(magrittr)
+  library(dplyr)
+  library(xgboost)
+  library(FeatureHashing)
 })
 opts_chunk$set(echo = FALSE, cache = FALSE)
 fig <- function(path, size = 100, style = NULL) {
@@ -74,7 +79,7 @@ source: <http://edition.cnn.com/2014/01/15/travel/10-things-taiwan/>
 ## Outline
 
 1. Feature Vectorization and Formula Interface in R
-1. Feature Hashing
+1. Many Many Categorical Features
 
 --- .segue .dark
 
@@ -131,7 +136,7 @@ kable(model.matrix(~ ., iris.demo))
 - `model.matrix(~ ., iris)`
     - `.` represents linear term of all columns except response in the data.frame
 
-```{r formula-.}
+```{r formula, echo = TRUE}
 all.equal(
   model.matrix(~., iris),
   model.matrix(~Sepal.Length+Sepal.Width+Petal.Length+Petal.Width+Species, iris)
@@ -145,52 +150,332 @@ all.equal(
 
 --- &vcenter .largecontent
 
-
 ## Operator in Formula
 
 - `+`, the basic operator of linear predictor
 - `:`, the interaction operator of linear predictor
 
-```{r model.matrix, echo = TRUE, results='hide'}
+```{r formula.operator, echo = TRUE, results='hide'}
 model.matrix(~ Sepal.Length+Sepal.Width+Sepal.Length:Sepal.Width, iris.demo)
 ```
 
-```{r model.matrix.result}
+```{r formula.operator.result}
 kable(model.matrix(~ Sepal.Length+Sepal.Width+Sepal.Length:Sepal.Width, iris.demo))
 ```
 
+--- &vcenter .largecontent
+
+## Operator in Formula
+
+- `*`, factor crossing: a*b interpreted as a+b+a:b
+- `^`, crossing to the specified degree
+
+```{r formula.operator.order, echo = TRUE}
+all.equal(
+  model.matrix(~ Sepal.Length+Sepal.Width+Sepal.Length:Sepal.Width, iris.demo),
+  model.matrix(~ Sepal.Length * Sepal.Width, iris.demo)
+)
+
+all.equal(
+  model.matrix(~ (Sepal.Length + Sepal.Width)^2, iris.demo),
+  model.matrix(~ (Sepal.Length + Sepal.Width) * (Sepal.Length + Sepal.Width), iris.demo)
+)
+```
 
 --- &vcenter .largecontent
 
-## Numeric Feature and Formula Operator
+## More Formula...
 
-```{r numeric.feature, echo = TRUE, results='hide'}
-model.matrix(~ Sepal.Length + Sepal.Length:Sepal.Width, iris.demo)
-```
+- Please check `?formula`
 
-```{r numeric.feature.result}
-kable(model.matrix(~ Sepal.Length + Sepal.Length:Sepal.Width, iris.demo))
+--- .dark .segue
+
+## Categorical Features
+
+--- &vcenter .largecontent
+
+## Categorical Feature in R
+
+- A categorical variable of $K$ categories => a sequence of $K-1$ variables
+- There are some built-in contrasts:
+    - `contr.treatment`
+    - `contr.poly`
+    - `contr.sum`
+    - `contr.treatment`
+    - `contr.SAS`
+- <http://www.ats.ucla.edu/stat/r/library/contrast_coding.htm>
+
+--- &vcenter .largecontent
+
+## Contrasts
+
+```{r contrasts.treatment, echo = TRUE}
+model.matrix(~ Species, iris.demo)
 ```
 
 --- &vcenter .largecontent
 
-## Categorical Feature and Contrast
+## Contrasts
+
+```{r contrasts.sum, echo = TRUE}
+contrasts(iris.demo$Species) <- contr.sum(levels(iris.demo$Species))
+model.matrix(~ Species, iris.demo)
+```
+
+--- .dark .segue
+
+## Motivation of the FeatureHashing
+
+--- &vcenter .largecontent
+
+## Modeling Many Categorical Features
+
+- Display Advertising
+- Text Mining
+
+`r center_fig("Trouble.jpg")`
+
+<small>source: <http://seckora.com/wp-content/uploads/2014/06/computer-trouble.jpg></small>
+
+--- &vcenter .largecontent
+
+## Display Advertising
+
+`r center_fig("Display_Ads_MatrixAdvertising_Wide.png")`
+
+<small>source: <http://images.dailytech.com/nimage/Display_Ads_MatrixAdvertising_Wide.png></small>
+
+--- &vcenter .largecontent
+
+## Kaggle: [Display Advertising Challenge](https://www.kaggle.com/c/criteo-display-ad-challenge)
+
+- Training Dataset: a portion of [Criteo](http://www.criteo.com/)'s traffic over a period of 7 days.
+    - Each instance corresponds to a display ad served by Criteo.
+    - The reponse is positive if the user click the ad and negative otherwise.
+- Evaluation: The [Logarithmic Loss](https://www.kaggle.com/wiki/LogarithmicLoss) of the prediction on the testing dataset.
+
+`r center_fig("criteo-logo.png")`
+
+--- &vcenter .largecontent
+
+## The Size of the Dataset
+
+- 13 integer features and 26 categorical features
+- $7 \times 10^7$ instances
+- There are many levels of categorical feature does not appear in the training dataset.
+- Dataset: [link](http://labs.criteo.com/downloads/2014-kaggle-display-advertising-challenge-dataset/)
+
+--- &vcenter .largecontent
+
+## Vectorize These Features in R
+
+- After binning the integer features, I got $3 \times 10^7$ levels.
+- Sparse matrix was required, and we have `Matrix::sparse.model.matrix`.
+    - A dense matrix requires 14PB memory...
+    - A sparse matrix requires 40GB memory...
+
+--- &vcenter .largecontent
+
+## Estimating Computing Resources
+
+- Dense matrix: `nrow` ($7 \times 10^7$) $\times$ `ncol` ($3 \times 10^7)$ $\times$ 8 bytes
+- Sparse matrix: `nrow` ($7 \times 10^7$) $\times$ ($13 + 26$) $\times$ ($4 + 4 + 8$) bytes
+
+--- &vcenter .largecontent
+
+## Vectorize These Features in R
+
+- There was no hashing trick in R, so I use `sparse.model.matrix` with a best machine in [Amazon Web Service](https://aws.amazon.com/tw/).
+- It took me many hours to vectorize these features. 
+
+--- &vcenter .largecontent
+
+## Fit Model with Limited Memory
+
+- A post [Beat the benchmark with less then 200MB of memory](https://www.kaggle.com/c/criteo-display-ad-challenge/forums/t/10322/beat-the-benchmark-with-less-then-200mb-of-memory) describes how to fit a model with limited resources.
+    - online logistic regression
+    - feature hash trick
+    - adaptive learning rate
+
+--- &vcenter .largecontent
+
+## [Online Machine Learning](https://en.wikipedia.org/wiki/Online_machine_learning)
+
+- In online learning, the model parameter is updated after the arrival of every new datapoint.
+- In batch learning, the model paramter is updated after access to the entire dataset.
 
 --- &vcenter .largecontent
 
 ## Limitation of `model.matrix`
 
+- **The vectorization requires all levels of categorical features**.
+
+```{r contrasts.need.all.levels, echo = TRUE}
+contr.treatment(levels(iris$Species))
+```
+
 --- &vcenter .largecontent
 
-## Hash Function
+## What is Feature Hashing?
+
+- A kind of feature vectorization is a function to map feature into index.
+
+```{r contrasts.need.all.levels2, echo = TRUE}
+contr.treatment(levels(iris$Species))
+```
+
+- Feature hashing is a method to do feature vectorization in this way.
+
+--- &vcenter .largecontent
+
+## Hash the Feature
+
+- A [hash function](https://en.wikipedia.org/wiki/Hash_function) is any function that can be used to map digital data of arbitrary size to digital data of fixed size. For example:
+    - Mod `%%`
 
 --- &vcenter .largecontent
 
 ## Feature Hashing
 
+- Choose a hash function and use it to hash all the categorical features.
+- The result is the index of 1 in the feature.
+
 --- &vcenter .largecontent
 
-## Pros and Cons
+## An Example of Feature Hashing of Criteo's Data
+
+```{r criteo-sample1}
+criteo <- fread("dac_sample.txt", data.table = FALSE)
+kable(head(criteo[,c(15:17)]))
+```
+
+- The categorical variables have been hashed onto 32 bits for anonymization purposes.
+- Hash function: map the feature to the last 4 bits. 
+- The size of matrix $X$ will be $(7 \times 10^7) \times (2^4)$
 
 --- &vcenter .largecontent
 
+## An Example of Feature Hashing of Criteo's Data
+
+```{r criteo-sample2}
+kable(head(criteo[,c(15:17)]))
+```
+
+- `68fd1e64, 80e26c9b, fb936136` => `4, b, 6` 
+    - $(0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)$
+- `68fd1e64, f0cf0024, 6f67f7e5` => `4, 4, 5`
+    - $(0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)$
+
+--- &vcenter .largecontent
+
+## Hash Collision
+
+- `68fd1e64, f0cf0024, 6f67f7e5` => `4, 4, 5`
+    - $(0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)$
+- Hash function is many to one, so different features might be mapped to the same index. This is called *collision*.
+- In the perspective of statistics, the *collision* in hash function makes the effect of these features confounding.
+
+--- &vcenter .largecontent
+
+## Choosing Hash Function
+
+- Less collision rate
+    - Real features, such as text features, are not uniformly distributed.
+- High throughput
+- `FeatureHashing` uses the [Murmurhash3](https://code.google.com/p/smhasher/wiki/MurmurHash3) algorithm implemented by [`digest`](https://cran.r-project.org/web/packages/digest/index.html)
+
+--- &vcenter .largecontent
+
+## Pros of FeatureHashing
+
+### A Good Companion of Online Algorithm
+
+```{r pros, echo = TRUE, eval = FALSE}
+library(FeatureHashing)
+hash_size <- 2^16
+w <- numeric(hash_size)
+for(i in 1:1000) {
+  data <- fread(paste0("criteo", i))
+  X <- hashed.model.matrix(V1 ~ ., data, hash.size = hash_size)
+  y <- data$V1
+  update_w(w, X, y)
+}
+```
+
+--- &vcenter .largecontent
+
+## Pros of FeatureHashing
+
+### A Good Companion of Distributed Algorithm
+
+```{r pros2, echo = TRUE, eval = FALSE}
+library(pbdMPI)
+library(FeatureHashing)
+hash_size <- 2^16
+w <- numeric(hash_size)
+i <- comm.rank()
+data <- fread(paste0("criteo", i))
+X <- hashed.model.matrix(V1 ~ ., data, hash.size = hash_size)
+y <- data$V1
+# ...
+```
+
+--- &vcenter .largecontent
+
+## Pros of FeatureHashing
+
+### Simple Training and Testing
+
+```{r pros3, echo = TRUE, eval = FALSE}
+library(FeatureHashing)
+model <- is_click ~ ad * (url + ip)
+m_train <- hashed.model.matrix(model, data_train, hash_size)
+m_test <- hashed.model.matrix(model, data_test, hash_size)
+```
+
+--- &vcenter .largecontent
+
+## Cons of FeatureHashing
+
+### Hash Size
+
+```{r cons1, cache = TRUE}
+criteo.train <- head(criteo, 9000)
+y.train <- criteo.train$V1
+criteo.test <- tail(criteo, 1000)
+y.test <- criteo.test$V1
+x <- 10:22
+hash_size.set <- 2^x
+retval <- numeric(length(hash_size.set))
+for(i in seq_along(hash_size.set)) {
+  m.train <- hashed.model.matrix(V1 ~ .^2, criteo.train, hash_size.set[i])
+  m.test <- hashed.model.matrix(V1 ~ .^2, criteo.test, hash_size.set[i])
+  g <- xgboost(m.train, y.train, nrounds = 100, nthread = 8, objective = "binary:logistic", verbose = 0)
+  p <- predict(g, m.test)
+  retval[i] <- mean(y.test * log(p) + (1 - y.test) * log(1 - p))
+}
+plot(x, - retval, type = "l", xaxt = "n", xlab = "hash size", ylab = "logarithmic loss")
+axis(1, at = x, labels = parse(text = sprintf("2^%d", x)))
+```
+
+--- &vcenter .largecontent
+
+## Cons of FeatureHashing
+
+### Lose Interpretation
+
+```{r, echo = TRUE}
+m <- hashed.model.matrix(~ Species, iris, hash.size = 2^4, create.mapping = TRUE)
+mapping %% 2^4
+```
+
+--- &vcenter .largecontent
+
+## Additional Pros
+
+### Split Text Data
+
+```{r imdb}
+imdb <- read.delim("labeledTrainData.tsv", quote = "")
+cat(as.character(imdb$review[20277]))
+```

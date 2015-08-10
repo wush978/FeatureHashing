@@ -32,11 +32,12 @@ center_fig <- function(path, size = 100, style = NULL) {
 }
 ```
 
-## Wush, a Co-founder of Taiwan R User Group
+## [Wush Chi-Hsuan Wu](https://github.com/wush978)
 
-- Ph.D. Student of National Taiwan Univ. 
-- A Co-founder of Taiwan R User Group
-- A Contributor of R Packages
+- Ph.D. Student
+    - Display Advertising
+    - Large Scale Machine Learning
+- Familiar tools: R, C++, [Apache Spark](http://spark.apache.org/)
 
 --- &twocol
 
@@ -44,12 +45,12 @@ center_fig <- function(path, size = 100, style = NULL) {
 
 *** =left
 
-`r center_fig("TaiwanMap.png", 80)`
+`r center_fig("TaiwanMap.jpg", 80)`
+
+<small>source: <http://www.nbcnews.com> </small>
 
 *** =right
 
-- Area: 0.5% of Australia's
-- Population: 23 M $\approx$ Australia's
 - Highest Mountain: Yushan (3952m)
 
 `r center_fig("Mount_Yu_Shan_-_Taiwan.jpg")`
@@ -63,11 +64,9 @@ center_fig <- function(path, size = 100, style = NULL) {
 
 ---
 
-## Night Market
+## New Landmark of Taipei
 
-`r center_fig("nightmarket.jpg", 90)`
-
-source: <http://edition.cnn.com/2014/01/15/travel/10-things-taiwan/>
+`r center_fig("mailbox.jpg")`
 
 --- &vcenter .largecontent
 
@@ -77,9 +76,145 @@ source: <http://edition.cnn.com/2014/01/15/travel/10-things-taiwan/>
 
 `r center_fig("taiwan-r.jpg", 60)`
 
+--- .dark .segue
+
+## An Example of FeatureHashing
+
+--- &vcenter .largecontent
+
+## Sentiment Analysis
+
+- Provided by [Lewis Crouch](https://github.com/lewis-c)
+- Show the pros of using `FeatureHashing`
+
+```{r imdb.setup, include=FALSE}
+opts_chunk$set(cache = TRUE)
+```
+
+--- &vcenter .largecontent
+
+## Dataset: [IMDB](https://www.kaggle.com/c/word2vec-nlp-tutorial)
+
+- Predict the rating of the movie according to the text in the review.
+
+```{r imdb}
+imdb <- read.delim("labeledTrainData.tsv", quote = "", as.is = TRUE)
+imdb$review <- tolower(gsub("[^[:alnum:] ]", " ", imdb$review))
+```
+
+- Training Dataset: 25000 reviews
+- Binary response: positive or negative.
+
+```{r imdb.sentiment, dependson="imdb"}
+print(imdb$sentiment[457])
+```
+
+- Cleaned review
+
+```{r imdb.review, dependson="imdb"}
+strwrap(imdb$review[457], width = 80)
+```
+
+```{r imdb.split, dependson="imdb"}
+imdb.shuffle <- dplyr::sample_frac(imdb, 1, replace = FALSE)
+imdb.train <- head(imdb.shuffle, 20000)
+imdb.valid <- tail(imdb.shuffle, 5000)
+```
+
+--- &vcenter .largecontent
+
+## Word Segmentation
+
+```{r imdb.tokenize, dependson="imdb"}
+strsplit(imdb$review[457], " ")[[1]]
+```
+
+
+--- &vcenter .largecontent
+
+## Word Segmentation and Feature Extraction
+
+```{r imdb.tokenize.vectorize, dependson="imdb"}
+tokens <- strsplit(head(imdb$review), " ")
+tks <- c("message", "hate", "bad", "like", "gratuitous")
+tmp <- lapply(tks, function(tk) {
+  sapply(tokens, `%in%`, x = tk)  
+}) %>% 
+  `names<-`(tks) %>% 
+  as.data.frame(stringsAsFactors = FALSE)
+tmp$id <- imdb$id %>% head
+kable(tmp[,c(6,1:5)])
+```
+
+--- &vcenter .largecontent
+
+## `FeatureHashing`
+
+- `FeatureHashing` implements `split` in the formula interface.
+
+```{r imdb.m, dependson="imdb.split", echo = TRUE}
+hash_size <- 2^16
+m.train <- hashed.model.matrix(~ split(review, delim = " ", type = "existence"), 
+                               data = imdb.train, 
+                               hash.size = hash_size,
+                               signed.hash = FALSE)
+m.valid <- hashed.model.matrix(~ split(review, delim = " ", type = "existence"), 
+                              data = imdb.valid, 
+                              hash.size = hash_size,
+                              signed.hash = FALSE)
+```
+
+--- &vcenter .largecontent
+
+## Type of `split`
+
+- `existence`
+- `count`
+- [`tf-idf`](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) which is contributed by [Michaël Benesty](https://github.com/pommedeterresautee) and will be announced in v0.9.1
+
+--- &vcenter .largecontent
+
+## Gradient Boosted Decision Tree with `xgboost`
+
+```{r, dependson="imdb.m", echo = TRUE, results='hide'}
+dtrain <- xgb.DMatrix(m.train, label = imdb.train$sentiment)
+dvalid <- xgb.DMatrix(m.valid, label = imdb.valid$sentiment)
+watch <- list(train = dtrain, valid = dvalid)
+g <- xgb.train(booster = "gblinear", nrounds = 100, eta = 0.0001, max.depth = 2,
+                data = dtrain, objective = "binary:logistic",
+                watchlist = watch, eval_metric = "auc")
+```
+
+```
+[0]  train-auc:0.969895  valid-auc:0.914488
+[1]	train-auc:0.969982	valid-auc:0.914621
+[2]	train-auc:0.970069	valid-auc:0.914766
+...
+[97]  train-auc:0.975616	valid-auc:0.922895
+[98]	train-auc:0.975658	valid-auc:0.922952
+[99]	train-auc:0.975700	valid-auc:0.923014
+```
+
+--- &vcenter .largecontent
+
+## Performance
+
+- The [AUC](https://www.kaggle.com/wiki/AUC) of `g` is $0.90110$ in the [public leader board](https://www.kaggle.com/c/word2vec-nlp-tutorial/leaderboard?submissionId=1848642) 
+    - It outperforms the benchmark in Kaggle
+
+--- &vcenter .largecontent
+
+## The Purpose of FeatureHashing
+
+- **Make our life easier**
+
 --- .segue .dark
 
-## Feature Vectorization and Formula Interface in R
+```{r, include=FALSE}
+opts_chunk$set(cache = FALSE)
+```
+
+## Formula Interface in R
 
 --- &vcenter .largecontent
 
@@ -96,13 +231,13 @@ iris.demo <- iris[c(1:2,51:52,101:102),]
 kable(iris.demo)
 ```
 
-- Where is $X$ and $y$?
+- How to convert the real data to $X$?
 
 --- &vcenter .largecontent
 
 ## Feature Vectorization and Formula Interface
 
-- $X$ and $y$ are constructed via `model.matrix` in R
+- $X$ is usually constructed via `model.matrix` in R
 
 ```{r model.matrix, echo = TRUE, results='hide'}
 model.matrix(~ ., iris.demo)
@@ -116,67 +251,89 @@ kable(model.matrix(~ ., iris.demo))
 
 ## Formula Interface
 
-- `y ~ model`
-    - `y` is modelled by a linear predictor specified symbolically by `model`
-- Available symbols is the column names of the `data.frame`. Take `iris` for example:
-    - `Sepal.Length`
-    - `Sepal.Width`
-    - `Petal.Length`
-    - `Petal.Width`
-    - `Species`
+- `y ~ a + b`
+    - `y` is the response
+    - `a` and `b` are predictors
 
---- &vcenter .largecontent
-
-## Formula Interface
-
-- `model.matrix(~ ., iris)`
-    - `.` represents the linear term of all columns but the response
-
-```{r formula, echo = TRUE}
-all.equal(
-  model.matrix(~., iris),
-  model.matrix(~Sepal.Length+Sepal.Width+Petal.Length+Petal.Width+Species, iris)
-  )
-
-all.equal(
-  model.matrix(Species ~ ., iris),
-  model.matrix(Species ~ Sepal.Length+Sepal.Width+Petal.Length+Petal.Width, iris)
-  )
+```{r data.demo, echo = FALSE, eval = TRUE, results='hide'}
+data.demo <- iris.demo
+colnames(data.demo) <- c("a", "b", "c", "d", "e")
 ```
 
 --- &vcenter .largecontent
 
-## Operator in Formula
+## Formula Interface: `+`
 
-- `+`, the basic operator of linear predictors
-- `:`, the interaction operator of linear predictor
+- `+` is the operator of combining linear predictors
 
-```{r formula.operator, echo = TRUE, results='hide'}
-model.matrix(~ Sepal.Length+Sepal.Width+Sepal.Length:Sepal.Width, iris.demo)
+```{r fi.+1, echo = TRUE, eval = FALSE}
+model.matrix(~ a + b, data.demo)
 ```
 
-```{r formula.operator.result}
-kable(model.matrix(~ Sepal.Length+Sepal.Width+Sepal.Length:Sepal.Width, iris.demo))
+```{r fi.+2}
+kable(model.matrix(~ a + b, data.demo))
 ```
 
 --- &vcenter .largecontent
 
-## Operator in Formula
+## Formula Interface: `:`
 
-- `*`, factor crossing. For example, `a*b` is interpreted as `a+b+a:b`
-- `^`, the operator indicating crossing to the specified degree
+- `:` is the interaction operator
 
-```{r formula.operator.order, echo = TRUE}
-all.equal(
-  model.matrix(~ Sepal.Length+Sepal.Width+Sepal.Length:Sepal.Width, iris.demo),
-  model.matrix(~ Sepal.Length * Sepal.Width, iris.demo)
-)
-
-all.equal(
-  model.matrix(~ (Sepal.Length + Sepal.Width)^2, iris.demo),
-  model.matrix(~ (Sepal.Length + Sepal.Width) * (Sepal.Length + Sepal.Width), iris.demo)
-)
+```{r fi.:1, echo = TRUE, eval = FALSE}
+model.matrix(~ a + b + a:b, data.demo)
 ```
+
+```{r fi.:2}
+kable(model.matrix(~ a + b + a:b, data.demo))
+```
+
+--- &vcenter .largecontent
+
+## Formula Interface: `*`
+
+- `*` is the operator of cross product
+
+```{r fi.*1, echo = TRUE, eval = FALSE}
+# a + b + a:b
+model.matrix(~ a * b, data.demo)
+```
+
+```{r fi.*2}
+kable(model.matrix(~ a * b, data.demo))
+```
+
+--- &vcenter .largecontent
+
+## Formula Interface: `(`
+
+- `:` and `*` are distributive over `+`
+
+```{r fi.(1, echo = TRUE, eval = FALSE}
+# a:c + b:c
+model.matrix(~ (a + b):c, data.demo)
+```
+
+```{r fi.(2}
+model.matrix(~ (a + b):c, data.demo) %>% kable
+```
+
+--- &vcenter .largecontent
+
+## Formula Interface: `.`
+
+- `.` means all columns of the `data`.
+
+```{r fi..1, echo = TRUE, eval = FALSE}
+# ~ Sepal.Length + Sepal.Width + Petal.Length +
+#   Petal.Width + Species
+model.matrix(~ ., iris.demo)
+```
+
+```{r fi..2}
+model.matrix(~ ., iris.demo) %>% kable
+```
+
 
 --- &vcenter .largecontent
 
@@ -190,30 +347,27 @@ all.equal(
 
 ## Categorical Feature in R
 
-- A categorical variable of $K$ categories => a sequence of $K-1$ variables
-- There are some built-in contrasts:
-    - `contr.treatment`
-    - `contr.poly`
-    - `contr.sum`
-    - `contr.treatment`
-    - `contr.SAS`
-- <http://www.ats.ucla.edu/stat/r/library/contrast_coding.htm>
+- A categorical variables of $K$ categories are transformed to a $K-1$-dimentional vector.
+- There are many coding systems and the most commonly used is `Dummy Coding`.
+    - The first category are transformed to $\vec{0}$.
 
---- &vcenter .largecontent
+### Dummy Coding
 
-## Contrasts
-
-```{r contrasts.treatment, echo = TRUE}
-model.matrix(~ Species, iris.demo)
+```{r categorical.variable}
+contr.treatment(levels(iris$Species))
 ```
 
 --- &vcenter .largecontent
 
-## Contrasts
+## Categorical Feature in Machine Learning
 
-```{r contrasts.sum, echo = TRUE}
-contrasts(iris.demo$Species) <- contr.sum(levels(iris.demo$Species))
-model.matrix(~ Species, iris.demo)
+- Predictive analysis
+- Regularization
+- The categorical variables of $K$ categories are transformed to $K$-dimentional vector.
+    - The missing data are transformed to $\vec{0}$.
+
+```{r contrasts.treatment1, echo = TRUE}
+contr.treatment(levels(iris.demo$Species), contrasts = FALSE)
 ```
 
 --- .dark .segue
@@ -222,31 +376,9 @@ model.matrix(~ Species, iris.demo)
 
 --- &vcenter .largecontent
 
-## Modeling Many Categorical Features
-
-- Display Advertising
-- Text Mining
-
-`r center_fig("Trouble.jpg")`
-
-<small>source: <http://seckora.com/wp-content/uploads/2014/06/computer-trouble.jpg></small>
-
---- &vcenter .largecontent
-
-## Display Advertising
-
-`r center_fig("Display_Ads_MatrixAdvertising_Wide.png")`
-
-<small>source: <http://images.dailytech.com/nimage/Display_Ads_MatrixAdvertising_Wide.png></small>
-
---- &vcenter .largecontent
-
 ## Kaggle: [Display Advertising Challenge](https://www.kaggle.com/c/criteo-display-ad-challenge)
 
-- Training Dataset: a portion of [Criteo](http://www.criteo.com/)'s traffic over a period of 7 days.
-    - Each instance corresponds to a display ad served by Criteo.
-    - The reponse is positive if the ad viewer clicks the ad.
-- Evaluation: The [Logarithmic Loss](https://www.kaggle.com/wiki/LogarithmicLoss) of the prediction on the testing dataset.
+- Given a user and the page he is visiting, what is the probability that he will click on a given ad?
 
 `r center_fig("criteo-logo.png")`
 
@@ -256,14 +388,13 @@ model.matrix(~ Species, iris.demo)
 
 - 13 integer features and 26 categorical features
 - $7 \times 10^7$ instances
-- There are many levels of categorical feature which do not appear in the training dataset.
-- The [link](http://labs.criteo.com/downloads/2014-kaggle-display-advertising-challenge-dataset/)
+- Download the dataset via this [link](http://labs.criteo.com/downloads/2014-kaggle-display-advertising-challenge-dataset/)
 
 --- &vcenter .largecontent
 
 ## Vectorize These Features in R
 
-- After binning the integer features, I got $3 \times 10^7$ levels.
+- After binning the integer features, I got $3 \times 10^7$ categories.
 - Sparse matrix was required
     - A dense matrix required 14PB memory...
     - A sparse matrix required 40GB memory...
@@ -279,10 +410,7 @@ model.matrix(~ Species, iris.demo)
 
 ## Vectorize These Features in R
 
-- There was no implementation of the hashing trick in R, so I used `sparse.model.matrix` with a best machine in [Amazon Web Service](https://aws.amazon.com/tw/).
-- It took me many hours to design and implement the algorithm.
-- It took me many hours to run the scripts.
-
+- `sparse.model.matrix` is similar to `model.matrix` but returns a sparse matrix.
 
 --- &vcenter .largecontent
 
@@ -298,13 +426,21 @@ model.matrix(~ Species, iris.demo)
 ## [Online Machine Learning](https://en.wikipedia.org/wiki/Online_machine_learning)
 
 - In online learning, the model parameter is updated after the arrival of every new datapoint.
+    - Only the aggregated information and the incoming datapoint are used.
 - In batch learning, the model paramter is updated after access to the entire dataset.
+
+--- &vcenter .largecontent
+
+## Memory Requirement of Online Learning
+
+- Related to model parameters
+    - Require little memory for large amount of instances.
 
 --- &vcenter .largecontent
 
 ## Limitation of `model.matrix`
 
-- **The vectorization requires all levels of categorical features**.
+- The vectorization requires <font color="red">all categories</font>.
 
 ```{r contrasts.need.all.levels, echo = TRUE}
 contr.treatment(levels(iris$Species))
@@ -312,12 +448,36 @@ contr.treatment(levels(iris$Species))
 
 --- &vcenter .largecontent
 
-## $f : \mathbb{Z} -> {0, 1, 2, ..., k}$
+## My Work Around
 
-- Mapping features to indices is one of method to vectorize feature. 
+- Scan all data to retrieve all categories
+- Vectorize features in an online fashion
+- The overhead of exploring features increases
 
-```{r contrasts.need.all.levels2, echo = TRUE}
-contr.treatment(levels(iris$Species))
+--- &vcenter .largecontent
+
+## Observations
+
+- Mapping features to $\{0, 1, 2, ..., K\}$ is one of method to vectorize feature.
+    - `setosa` => $\vec{e_1}$
+    - `versicolor` => $\vec{e_2}$
+    - `virginica` => $\vec{e_3}$
+
+```{r}
+contr.treatment(levels(iris$Species), contrasts = FALSE)
+```
+
+--- &vcenter .largecontent
+
+## Observations
+
+- `contr.treatment` ranks all categories to map the feature to integer.
+- What if we do not know all categories?
+    - Digital features are integer.
+    - We use a function maps $\mathbb{Z}$ to $\{0, 1, 2, ..., K\}$
+
+```{r, echo = TRUE}
+charToRaw("setosa")
 ```
 
 --- &vcenter .largecontent
@@ -335,6 +495,7 @@ contr.treatment(levels(iris$Species))
 ## Feature Hashing
 
 - Choose a hash function and use it to hash all the categorical features.
+- The hash function does not require global information.
 
 --- &vcenter .largecontent
 
@@ -460,8 +621,8 @@ axis(1, at = x, labels = parse(text = sprintf("2^%d", x)))
 
 ### Lose Interpretation
 
-- It is inconvenient to reverse the indices to feature.
 - Collision makes the interpretation harder.
+- It is inconvenient to reverse the indices to feature.
 
 ```{r, echo = TRUE}
 m <- hashed.model.matrix(~ Species, iris, hash.size = 2^4, create.mapping = TRUE)
@@ -473,137 +634,10 @@ hash.mapping(m) %% 2^4
 ## The Result of the Competition...
 
 - No.1: [Field-aware Factorization Machine](http://ntucsu.csie.ntu.edu.tw/~cjlin/libffm/)
+    - [The hashing trick do not contribute any improvement on the leaderboard. They
+apply the hashing trick only because it makes their life easier to generate
+features.](https://www.kaggle.com/c/criteo-display-ad-challenge/forums/t/10555/3-idiots-solution-libffm/55888#post55888).
 - No.3, no.4 and no.9 (we): Neuron Network
-
---- .dark .segue
-
-## Additional Features of `FeatureHashing`
-
---- &vcenter .largecontent
-
-## Another Story: Sentiment Analysis
-
-- Provided by [Lewis Crouch](https://github.com/lewis-c)
-- Show the Pros of using FeatureHashing
-
-```{r imdb.setup, include=FALSE}
-opts_chunk$set(cache = TRUE)
-```
-
---- &vcenter .largecontent
-
-## Dataset: [IMDB](https://www.kaggle.com/c/word2vec-nlp-tutorial)
-
-```{r imdb}
-imdb <- read.delim("labeledTrainData.tsv", quote = "", as.is = TRUE)
-imdb$review <- tolower(gsub("[^[:alnum:] ]", " ", imdb$review))
-```
-
-- Training Dataset: 25000 reviews
-- Binary response: positive or negative.
-
-```{r imdb.sentiment, dependson="imdb"}
-print(imdb$sentiment[457])
-```
-
-- Cleaned review
-
-```{r imdb.review, dependson="imdb"}
-strwrap(imdb$review[457], width = 80)
-```
-
-```{r imdb.split, dependson="imdb"}
-imdb.shuffle <- dplyr::sample_frac(imdb, 1, replace = FALSE)
-imdb.train <- head(imdb.shuffle, 20000)
-imdb.valid <- tail(imdb.shuffle, 5000)
-```
-
---- &vcenter .largecontent
-
-## Tokenize
-
-```{r imdb.tokenize, dependson="imdb"}
-strsplit(imdb$review[457], " ")[[1]]
-```
-
-
---- &vcenter .largecontent
-
-## Tokenize and Vectorization
-
-```{r imdb.tokenize.vectorize, dependson="imdb"}
-tokens <- strsplit(head(imdb$review), " ")
-tks <- c("message", "hate", "bad", "like", "gratuitous")
-tmp <- lapply(tks, function(tk) {
-  sapply(tokens, `%in%`, x = tk)  
-}) %>% 
-  `names<-`(tks) %>% 
-  as.data.frame(stringsAsFactors = FALSE)
-tmp$id <- imdb$id %>% head
-kable(tmp[,c(6,1:5)])
-```
-
---- &vcenter .largecontent
-
-## Additional Feature of `FeatureHashing`
-
-- `FeatureHashing` implements `split` in the formula interface.
-
-```{r imdb.m, dependson="imdb.split", echo = TRUE}
-hash_size <- 2^16
-m.train <- hashed.model.matrix(~ split(review, delim = " ", type = "existence"), 
-                               data = imdb.train, 
-                               hash.size = hash_size,
-                               signed.hash = FALSE)
-m.valid <- hashed.model.matrix(~ split(review, delim = " ", type = "existence"), 
-                              data = imdb.valid, 
-                              hash.size = hash_size,
-                              signed.hash = FALSE)
-```
-
---- &vcenter .largecontent
-
-## Type of `split`
-
-- `existence`
-- `count`
-- [`tf-idf`](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) which is contributed by [Michaël Benesty](https://github.com/pommedeterresautee) and will be announced in v0.9.1
-
---- &vcenter .largecontent
-
-## Gradient Boosted Decision Tree with `xgboost`
-
-```{r, dependson="imdb.m", echo = TRUE, results='hide'}
-dtrain <- xgb.DMatrix(m.train, label = imdb.train$sentiment)
-dvalid <- xgb.DMatrix(m.valid, label = imdb.valid$sentiment)
-watch <- list(train = dtrain, valid = dvalid)
-g <- xgb.train(booster = "gblinear", nrounds = 100, eta = 0.0001, max.depth = 2,
-                data = dtrain, objective = "binary:logistic",
-                watchlist = watch, eval_metric = "auc")
-```
-
-```
-[0]  train-auc:0.969895	valid-auc:0.914488
-[1]	train-auc:0.969982	valid-auc:0.914621
-[2]	train-auc:0.970069	valid-auc:0.914766
-...
-[97]  train-auc:0.975616	valid-auc:0.922895
-[98]	train-auc:0.975658	valid-auc:0.922952
-[99]	train-auc:0.975700	valid-auc:0.923014
-```
-
---- &vcenter .largecontent
-
-## Performance
-
-- The [AUC](https://www.kaggle.com/wiki/AUC) of `g` is $0.90110$ in the [public leader board](https://www.kaggle.com/c/word2vec-nlp-tutorial/leaderboard?submissionId=1848642) 
-    - It outperforms the benchmark in Kaggle
-
---- &vcenter .largecontent
-
-## The Purpose of FeatureHashing
-
-- **Make our life easier**
 
 --- .dark .segue
 
@@ -668,6 +702,21 @@ getParseData(p)
 `r center_fig("commpraxis-audience-confusion.png", 75)`
 <small>source: http://www.commpraxis.com/wp-content/uploads/2015/01/commpraxis-audience-confusion.png</small>
 
+--- &vcenter .largecontent
+
+## Summary
+
+- Pros of `FeatureHashing`
+    - Make it easier to do feature vectorization for predictive analysis.
+    - Make it easier to tokenize the text data.
+- Cons of `FeatureHashing`
+    - Decrease the prediction accuracy if the `hash size` is too small
+    - Interpretation becomes harder.
+
+### When should I use `FeatureHashing`?
+
+Short Answer: Predictive Anlysis with a large amount of categories.
+
 --- .dark .segue
 
 ## Q&A
@@ -675,4 +724,3 @@ getParseData(p)
 --- &vcenter .largecontent
 
 ## Thanks You
-

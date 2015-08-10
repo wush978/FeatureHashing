@@ -44,13 +44,17 @@
     <!-- SLIDES -->
     <slide class="largecontent" id="slide-1" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>Wush, a Co-founder of Taiwan R User Group</h2>
+  <h2><a href="https://github.com/wush978">Wush Chi-Hsuan Wu</a></h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
 <ul>
-<li>Ph.D. Student of National Taiwan Univ. </li>
-<li>A Co-founder of Taiwan R User Group</li>
-<li>A Contributor of R Packages</li>
+<li>Ph.D. Student
+
+<ul>
+<li>Display Advertising</li>
+<li>Large Scale Machine Learning</li>
+</ul></li>
+<li>Familiar tools: R, C++, <a href="http://spark.apache.org/">Apache Spark</a></li>
 </ul>
 
 </article>
@@ -63,13 +67,13 @@
   <article data-timings="">
     
 <div style='float:left;width:48%;' class='centered'>
-  <p><center><img src="assets/img/TaiwanMap.png" style="max-height: 80%; max-width: 80%;"/></center></p>
+  <p><center><img src="assets/img/TaiwanMap.jpg" style="max-height: 80%; max-width: 80%;"/></center></p>
+
+<p><small>source: <a href="http://www.nbcnews.com">http://www.nbcnews.com</a> </small></p>
 
 </div>
 <div style='float:right;width:48%;' class='centered'>
   <ul>
-<li>Area: 0.5% of Australia&#39;s</li>
-<li>Population: 23 M \(\approx\) Australia&#39;s</li>
 <li>Highest Mountain: Yushan (3952m)</li>
 </ul>
 
@@ -98,12 +102,10 @@
 </slide>
 <slide class="" id="slide-4" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
   <hgroup>
-    <h2>Night Market</h2>
+    <h2>New Landmark of Taipei</h2>
   </hgroup>
   <article data-timings="">
-    <p><center><img src="assets/img/nightmarket.jpg" style="max-height: 90%; max-width: 90%;"/></center></p>
-
-<p>source: <a href="http://edition.cnn.com/2014/01/15/travel/10-things-taiwan/">http://edition.cnn.com/2014/01/15/travel/10-things-taiwan/</a></p>
+    <p><center><img src="assets/img/mailbox.jpg" style="max-height: 100%; max-width: 100%;"/></center></p>
 
   </article>
   <!-- Presenter Notes -->
@@ -120,9 +122,9 @@
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="segue dark" id="slide-6" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+<slide class="dark segue" id="slide-6" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
   <hgroup>
-    <h2>Feature Vectorization and Formula Interface in R</h2>
+    <h2>An Example of FeatureHashing</h2>
   </hgroup>
   <article data-timings="">
     
@@ -130,6 +132,241 @@
   <!-- Presenter Notes -->
 </slide>
 <slide class="largecontent" id="slide-7" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Sentiment Analysis</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>Provided by <a href="https://github.com/lewis-c">Lewis Crouch</a></li>
+<li>Show the pros of using <code>FeatureHashing</code></li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-8" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Dataset: <a href="https://www.kaggle.com/c/word2vec-nlp-tutorial">IMDB</a></h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li><p>Predict the rating of the movie according to the text in the review.</p></li>
+<li><p>Training Dataset: 25000 reviews</p></li>
+<li><p>Binary response: positive or negative.</p></li>
+</ul>
+
+<pre><code>## [1] 1
+</code></pre>
+
+<ul>
+<li>Cleaned review</li>
+</ul>
+
+<pre><code>## [1] &quot;kurosawa is a proved humanitarian this movie is totally about people living in&quot; 
+## [2] &quot;poverty you will see nothing but angry in this movie it makes you feel bad but&quot; 
+## [3] &quot;still worth all those who s too comfortable with materialization should spend 2&quot;
+## [4] &quot;5 hours with this movie&quot;
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-9" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Word Segmentation</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code>##  [1] &quot;&quot;                &quot;kurosawa&quot;        &quot;is&quot;             
+##  [4] &quot;a&quot;               &quot;proved&quot;          &quot;humanitarian&quot;   
+##  [7] &quot;&quot;                &quot;this&quot;            &quot;movie&quot;          
+## [10] &quot;is&quot;              &quot;totally&quot;         &quot;about&quot;          
+## [13] &quot;people&quot;          &quot;living&quot;          &quot;in&quot;             
+## [16] &quot;poverty&quot;         &quot;&quot;                &quot;you&quot;            
+## [19] &quot;will&quot;            &quot;see&quot;             &quot;nothing&quot;        
+## [22] &quot;but&quot;             &quot;angry&quot;           &quot;in&quot;             
+## [25] &quot;this&quot;            &quot;movie&quot;           &quot;&quot;               
+## [28] &quot;it&quot;              &quot;makes&quot;           &quot;you&quot;            
+## [31] &quot;feel&quot;            &quot;bad&quot;             &quot;but&quot;            
+## [34] &quot;still&quot;           &quot;worth&quot;           &quot;&quot;               
+## [37] &quot;all&quot;             &quot;those&quot;           &quot;who&quot;            
+## [40] &quot;s&quot;               &quot;too&quot;             &quot;comfortable&quot;    
+## [43] &quot;with&quot;            &quot;materialization&quot; &quot;should&quot;         
+## [46] &quot;spend&quot;           &quot;2&quot;               &quot;5&quot;              
+## [49] &quot;hours&quot;           &quot;with&quot;            &quot;this&quot;           
+## [52] &quot;movie&quot;           &quot;&quot;
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-10" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Word Segmentation and Feature Extraction</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<table><thead>
+<tr>
+<th align="left">id</th>
+<th align="left">message</th>
+<th align="left">hate</th>
+<th align="left">bad</th>
+<th align="left">like</th>
+<th align="left">gratuitous</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">&quot;5814_8&quot;</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+<td align="left">FALSE</td>
+</tr>
+<tr>
+<td align="left">&quot;2381_9&quot;</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">FALSE</td>
+</tr>
+<tr>
+<td align="left">&quot;7759_3&quot;</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">FALSE</td>
+</tr>
+<tr>
+<td align="left">&quot;3630_4&quot;</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+</tr>
+<tr>
+<td align="left">&quot;9495_8&quot;</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+</tr>
+<tr>
+<td align="left">&quot;8196_8&quot;</td>
+<td align="left">FALSE</td>
+<td align="left">FALSE</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+<td align="left">TRUE</td>
+</tr>
+</tbody></table>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-11" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2><code>FeatureHashing</code></h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li><code>FeatureHashing</code> implements <code>split</code> in the formula interface.</li>
+</ul>
+
+<pre><code class="r">hash_size &lt;- 2^16
+m.train &lt;- hashed.model.matrix(~ split(review, delim = &quot; &quot;, type = &quot;existence&quot;), 
+                               data = imdb.train, 
+                               hash.size = hash_size,
+                               signed.hash = FALSE)
+m.valid &lt;- hashed.model.matrix(~ split(review, delim = &quot; &quot;, type = &quot;existence&quot;), 
+                              data = imdb.valid, 
+                              hash.size = hash_size,
+                              signed.hash = FALSE)
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-12" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Type of <code>split</code></h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li><code>existence</code></li>
+<li><code>count</code></li>
+<li><a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf"><code>tf-idf</code></a> which is contributed by <a href="https://github.com/pommedeterresautee">Michaël Benesty</a> and will be announced in v0.9.1</li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-13" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Gradient Boosted Decision Tree with <code>xgboost</code></h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<pre><code class="r">dtrain &lt;- xgb.DMatrix(m.train, label = imdb.train$sentiment)
+dvalid &lt;- xgb.DMatrix(m.valid, label = imdb.valid$sentiment)
+watch &lt;- list(train = dtrain, valid = dvalid)
+g &lt;- xgb.train(booster = &quot;gblinear&quot;, nrounds = 100, eta = 0.0001, max.depth = 2,
+                data = dtrain, objective = &quot;binary:logistic&quot;,
+                watchlist = watch, eval_metric = &quot;auc&quot;)
+</code></pre>
+
+<pre><code>[0]  train-auc:0.969895  valid-auc:0.914488
+[1] train-auc:0.969982  valid-auc:0.914621
+[2] train-auc:0.970069  valid-auc:0.914766
+...
+[97]  train-auc:0.975616    valid-auc:0.922895
+[98]    train-auc:0.975658  valid-auc:0.922952
+[99]    train-auc:0.975700  valid-auc:0.923014
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-14" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Performance</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>The <a href="https://www.kaggle.com/wiki/AUC">AUC</a> of <code>g</code> is \(0.90110\) in the <a href="https://www.kaggle.com/c/word2vec-nlp-tutorial/leaderboard?submissionId=1848642">public leader board</a> 
+
+<ul>
+<li>It outperforms the benchmark in Kaggle</li>
+</ul></li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-15" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>The Purpose of FeatureHashing</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li><strong>Make our life easier</strong></li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="segue dark" id="slide-16" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+  <hgroup>
+    <h2>Formula Interface in R</h2>
+  </hgroup>
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-17" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Algorithm in Text Book</h2>
 </hgroup>
@@ -201,19 +438,19 @@
 </tbody></table>
 
 <ul>
-<li>Where is \(X\) and \(y\)?</li>
+<li>How to convert the real data to \(X\)?</li>
 </ul>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-8" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-18" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Feature Vectorization and Formula Interface</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
 <ul>
-<li>\(X\) and \(y\) are constructed via <code>model.matrix</code> in R</li>
+<li>\(X\) is usually constructed via <code>model.matrix</code> in R</li>
 </ul>
 
 <pre><code class="r">model.matrix(~ ., iris.demo)
@@ -296,85 +533,103 @@
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-9" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-19" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Formula Interface</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
 <ul>
-<li><code>y ~ model</code>
+<li><code>y ~ a + b</code>
 
 <ul>
-<li><code>y</code> is modelled by a linear predictor specified symbolically by <code>model</code></li>
-</ul></li>
-<li>Available symbols is the column names of the <code>data.frame</code>. Take <code>iris</code> for example:
-
-<ul>
-<li><code>Sepal.Length</code></li>
-<li><code>Sepal.Width</code></li>
-<li><code>Petal.Length</code></li>
-<li><code>Petal.Width</code></li>
-<li><code>Species</code></li>
+<li><code>y</code> is the response</li>
+<li><code>a</code> and <code>b</code> are predictors</li>
 </ul></li>
 </ul>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-10" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-20" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>Formula Interface</h2>
+  <h2>Formula Interface: <code>+</code></h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
 <ul>
-<li><code>model.matrix(~ ., iris)</code>
-
-<ul>
-<li><code>.</code> represents the linear term of all columns but the response</li>
-</ul></li>
+<li><code>+</code> is the operator of combining linear predictors</li>
 </ul>
 
-<pre><code class="r">all.equal(
-  model.matrix(~., iris),
-  model.matrix(~Sepal.Length+Sepal.Width+Petal.Length+Petal.Width+Species, iris)
-  )
-</code></pre>
-
-<pre><code>## [1] TRUE
-</code></pre>
-
-<pre><code class="r">all.equal(
-  model.matrix(Species ~ ., iris),
-  model.matrix(Species ~ Sepal.Length+Sepal.Width+Petal.Length+Petal.Width, iris)
-  )
-</code></pre>
-
-<pre><code>## [1] TRUE
-</code></pre>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-11" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Operator in Formula</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<ul>
-<li><code>+</code>, the basic operator of linear predictors</li>
-<li><code>:</code>, the interaction operator of linear predictor</li>
-</ul>
-
-<pre><code class="r">model.matrix(~ Sepal.Length+Sepal.Width+Sepal.Length:Sepal.Width, iris.demo)
+<pre><code class="r">model.matrix(~ a + b, data.demo)
 </code></pre>
 
 <table><thead>
 <tr>
 <th align="left"></th>
 <th align="right">(Intercept)</th>
-<th align="right">Sepal.Length</th>
-<th align="right">Sepal.Width</th>
-<th align="right">Sepal.Length:Sepal.Width</th>
+<th align="right">a</th>
+<th align="right">b</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">1</td>
+<td align="right">1</td>
+<td align="right">5.1</td>
+<td align="right">3.5</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="right">1</td>
+<td align="right">4.9</td>
+<td align="right">3.0</td>
+</tr>
+<tr>
+<td align="left">51</td>
+<td align="right">1</td>
+<td align="right">7.0</td>
+<td align="right">3.2</td>
+</tr>
+<tr>
+<td align="left">52</td>
+<td align="right">1</td>
+<td align="right">6.4</td>
+<td align="right">3.2</td>
+</tr>
+<tr>
+<td align="left">101</td>
+<td align="right">1</td>
+<td align="right">6.3</td>
+<td align="right">3.3</td>
+</tr>
+<tr>
+<td align="left">102</td>
+<td align="right">1</td>
+<td align="right">5.8</td>
+<td align="right">2.7</td>
+</tr>
+</tbody></table>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-21" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Formula Interface: <code>:</code></h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li><code>:</code> is the interaction operator</li>
+</ul>
+
+<pre><code class="r">model.matrix(~ a + b + a:b, data.demo)
+</code></pre>
+
+<table><thead>
+<tr>
+<th align="left"></th>
+<th align="right">(Intercept)</th>
+<th align="right">a</th>
+<th align="right">b</th>
+<th align="right">a:b</th>
 </tr>
 </thead><tbody>
 <tr>
@@ -424,38 +679,229 @@
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-12" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-22" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>Operator in Formula</h2>
+  <h2>Formula Interface: <code>*</code></h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
 <ul>
-<li><code>*</code>, factor crossing. For example, <code>a*b</code> is interpreted as <code>a+b+a:b</code></li>
-<li><code>^</code>, the operator indicating crossing to the specified degree</li>
+<li><code>*</code> is the operator of cross product</li>
 </ul>
 
-<pre><code class="r">all.equal(
-  model.matrix(~ Sepal.Length+Sepal.Width+Sepal.Length:Sepal.Width, iris.demo),
-  model.matrix(~ Sepal.Length * Sepal.Width, iris.demo)
-)
+<pre><code class="r"># a + b + a:b
+model.matrix(~ a * b, data.demo)
 </code></pre>
 
-<pre><code>## [1] TRUE
-</code></pre>
-
-<pre><code class="r">all.equal(
-  model.matrix(~ (Sepal.Length + Sepal.Width)^2, iris.demo),
-  model.matrix(~ (Sepal.Length + Sepal.Width) * (Sepal.Length + Sepal.Width), iris.demo)
-)
-</code></pre>
-
-<pre><code>## [1] TRUE
-</code></pre>
+<table><thead>
+<tr>
+<th align="left"></th>
+<th align="right">(Intercept)</th>
+<th align="right">a</th>
+<th align="right">b</th>
+<th align="right">a:b</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">1</td>
+<td align="right">1</td>
+<td align="right">5.1</td>
+<td align="right">3.5</td>
+<td align="right">17.85</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="right">1</td>
+<td align="right">4.9</td>
+<td align="right">3.0</td>
+<td align="right">14.70</td>
+</tr>
+<tr>
+<td align="left">51</td>
+<td align="right">1</td>
+<td align="right">7.0</td>
+<td align="right">3.2</td>
+<td align="right">22.40</td>
+</tr>
+<tr>
+<td align="left">52</td>
+<td align="right">1</td>
+<td align="right">6.4</td>
+<td align="right">3.2</td>
+<td align="right">20.48</td>
+</tr>
+<tr>
+<td align="left">101</td>
+<td align="right">1</td>
+<td align="right">6.3</td>
+<td align="right">3.3</td>
+<td align="right">20.79</td>
+</tr>
+<tr>
+<td align="left">102</td>
+<td align="right">1</td>
+<td align="right">5.8</td>
+<td align="right">2.7</td>
+<td align="right">15.66</td>
+</tr>
+</tbody></table>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-13" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-23" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Formula Interface: <code>(</code></h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li><code>:</code> and <code>*</code> are distributive over <code>+</code></li>
+</ul>
+
+<pre><code class="r"># a:c + b:c
+model.matrix(~ (a + b):c, data.demo)
+</code></pre>
+
+<table><thead>
+<tr>
+<th align="left"></th>
+<th align="right">(Intercept)</th>
+<th align="right">a:c</th>
+<th align="right">b:c</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">1</td>
+<td align="right">1</td>
+<td align="right">7.14</td>
+<td align="right">4.90</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="right">1</td>
+<td align="right">6.86</td>
+<td align="right">4.20</td>
+</tr>
+<tr>
+<td align="left">51</td>
+<td align="right">1</td>
+<td align="right">32.90</td>
+<td align="right">15.04</td>
+</tr>
+<tr>
+<td align="left">52</td>
+<td align="right">1</td>
+<td align="right">28.80</td>
+<td align="right">14.40</td>
+</tr>
+<tr>
+<td align="left">101</td>
+<td align="right">1</td>
+<td align="right">37.80</td>
+<td align="right">19.80</td>
+</tr>
+<tr>
+<td align="left">102</td>
+<td align="right">1</td>
+<td align="right">29.58</td>
+<td align="right">13.77</td>
+</tr>
+</tbody></table>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-24" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Formula Interface: <code>.</code></h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li><code>.</code> means all columns of the <code>data</code>.</li>
+</ul>
+
+<pre><code class="r"># ~ Sepal.Length + Sepal.Width + Petal.Length +
+#   Petal.Width + Species
+model.matrix(~ ., iris.demo)
+</code></pre>
+
+<table><thead>
+<tr>
+<th align="left"></th>
+<th align="right">(Intercept)</th>
+<th align="right">Sepal.Length</th>
+<th align="right">Sepal.Width</th>
+<th align="right">Petal.Length</th>
+<th align="right">Petal.Width</th>
+<th align="right">Speciesversicolor</th>
+<th align="right">Speciesvirginica</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">1</td>
+<td align="right">1</td>
+<td align="right">5.1</td>
+<td align="right">3.5</td>
+<td align="right">1.4</td>
+<td align="right">0.2</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="right">1</td>
+<td align="right">4.9</td>
+<td align="right">3.0</td>
+<td align="right">1.4</td>
+<td align="right">0.2</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">51</td>
+<td align="right">1</td>
+<td align="right">7.0</td>
+<td align="right">3.2</td>
+<td align="right">4.7</td>
+<td align="right">1.4</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">52</td>
+<td align="right">1</td>
+<td align="right">6.4</td>
+<td align="right">3.2</td>
+<td align="right">4.5</td>
+<td align="right">1.5</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="left">101</td>
+<td align="right">1</td>
+<td align="right">6.3</td>
+<td align="right">3.3</td>
+<td align="right">6.0</td>
+<td align="right">2.5</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr>
+<td align="left">102</td>
+<td align="right">1</td>
+<td align="right">5.8</td>
+<td align="right">2.7</td>
+<td align="right">5.1</td>
+<td align="right">1.9</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+</tbody></table>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-25" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   
 </hgroup>
@@ -467,7 +913,7 @@
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="dark segue" id="slide-14" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+<slide class="dark segue" id="slide-26" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
   <hgroup>
     <h2>Categorical Features</h2>
   </hgroup>
@@ -476,83 +922,59 @@
   </article>
   <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-15" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-27" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Categorical Feature in R</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
 <ul>
-<li>A categorical variable of \(K\) categories =&gt; a sequence of \(K-1\) variables</li>
-<li>There are some built-in contrasts:
+<li>A categorical variables of \(K\) categories are transformed to a \(K-1\)-dimentional vector.</li>
+<li>There are many coding systems and the most commonly used is <code>Dummy Coding</code>.
 
 <ul>
-<li><code>contr.treatment</code></li>
-<li><code>contr.poly</code></li>
-<li><code>contr.sum</code></li>
-<li><code>contr.treatment</code></li>
-<li><code>contr.SAS</code></li>
+<li>The first category are transformed to \(\vec{0}\).</li>
 </ul></li>
-<li><a href="http://www.ats.ucla.edu/stat/r/library/contrast_coding.htm">http://www.ats.ucla.edu/stat/r/library/contrast_coding.htm</a></li>
 </ul>
 
+<h3>Dummy Coding</h3>
+
+<pre><code>##            versicolor virginica
+## setosa              0         0
+## versicolor          1         0
+## virginica           0         1
+</code></pre>
+
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-16" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-28" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>Contrasts</h2>
+  <h2>Categorical Feature in Machine Learning</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
-<pre><code class="r">model.matrix(~ Species, iris.demo)
+<ul>
+<li>Predictive analysis</li>
+<li>Regularization</li>
+<li>The categorical variables of \(K\) categories are transformed to \(K\)-dimentional vector.
+
+<ul>
+<li>The missing data are transformed to \(\vec{0}\).</li>
+</ul></li>
+</ul>
+
+<pre><code class="r">contr.treatment(levels(iris.demo$Species), contrasts = FALSE)
 </code></pre>
 
-<pre><code>##     (Intercept) Speciesversicolor Speciesvirginica
-## 1             1                 0                0
-## 2             1                 0                0
-## 51            1                 1                0
-## 52            1                 1                0
-## 101           1                 0                1
-## 102           1                 0                1
-## attr(,&quot;assign&quot;)
-## [1] 0 1 1
-## attr(,&quot;contrasts&quot;)
-## attr(,&quot;contrasts&quot;)$Species
-## [1] &quot;contr.treatment&quot;
-</code></pre>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-17" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Contrasts</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<pre><code class="r">contrasts(iris.demo$Species) &lt;- contr.sum(levels(iris.demo$Species))
-model.matrix(~ Species, iris.demo)
-</code></pre>
-
-<pre><code>##     (Intercept) Species1 Species2
-## 1             1        1        0
-## 2             1        1        0
-## 51            1        0        1
-## 52            1        0        1
-## 101           1       -1       -1
-## 102           1       -1       -1
-## attr(,&quot;assign&quot;)
-## [1] 0 1 1
-## attr(,&quot;contrasts&quot;)
-## attr(,&quot;contrasts&quot;)$Species
-##            [,1] [,2]
-## setosa        1    0
-## versicolor    0    1
-## virginica    -1   -1
+<pre><code>##            setosa versicolor virginica
+## setosa          1          0         0
+## versicolor      0          1         0
+## virginica       0          0         1
 </code></pre>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="dark segue" id="slide-18" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+<slide class="dark segue" id="slide-29" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
   <hgroup>
     <h2>Motivation of the FeatureHashing</h2>
   </hgroup>
@@ -561,48 +983,13 @@ model.matrix(~ Species, iris.demo)
   </article>
   <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-19" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Modeling Many Categorical Features</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<ul>
-<li>Display Advertising</li>
-<li>Text Mining</li>
-</ul>
-
-<p><center><img src="assets/img/Trouble.jpg" style="max-height: 100%; max-width: 100%;"/></center></p>
-
-<p><small>source: <a href="http://seckora.com/wp-content/uploads/2014/06/computer-trouble.jpg">http://seckora.com/wp-content/uploads/2014/06/computer-trouble.jpg</a></small></p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-20" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Display Advertising</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<p><center><img src="assets/img/Display_Ads_MatrixAdvertising_Wide.png" style="max-height: 100%; max-width: 100%;"/></center></p>
-
-<p><small>source: <a href="http://images.dailytech.com/nimage/Display_Ads_MatrixAdvertising_Wide.png">http://images.dailytech.com/nimage/Display_Ads_MatrixAdvertising_Wide.png</a></small></p>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-21" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-30" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Kaggle: <a href="https://www.kaggle.com/c/criteo-display-ad-challenge">Display Advertising Challenge</a></h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
 <ul>
-<li>Training Dataset: a portion of <a href="http://www.criteo.com/">Criteo</a>&#39;s traffic over a period of 7 days.
-
-<ul>
-<li>Each instance corresponds to a display ad served by Criteo.</li>
-<li>The reponse is positive if the ad viewer clicks the ad.</li>
-</ul></li>
-<li>Evaluation: The <a href="https://www.kaggle.com/wiki/LogarithmicLoss">Logarithmic Loss</a> of the prediction on the testing dataset.</li>
+<li>Given a user and the page he is visiting, what is the probability that he will click on a given ad?</li>
 </ul>
 
 <p><center><img src="assets/img/criteo-logo.png" style="max-height: 100%; max-width: 100%;"/></center></p>
@@ -610,7 +997,7 @@ model.matrix(~ Species, iris.demo)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-22" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-31" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>The Size of the Dataset</h2>
 </hgroup>
@@ -618,20 +1005,19 @@ model.matrix(~ Species, iris.demo)
 <ul>
 <li>13 integer features and 26 categorical features</li>
 <li>\(7 \times 10^7\) instances</li>
-<li>There are many levels of categorical feature which do not appear in the training dataset.</li>
-<li>The <a href="http://labs.criteo.com/downloads/2014-kaggle-display-advertising-challenge-dataset/">link</a></li>
+<li>Download the dataset via this <a href="http://labs.criteo.com/downloads/2014-kaggle-display-advertising-challenge-dataset/">link</a></li>
 </ul>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-23" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-32" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Vectorize These Features in R</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
 <ul>
-<li>After binning the integer features, I got \(3 \times 10^7\) levels.</li>
+<li>After binning the integer features, I got \(3 \times 10^7\) categories.</li>
 <li>Sparse matrix was required
 
 <ul>
@@ -643,7 +1029,7 @@ model.matrix(~ Species, iris.demo)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-24" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-33" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Estimating Computing Resources</h2>
 </hgroup>
@@ -656,21 +1042,19 @@ model.matrix(~ Species, iris.demo)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-25" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-34" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Vectorize These Features in R</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
 <ul>
-<li>There was no implementation of the hashing trick in R, so I used <code>sparse.model.matrix</code> with a best machine in <a href="https://aws.amazon.com/tw/">Amazon Web Service</a>.</li>
-<li>It took me many hours to design and implement the algorithm.</li>
-<li>It took me many hours to run the scripts.</li>
+<li><code>sparse.model.matrix</code> is similar to <code>model.matrix</code> but returns a sparse matrix.</li>
 </ul>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-26" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-35" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Fit Model with Limited Memory</h2>
 </hgroup>
@@ -688,26 +1072,46 @@ model.matrix(~ Species, iris.demo)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-27" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-36" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2><a href="https://en.wikipedia.org/wiki/Online_machine_learning">Online Machine Learning</a></h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
 <ul>
-<li>In online learning, the model parameter is updated after the arrival of every new datapoint.</li>
+<li>In online learning, the model parameter is updated after the arrival of every new datapoint.
+
+<ul>
+<li>Only the aggregated information and the incoming datapoint are used.</li>
+</ul></li>
 <li>In batch learning, the model paramter is updated after access to the entire dataset.</li>
 </ul>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-28" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-37" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Memory Requirement of Online Learning</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>Related to model parameters
+
+<ul>
+<li>Require little memory for large amount of instances.</li>
+</ul></li>
+</ul>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-38" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Limitation of <code>model.matrix</code></h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
 <ul>
-<li><strong>The vectorization requires all levels of categorical features</strong>.</li>
+<li>The vectorization requires <font color="red">all categories</font>.</li>
 </ul>
 
 <pre><code class="r">contr.treatment(levels(iris$Species))
@@ -722,28 +1126,69 @@ model.matrix(~ Species, iris.demo)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-29" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-39" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
-  <h2>\(f : \mathbb{Z} -> {0, 1, 2, ..., k}\)</h2>
+  <h2>My Work Around</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
 <ul>
-<li>Mapping features to indices is one of method to vectorize feature. </li>
+<li>Scan all data to retrieve all categories</li>
+<li>Vectorize features in an online fashion</li>
+<li>The overhead of exploring features increases</li>
 </ul>
 
-<pre><code class="r">contr.treatment(levels(iris$Species))
-</code></pre>
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-40" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Observations</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>Mapping features to \(\{0, 1, 2, ..., K\}\) is one of method to vectorize feature.
 
-<pre><code>##            versicolor virginica
-## setosa              0         0
-## versicolor          1         0
-## virginica           0         1
+<ul>
+<li><code>setosa</code> =&gt; \(\vec{e_1}\)</li>
+<li><code>versicolor</code> =&gt; \(\vec{e_2}\)</li>
+<li><code>virginica</code> =&gt; \(\vec{e_3}\)</li>
+</ul></li>
+</ul>
+
+<pre><code>##            setosa versicolor virginica
+## setosa          1          0         0
+## versicolor      0          1         0
+## virginica       0          0         1
 </code></pre>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-30" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-41" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Observations</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li><code>contr.treatment</code> ranks all categories to map the feature to integer.</li>
+<li>What if we do not know all categories?
+
+<ul>
+<li>Digital features are integer.</li>
+<li>We use a function maps \(\mathbb{Z}\) to \(\{0, 1, 2, ..., K\}\)</li>
+</ul></li>
+</ul>
+
+<pre><code class="r">charToRaw(&quot;setosa&quot;)
+</code></pre>
+
+<pre><code>## [1] 73 65 74 6f 73 61
+</code></pre>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="largecontent" id="slide-42" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>What is Feature Hashing?</h2>
 </hgroup>
@@ -761,19 +1206,20 @@ model.matrix(~ Species, iris.demo)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-31" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-43" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Feature Hashing</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
 <ul>
 <li>Choose a hash function and use it to hash all the categorical features.</li>
+<li>The hash function does not require global information.</li>
 </ul>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-32" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-44" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>An Example of Feature Hashing of Criteo&#39;s Data</h2>
 </hgroup>
@@ -826,7 +1272,7 @@ model.matrix(~ Species, iris.demo)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-33" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-45" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>An Example of Feature Hashing of Criteo&#39;s Data</h2>
 </hgroup>
@@ -886,7 +1332,7 @@ model.matrix(~ Species, iris.demo)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-34" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-46" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Hash Collision</h2>
 </hgroup>
@@ -904,7 +1350,7 @@ model.matrix(~ Species, iris.demo)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-35" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-47" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Choosing Hash Function</h2>
 </hgroup>
@@ -922,7 +1368,7 @@ model.matrix(~ Species, iris.demo)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-36" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-48" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Pros of FeatureHashing</h2>
 </hgroup>
@@ -943,7 +1389,7 @@ for(i in 1:1000) {
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-37" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-49" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Pros of FeatureHashing</h2>
 </hgroup>
@@ -964,7 +1410,7 @@ y &lt;- data$V1
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-38" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-50" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Pros of FeatureHashing</h2>
 </hgroup>
@@ -980,7 +1426,7 @@ m_test &lt;- hashed.model.matrix(model, data_test, hash_size)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-39" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-51" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Cons of FeatureHashing</h2>
 </hgroup>
@@ -992,7 +1438,7 @@ m_test &lt;- hashed.model.matrix(model, data_test, hash_size)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-40" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-52" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Cons of FeatureHashing</h2>
 </hgroup>
@@ -1000,8 +1446,8 @@ m_test &lt;- hashed.model.matrix(model, data_test, hash_size)
 <h3>Lose Interpretation</h3>
 
 <ul>
-<li>It is inconvenient to reverse the indices to feature.</li>
 <li>Collision makes the interpretation harder.</li>
+<li>It is inconvenient to reverse the indices to feature.</li>
 </ul>
 
 <pre><code class="r">m &lt;- hashed.model.matrix(~ Species, iris, hash.size = 2^4, create.mapping = TRUE)
@@ -1015,254 +1461,26 @@ hash.mapping(m) %% 2^4
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-41" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-53" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>The Result of the Competition...</h2>
 </hgroup>
 <article class = 'flexbox vcenter'>
 <ul>
-<li>No.1: <a href="http://ntucsu.csie.ntu.edu.tw/%7Ecjlin/libffm/">Field-aware Factorization Machine</a></li>
+<li>No.1: <a href="http://ntucsu.csie.ntu.edu.tw/%7Ecjlin/libffm/">Field-aware Factorization Machine</a>
+
+<ul>
+<li><a href="https://www.kaggle.com/c/criteo-display-ad-challenge/forums/t/10555/3-idiots-solution-libffm/55888#post55888">The hashing trick do not contribute any improvement on the leaderboard. They
+apply the hashing trick only because it makes their life easier to generate
+features.</a>.</li>
+</ul></li>
 <li>No.3, no.4 and no.9 (we): Neuron Network</li>
 </ul>
 
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="dark segue" id="slide-42" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
-  <hgroup>
-    <h2>Additional Features of <code>FeatureHashing</code></h2>
-  </hgroup>
-  <article data-timings="">
-    
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-43" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Another Story: Sentiment Analysis</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<ul>
-<li>Provided by <a href="https://github.com/lewis-c">Lewis Crouch</a></li>
-<li>Show the Pros of using FeatureHashing</li>
-</ul>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-44" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Dataset: <a href="https://www.kaggle.com/c/word2vec-nlp-tutorial">IMDB</a></h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<ul>
-<li>Training Dataset: 25000 reviews</li>
-<li>Binary response: positive or negative.</li>
-</ul>
-
-<pre><code>## [1] 1
-</code></pre>
-
-<ul>
-<li>Cleaned review</li>
-</ul>
-
-<pre><code>## [1] &quot;kurosawa is a proved humanitarian this movie is totally about people living in&quot; 
-## [2] &quot;poverty you will see nothing but angry in this movie it makes you feel bad but&quot; 
-## [3] &quot;still worth all those who s too comfortable with materialization should spend 2&quot;
-## [4] &quot;5 hours with this movie&quot;
-</code></pre>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-45" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Tokenize</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<pre><code>##  [1] &quot;&quot;                &quot;kurosawa&quot;        &quot;is&quot;             
-##  [4] &quot;a&quot;               &quot;proved&quot;          &quot;humanitarian&quot;   
-##  [7] &quot;&quot;                &quot;this&quot;            &quot;movie&quot;          
-## [10] &quot;is&quot;              &quot;totally&quot;         &quot;about&quot;          
-## [13] &quot;people&quot;          &quot;living&quot;          &quot;in&quot;             
-## [16] &quot;poverty&quot;         &quot;&quot;                &quot;you&quot;            
-## [19] &quot;will&quot;            &quot;see&quot;             &quot;nothing&quot;        
-## [22] &quot;but&quot;             &quot;angry&quot;           &quot;in&quot;             
-## [25] &quot;this&quot;            &quot;movie&quot;           &quot;&quot;               
-## [28] &quot;it&quot;              &quot;makes&quot;           &quot;you&quot;            
-## [31] &quot;feel&quot;            &quot;bad&quot;             &quot;but&quot;            
-## [34] &quot;still&quot;           &quot;worth&quot;           &quot;&quot;               
-## [37] &quot;all&quot;             &quot;those&quot;           &quot;who&quot;            
-## [40] &quot;s&quot;               &quot;too&quot;             &quot;comfortable&quot;    
-## [43] &quot;with&quot;            &quot;materialization&quot; &quot;should&quot;         
-## [46] &quot;spend&quot;           &quot;2&quot;               &quot;5&quot;              
-## [49] &quot;hours&quot;           &quot;with&quot;            &quot;this&quot;           
-## [52] &quot;movie&quot;           &quot;&quot;
-</code></pre>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-46" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Tokenize and Vectorization</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<table><thead>
-<tr>
-<th align="left">id</th>
-<th align="left">message</th>
-<th align="left">hate</th>
-<th align="left">bad</th>
-<th align="left">like</th>
-<th align="left">gratuitous</th>
-</tr>
-</thead><tbody>
-<tr>
-<td align="left">&quot;5814_8&quot;</td>
-<td align="left">TRUE</td>
-<td align="left">TRUE</td>
-<td align="left">TRUE</td>
-<td align="left">TRUE</td>
-<td align="left">FALSE</td>
-</tr>
-<tr>
-<td align="left">&quot;2381_9&quot;</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="left">FALSE</td>
-</tr>
-<tr>
-<td align="left">&quot;7759_3&quot;</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="left">FALSE</td>
-</tr>
-<tr>
-<td align="left">&quot;3630_4&quot;</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-</tr>
-<tr>
-<td align="left">&quot;9495_8&quot;</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-</tr>
-<tr>
-<td align="left">&quot;8196_8&quot;</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="left">TRUE</td>
-<td align="left">TRUE</td>
-</tr>
-</tbody></table>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-47" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Additional Feature of <code>FeatureHashing</code></h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<ul>
-<li><code>FeatureHashing</code> implements <code>split</code> in the formula interface.</li>
-</ul>
-
-<pre><code class="r">hash_size &lt;- 2^16
-m.train &lt;- hashed.model.matrix(~ split(review, delim = &quot; &quot;, type = &quot;existence&quot;), 
-                               data = imdb.train, 
-                               hash.size = hash_size,
-                               signed.hash = FALSE)
-m.valid &lt;- hashed.model.matrix(~ split(review, delim = &quot; &quot;, type = &quot;existence&quot;), 
-                              data = imdb.valid, 
-                              hash.size = hash_size,
-                              signed.hash = FALSE)
-</code></pre>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-48" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Type of <code>split</code></h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<ul>
-<li><code>existence</code></li>
-<li><code>count</code></li>
-<li><a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf"><code>tf-idf</code></a> which is contributed by <a href="https://github.com/pommedeterresautee">Michaël Benesty</a> and will be announced in v0.9.1</li>
-</ul>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-49" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Gradient Boosted Decision Tree with <code>xgboost</code></h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<pre><code class="r">dtrain &lt;- xgb.DMatrix(m.train, label = imdb.train$sentiment)
-dvalid &lt;- xgb.DMatrix(m.valid, label = imdb.valid$sentiment)
-watch &lt;- list(train = dtrain, valid = dvalid)
-g &lt;- xgb.train(booster = &quot;gblinear&quot;, nrounds = 100, eta = 0.0001, max.depth = 2,
-                data = dtrain, objective = &quot;binary:logistic&quot;,
-                watchlist = watch, eval_metric = &quot;auc&quot;)
-</code></pre>
-
-<pre><code>[0]  train-auc:0.969895 valid-auc:0.914488
-[1] train-auc:0.969982  valid-auc:0.914621
-[2] train-auc:0.970069  valid-auc:0.914766
-...
-[97]  train-auc:0.975616    valid-auc:0.922895
-[98]    train-auc:0.975658  valid-auc:0.922952
-[99]    train-auc:0.975700  valid-auc:0.923014
-</code></pre>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-50" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>Performance</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<ul>
-<li>The <a href="https://www.kaggle.com/wiki/AUC">AUC</a> of <code>g</code> is \(0.90110\) in the <a href="https://www.kaggle.com/c/word2vec-nlp-tutorial/leaderboard?submissionId=1848642">public leader board</a> 
-
-<ul>
-<li>It outperforms the benchmark in Kaggle</li>
-</ul></li>
-</ul>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="largecontent" id="slide-51" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
-<hgroup>
-  <h2>The Purpose of FeatureHashing</h2>
-</hgroup>
-<article class = 'flexbox vcenter'>
-<ul>
-<li><strong>Make our life easier</strong></li>
-</ul>
-
-</article>
-<!-- Presenter Notes -->
-</slide>
-<slide class="dark segue" id="slide-52" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+<slide class="dark segue" id="slide-54" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
   <hgroup>
     <h2>Extending Formula Interface in R</h2>
   </hgroup>
@@ -1271,7 +1489,7 @@ g &lt;- xgb.train(booster = &quot;gblinear&quot;, nrounds = 100, eta = 0.0001, m
   </article>
   <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-53" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-55" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   
 </hgroup>
@@ -1283,7 +1501,7 @@ g &lt;- xgb.train(booster = &quot;gblinear&quot;, nrounds = 100, eta = 0.0001, m
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-54" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-56" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Tips</h2>
 </hgroup>
@@ -1312,7 +1530,7 @@ attr(tf, &quot;factors&quot;)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-55" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-57" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Specials</h2>
 </hgroup>
@@ -1338,7 +1556,7 @@ attr(tf, &quot;factors&quot;)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-56" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-58" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Parse</h2>
 </hgroup>
@@ -1365,7 +1583,7 @@ getParseData(p)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-57" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-59" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Efficiency</h2>
 </hgroup>
@@ -1396,7 +1614,7 @@ getParseData(p)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-58" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-60" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Let&#39;s Discuss the Implementation Later</h2>
 </hgroup>
@@ -1407,7 +1625,34 @@ getParseData(p)
 </article>
 <!-- Presenter Notes -->
 </slide>
-<slide class="dark segue" id="slide-59" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
+<slide class="largecontent" id="slide-61" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<hgroup>
+  <h2>Summary</h2>
+</hgroup>
+<article class = 'flexbox vcenter'>
+<ul>
+<li>Pros of <code>FeatureHashing</code>
+
+<ul>
+<li>Make it easier to do feature vectorization for predictive analysis.</li>
+<li>Make it easier to tokenize the text data.</li>
+</ul></li>
+<li>Cons of <code>FeatureHashing</code>
+
+<ul>
+<li>Decrease the prediction accuracy if the <code>hash size</code> is too small</li>
+<li>Interpretation becomes harder.</li>
+</ul></li>
+</ul>
+
+<h3>When should I use <code>FeatureHashing</code>?</h3>
+
+<p>Short Answer: Predictive Anlysis with a large amount of categories.</p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="dark segue" id="slide-62" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;">
   <hgroup>
     <h2>Q&amp;A</h2>
   </hgroup>
@@ -1416,7 +1661,7 @@ getParseData(p)
   </article>
   <!-- Presenter Notes -->
 </slide>
-<slide class="largecontent" id="slide-60" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
+<slide class="largecontent" id="slide-63" style="background-image: url('libraries/frameworks/io2012-wush/images/background.png'); background-repeat:no-repeat; background-position:center; background-size: 100% 100%;" >
 <hgroup>
   <h2>Thanks You</h2>
 </hgroup>
@@ -1431,7 +1676,7 @@ getParseData(p)
     <ul>
       <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=1 title='Wush, a Co-founder of Taiwan R User Group'>
+        data-slide=1 title='<a href="https://github.com/wush978">Wush Chi-Hsuan Wu</a>'>
          1
       </a>
     </li>
@@ -1449,7 +1694,7 @@ getParseData(p)
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=4 title='Night Market'>
+        data-slide=4 title='New Landmark of Taipei'>
          4
       </a>
     </li>
@@ -1461,332 +1706,350 @@ getParseData(p)
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=6 title='Feature Vectorization and Formula Interface in R'>
+        data-slide=6 title='An Example of FeatureHashing'>
          6
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=7 title='Algorithm in Text Book'>
+        data-slide=7 title='Sentiment Analysis'>
          7
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=8 title='Feature Vectorization and Formula Interface'>
+        data-slide=8 title='Dataset: <a href="https://www.kaggle.com/c/word2vec-nlp-tutorial">IMDB</a>'>
          8
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=9 title='Formula Interface'>
+        data-slide=9 title='Word Segmentation'>
          9
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=10 title='Formula Interface'>
+        data-slide=10 title='Word Segmentation and Feature Extraction'>
          10
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=11 title='Operator in Formula'>
+        data-slide=11 title='<code>FeatureHashing</code>'>
          11
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=12 title='Operator in Formula'>
+        data-slide=12 title='Type of <code>split</code>'>
          12
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=13 title=''>
+        data-slide=13 title='Gradient Boosted Decision Tree with <code>xgboost</code>'>
          13
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=14 title='Categorical Features'>
+        data-slide=14 title='Performance'>
          14
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=15 title='Categorical Feature in R'>
+        data-slide=15 title='The Purpose of FeatureHashing'>
          15
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=16 title='Contrasts'>
+        data-slide=16 title='Formula Interface in R'>
          16
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=17 title='Contrasts'>
+        data-slide=17 title='Algorithm in Text Book'>
          17
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=18 title='Motivation of the FeatureHashing'>
+        data-slide=18 title='Feature Vectorization and Formula Interface'>
          18
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=19 title='Modeling Many Categorical Features'>
+        data-slide=19 title='Formula Interface'>
          19
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=20 title='Display Advertising'>
+        data-slide=20 title='Formula Interface: <code>+</code>'>
          20
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=21 title='Kaggle: <a href="https://www.kaggle.com/c/criteo-display-ad-challenge">Display Advertising Challenge</a>'>
+        data-slide=21 title='Formula Interface: <code>:</code>'>
          21
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=22 title='The Size of the Dataset'>
+        data-slide=22 title='Formula Interface: <code>*</code>'>
          22
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=23 title='Vectorize These Features in R'>
+        data-slide=23 title='Formula Interface: <code>(</code>'>
          23
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=24 title='Estimating Computing Resources'>
+        data-slide=24 title='Formula Interface: <code>.</code>'>
          24
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=25 title='Vectorize These Features in R'>
+        data-slide=25 title=''>
          25
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=26 title='Fit Model with Limited Memory'>
+        data-slide=26 title='Categorical Features'>
          26
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=27 title='<a href="https://en.wikipedia.org/wiki/Online_machine_learning">Online Machine Learning</a>'>
+        data-slide=27 title='Categorical Feature in R'>
          27
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=28 title='Limitation of <code>model.matrix</code>'>
+        data-slide=28 title='Categorical Feature in Machine Learning'>
          28
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=29 title='\(f : \mathbb{Z} -> {0, 1, 2, ..., k}\)'>
+        data-slide=29 title='Motivation of the FeatureHashing'>
          29
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=30 title='What is Feature Hashing?'>
+        data-slide=30 title='Kaggle: <a href="https://www.kaggle.com/c/criteo-display-ad-challenge">Display Advertising Challenge</a>'>
          30
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=31 title='Feature Hashing'>
+        data-slide=31 title='The Size of the Dataset'>
          31
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=32 title='An Example of Feature Hashing of Criteo&#39;s Data'>
+        data-slide=32 title='Vectorize These Features in R'>
          32
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=33 title='An Example of Feature Hashing of Criteo&#39;s Data'>
+        data-slide=33 title='Estimating Computing Resources'>
          33
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=34 title='Hash Collision'>
+        data-slide=34 title='Vectorize These Features in R'>
          34
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=35 title='Choosing Hash Function'>
+        data-slide=35 title='Fit Model with Limited Memory'>
          35
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=36 title='Pros of FeatureHashing'>
+        data-slide=36 title='<a href="https://en.wikipedia.org/wiki/Online_machine_learning">Online Machine Learning</a>'>
          36
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=37 title='Pros of FeatureHashing'>
+        data-slide=37 title='Memory Requirement of Online Learning'>
          37
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=38 title='Pros of FeatureHashing'>
+        data-slide=38 title='Limitation of <code>model.matrix</code>'>
          38
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=39 title='Cons of FeatureHashing'>
+        data-slide=39 title='My Work Around'>
          39
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=40 title='Cons of FeatureHashing'>
+        data-slide=40 title='Observations'>
          40
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=41 title='The Result of the Competition...'>
+        data-slide=41 title='Observations'>
          41
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=42 title='Additional Features of <code>FeatureHashing</code>'>
+        data-slide=42 title='What is Feature Hashing?'>
          42
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=43 title='Another Story: Sentiment Analysis'>
+        data-slide=43 title='Feature Hashing'>
          43
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=44 title='Dataset: <a href="https://www.kaggle.com/c/word2vec-nlp-tutorial">IMDB</a>'>
+        data-slide=44 title='An Example of Feature Hashing of Criteo&#39;s Data'>
          44
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=45 title='Tokenize'>
+        data-slide=45 title='An Example of Feature Hashing of Criteo&#39;s Data'>
          45
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=46 title='Tokenize and Vectorization'>
+        data-slide=46 title='Hash Collision'>
          46
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=47 title='Additional Feature of <code>FeatureHashing</code>'>
+        data-slide=47 title='Choosing Hash Function'>
          47
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=48 title='Type of <code>split</code>'>
+        data-slide=48 title='Pros of FeatureHashing'>
          48
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=49 title='Gradient Boosted Decision Tree with <code>xgboost</code>'>
+        data-slide=49 title='Pros of FeatureHashing'>
          49
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=50 title='Performance'>
+        data-slide=50 title='Pros of FeatureHashing'>
          50
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=51 title='The Purpose of FeatureHashing'>
+        data-slide=51 title='Cons of FeatureHashing'>
          51
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=52 title='Extending Formula Interface in R'>
+        data-slide=52 title='Cons of FeatureHashing'>
          52
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=53 title=''>
+        data-slide=53 title='The Result of the Competition...'>
          53
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=54 title='Tips'>
+        data-slide=54 title='Extending Formula Interface in R'>
          54
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=55 title='Specials'>
+        data-slide=55 title=''>
          55
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=56 title='Parse'>
+        data-slide=56 title='Tips'>
          56
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=57 title='Efficiency'>
+        data-slide=57 title='Specials'>
          57
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=58 title='Let&#39;s Discuss the Implementation Later'>
+        data-slide=58 title='Parse'>
          58
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=59 title='Q&amp;A'>
+        data-slide=59 title='Efficiency'>
          59
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=60 title='Thanks You'>
+        data-slide=60 title='Let&#39;s Discuss the Implementation Later'>
          60
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=61 title='Summary'>
+         61
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=62 title='Q&amp;A'>
+         62
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=63 title='Thanks You'>
+         63
       </a>
     </li>
   </ul>

@@ -2,6 +2,7 @@
 % Please edit documentation in R/hashed.model.matrix.R
 \name{hashed.model.matrix}
 \alias{hash.sign}
+\alias{hashed.interaction.value}
 \alias{hashed.model.matrix}
 \alias{hashed.value}
 \title{Create a model matrix with feature hashing}
@@ -41,7 +42,7 @@ respectively. Different seeds are used to implement the hashing function
 \eqn{h} and \eqn{\xi} with MurmurHash3.
 
 The formula is parsed via \code{\link{terms.formula}} with "split" as special
-keyword. The interaction term is hashed in different ways. Please see example for
+keyword. The interaction term is hashed (\code{hashed.interaction})in different ways. Please see example for
 the detailed implementation. The "\code{split}" is used to expand the concatenated feature
 such as "10129,10024,13866,10111,10146,10120,10115,10063" which represents the occurrence of
 multiple categorical variable: "10129", "10024", "13866", "10111", "10146", "10120", "10115", and

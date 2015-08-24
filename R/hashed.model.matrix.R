@@ -1,7 +1,5 @@
 #'@title Create a model matrix with feature hashing
 #'
-#'@aliases hashed.value hash.sign
-#'
 #'@importFrom magrittr %>%
 #'@importFrom magrittr %<>%
 #'@importFrom methods new
@@ -33,7 +31,7 @@
 #'\eqn{h} and \eqn{\xi} with MurmurHash3.
 #'
 #'The formula is parsed via \code{\link{terms.formula}} with "split" as special
-#'keyword. The interaction term is hashed in different ways. Please see example for 
+#'keyword. The interaction term is hashed (\code{hashed.interaction})in different ways. Please see example for 
 #'the detailed implementation. The "\code{split}" is used to expand the concatenated feature
 #'such as "10129,10024,13866,10111,10146,10120,10115,10063" which represents the occurrence of 
 #'multiple categorical variable: "10129", "10024", "13866", "10111", "10146", "10120", "10115", and
@@ -194,7 +192,7 @@
 #'@importFrom methods new
 #'@importFrom methods checkAtAssignment
 #'@importClassesFrom Matrix dgCMatrix
-#'@aliases hashed.value hash.sign
+#'@aliases hashed.value hash.sign hashed.interaction.value
 hashed.model.matrix <- function(formula, data, hash.size = 2^18, transpose = FALSE, 
                                 create.mapping = FALSE, is.dgCMatrix = TRUE, signed.hash = TRUE
                                 ) {

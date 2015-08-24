@@ -1,6 +1,6 @@
-language: c
+osx_image: xcode61
 
-sudo: true
+language: objective-c
 
 addons:
   apt_packages:
@@ -12,27 +12,31 @@ after_failure:
   - ./travis-tool.sh dump_logs
 
 before_install:
-  - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
+  - curl -OL http://raw.github.com/wertion/r-travis-mac/master/scripts/travis-tool.sh
+  - echo "options(repos = c(CRAN='http://cran.r-project.org'))" >> ~/.Rprofile
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
-  - ./travis-tool.sh install_github dmlc/xgboost/R-package
-  - ./travis-tool.sh install_github jimhester/robustr
-  - ./travis-tool.sh install_github jimhester/covr
 
 install:
   - ./travis-tool.sh install_deps
+  - ./travis-tool.sh install_github jimhester/robustr
+  - ./travis-tool.sh install_github jimhester/covr
   # Install testthat after running install_deps, otherwise devtools itself might be installed from CRAN or c2d4u
 
 after_success:
   - Rscript -e 'library(covr); coveralls()'
+
 notifications:
   email:
     on_success: change
     on_failure: change
+
 env:
   - global:
     - WARNINGS_ARE_ERRORS=1
     - _R_CHECK_FORCE_SUGGESTS_=0
     - BOOTSTRAP_LATEX=1
-    - R_BUILD_ARGS="--no-manual"
-    - R_CHECK_ARGS="--no-manual --as-cran"
+    - R_BUILD_ARGS="--no-manual --no-build-vignettes"
+    - R_CHECK_ARGS="--no-manual --as-cran --no-vignettes"
+    - PKG_CFLAGS="-g -O3 -Wall -pedantic -I../inst/include -DLOGGER_LEVEL=LL_WARN"
+

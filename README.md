@@ -3,6 +3,7 @@ FeatureHashing
 
 Linux: [![Travis-ci Status](https://travis-ci.org/wush978/FeatureHashing.svg?branch=master)](https://travis-ci.org/wush978/FeatureHashing)
 Win : [![Build status](https://ci.appveyor.com/api/projects/status/bm4lpxn5f07d8klj/branch/master?svg=true)](https://ci.appveyor.com/project/wush978/featurehashing/branch/master)
+OS X: [![Travis-ci Status](https://travis-ci.org/wush978/FeatureHashing.svg?branch=osx)](https://travis-ci.org/wush978/FeatureHashing)
 
 
 [![Coverage Status](https://img.shields.io/coveralls/wush978/FeatureHashing.svg)](https://coveralls.io/r/wush978/FeatureHashing?branch=master)
@@ -105,7 +106,7 @@ auc(ipinyou.test$IsClick, p.lr)
 ```
 
 ```
-## [1] 0.5200747
+## [1] 0.5076923
 ```
 
 ### Gradient Boosted Decision Tree with [`xgboost`](http://cran.r-project.org/web/packages/xgboost/index.html)

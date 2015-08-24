@@ -1,7 +1,8 @@
 FeatureHashing.Rproj
 .Rhistory
 .gitignore
-.travis.yml
+^\.travis\.yml$
+^appveyor\.yml$
 .Rproj.user
 .git
 README.Rmd

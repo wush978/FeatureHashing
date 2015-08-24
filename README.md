@@ -1,7 +1,10 @@
 FeatureHashing
 ==============
 
-[![Travis-ci Status](https://travis-ci.org/wush978/FeatureHashing.svg)](https://travis-ci.org/wush978/FeatureHashing)
+Linux: [![Travis-ci Status](https://travis-ci.org/wush978/FeatureHashing.svg?branch=master)](https://travis-ci.org/wush978/FeatureHashing)
+Win : [![Build status](https://ci.appveyor.com/api/projects/status/bm4lpxn5f07d8klj/branch/master?svg=true)](https://ci.appveyor.com/project/wush978/featurehashing/branch/master)
+
+
 [![Coverage Status](https://img.shields.io/coveralls/wush978/FeatureHashing.svg)](https://coveralls.io/r/wush978/FeatureHashing?branch=master)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/FeatureHashing)](http://cran.r-project.org/web/packages/FeatureHashing)
 [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/FeatureHashing)](https://github.com/metacran/cranlogs.app)
@@ -90,7 +93,8 @@ library(glmnet)
 
 ```
 ## Loading required package: Matrix
-## Loaded glmnet 1.9-8
+## Loading required package: foreach
+## Loaded glmnet 2.0-2
 ```
 
 ```r
@@ -121,7 +125,7 @@ glmnet::auc(ipinyou.test$IsClick, p.lm)
 ```
 
 ```
-## [1] 0.6555232
+## [1] 0.6554945
 ```
 
 

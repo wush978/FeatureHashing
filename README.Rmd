@@ -1,7 +1,7 @@
 FeatureHashing
 ==============
 
-Linux: [![Travis-ci Status](https://travis-ci.org/wush978/FeatureHashing.svg)](https://travis-ci.org/wush978/FeatureHashing)
+Linux: [![Travis-ci Status](https://travis-ci.org/wush978/FeatureHashing.svg?branch=master)](https://travis-ci.org/wush978/FeatureHashing)
 Win : [![Build status](https://ci.appveyor.com/api/projects/status/bm4lpxn5f07d8klj/branch/master?svg=true)](https://ci.appveyor.com/project/wush978/featurehashing/branch/master)
 
 

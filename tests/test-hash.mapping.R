@@ -28,11 +28,11 @@ if (require(RUnit)) {
 -0.54252003099165, 1.20786780598317, 1.16040261569495, 0.700213649514998, 
 1.58683345454085, 0.558486425565304, -1.27659220845804, -0.573265414236886, 
 -1.22461261489836, -0.473400636439312))
-  m <- hashed.model.matrix(~ split(a, delim = ",", type = "existence") + b, df, 2^6,
+  m <- hashed.model.matrix(~ split(a, delim = ",", type = "existence") + b - 1, df, 2^6,
     create.mapping = TRUE, transpose = FALSE, is.dgCMatrix = TRUE)
   mapping <- hash.mapping(m)
   checkTrue(length(m@p) == 2^6 + 1)
-  checkTrue(max(mapping) < 2^6)
+  checkTrue(max(mapping) <= 2^6)
   checkTrue(abs(sum(diff(m@p) != 0) - length(unique(mapping))) <= 1, 
             "The hash mapping returned by `hashed.mapping` is incorrect")
   checkTrue(all(apply(m[,mapping], 2, function(v) sum(abs(v))) > 0))

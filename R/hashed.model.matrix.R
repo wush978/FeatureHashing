@@ -190,8 +190,9 @@
 #'names(mapping)
 #'
 #'@export
-#'@importFrom methods new
-#'@importFrom methods checkAtAssignment
+#'@importFrom methods new as checkAtAssignment as
+#'@importFrom stats as.formula terms.formula
+#'@importFrom utils getParseData head
 #'@importClassesFrom Matrix dgCMatrix
 #'@aliases hashed.value hash.sign hashed.interaction.value
 hashed.model.matrix <- function(formula, data, hash.size = 2^18, transpose = FALSE, 

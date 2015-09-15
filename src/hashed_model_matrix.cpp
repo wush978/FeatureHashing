@@ -181,7 +181,7 @@ const ConvertersVec get_converters(
 } 
 
 template<typename DataFrameLike>
-SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size, bool transpose, S4 retval, bool keep_hashing_mapping, bool is_xi) {
+SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size, bool transpose, S4 retval, bool keep_hashing_mapping, bool is_xi, bool progress) {
   if (hash_size > 4294967296) throw std::invalid_argument("hash_size is too big!");
   NameClassMapping reference_class(get_class(data));
   Environment e(Environment::base_env().new_child(wrap(true)));
@@ -203,8 +203,11 @@ SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size
   #ifdef NOISY_DEBUG
   Rprintf("nrow(data): %d length(converters): %d\n", data.nrows(), converters.size());
   #endif
+  std::shared_ptr<boost::progress_display> pd(NULL);
   if (transpose) {
+    if (progress) pd.reset(new boost::progress_display(data.nrows(), Rcpp::Rcout));
     for(auto i = 0;i < data.nrows();i++) {
+      if (progress) ++(*pd);
       if (is_intercept) {
         ivec.push_back(0);
         xvec.push_back(1.0);
@@ -228,6 +231,7 @@ SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size
     }
   }
   else {
+    if (progress) pd.reset(new boost::progress_display(data.nrows(), Rcpp::Rcout));
     std::map< uint32_t, std::pair< std::vector<int>, std::vector<double> > > cache;
     if (is_intercept) {
       std::pair< std::vector<int>, std::vector<double> >& k(cache[0]);
@@ -238,6 +242,7 @@ SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size
       k.second.resize(data.nrows(), 1.0);
     }
     for(auto i = 0;i < data.nrows();i++) {
+      if (progress) ++(*pd);
       for(auto j = converters.begin();j != converters.end();j++) {
         pVectorConverter& p(*j);
         const std::vector<uint32_t>& i_origin(p->get_feature(i));
@@ -300,7 +305,7 @@ SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size
 }
 
 //[[Rcpp::export(".hashed.model.matrix.dataframe")]]
-SEXP hashed_model_matrix_dataframe(RObject tf, DataFrame data, unsigned long hash_size, bool transpose, S4 retval, bool keep_hashing_mapping, bool is_xi) {
-  return hashed_model_matrix<DataFrame>(tf, data, hash_size, transpose, retval, keep_hashing_mapping, is_xi);
+SEXP hashed_model_matrix_dataframe(RObject tf, DataFrame data, unsigned long hash_size, bool transpose, S4 retval, bool keep_hashing_mapping, bool is_xi, bool progress) {
+  return hashed_model_matrix<DataFrame>(tf, data, hash_size, transpose, retval, keep_hashing_mapping, is_xi, progress);
 }
 

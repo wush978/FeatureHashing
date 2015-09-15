@@ -8,7 +8,8 @@
 \title{Create a model matrix with feature hashing}
 \usage{
 hashed.model.matrix(formula, data, hash.size = 2^18, transpose = FALSE,
-  create.mapping = FALSE, is.dgCMatrix = TRUE, signed.hash = TRUE)
+  create.mapping = FALSE, is.dgCMatrix = TRUE, signed.hash = TRUE,
+  progress = FALSE)
 }
 \arguments{
 \item{formula}{\code{formula} or a \code{character} vector of column names (will be expanded to a \code{formula})}
@@ -28,6 +29,8 @@ Please see the details.}
 
 \item{signed.hash}{logical value. Indicating if the hashed value is multipled by random sign.
 This will reduce the impact of collision. Disable it will enhance the speed.}
+
+\item{progress}{logical value. Indicating if the progress bar is displayed or not.}
 }
 \description{
 Create a model matrix with feature hashing

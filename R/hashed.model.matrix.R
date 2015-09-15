@@ -20,6 +20,7 @@
 #'@param is.dgCMatrix logical value. Indicating if the result is \code{dgCMatrix} or \code{CSCMatrix}
 #'@param signed.hash logical value. Indicating if the hashed value is multipled by random sign.
 #'This will reduce the impact of collision. Disable it will enhance the speed.
+#'@param progress logical value. Indicating if the progress bar is displayed or not.
 #'
 #'@details
 #'The \code{hashed.model.matrix} hashes the feature during
@@ -194,8 +195,8 @@
 #'@importClassesFrom Matrix dgCMatrix
 #'@aliases hashed.value hash.sign hashed.interaction.value
 hashed.model.matrix <- function(formula, data, hash.size = 2^18, transpose = FALSE, 
-                                create.mapping = FALSE, is.dgCMatrix = TRUE, signed.hash = TRUE
-                                ) {
+                                create.mapping = FALSE, is.dgCMatrix = TRUE, signed.hash = TRUE,
+                                progress = FALSE) {
   stopifnot(hash.size >= 0)
   stopifnot(is.data.frame(data))
   stopifnot(class(formula) %in% c("formula", "character"))
@@ -213,7 +214,7 @@ hashed.model.matrix <- function(formula, data, hash.size = 2^18, transpose = FAL
   
   tf <- terms.formula(formula, data = data, specials = "split")
   retval <- new(.CSCMatrix)
-  .hashed.model.matrix.dataframe(tf, data, hash.size, transpose, retval, create.mapping, signed.hash)
+  .hashed.model.matrix.dataframe(tf, data, hash.size, transpose, retval, create.mapping, signed.hash, progress)
   class(retval) <- .CSCMatrix
   retval@Dimnames[[2]] <- paste(seq_len(retval@Dim[2]))
   if (is.dgCMatrix) {

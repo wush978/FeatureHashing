@@ -25,6 +25,7 @@
 #include <Rcpp.h>
 #include "hash_function.h"
 #include "vector_converter.h"
+#include <boost/progress.hpp>
 
 typedef std::map< std::string, std::string > NameClassMapping;
 typedef std::vector< std::string > StrVec;

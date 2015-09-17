@@ -36,6 +36,18 @@ hashed.interaction.value <- function(src) {
     .Call('FeatureHashing_h2', PACKAGE = 'FeatureHashing', src)
 }
 
+#'@title Test the callback function.
+#'@param Rcallback external pointer. The pointer of the callback function.
+#'@param input string. The input.
+#'@details The Rcallback is an external pointer which points to a functional pointer..
+#'The signature of the functional pointer should be:
+#'\code{std::vector<std::string> (*f)(const char* str)}
+#'@return character
+#'@export
+test_callback <- function(Rcallback, input) {
+    .Call('FeatureHashing_test_callback', PACKAGE = 'FeatureHashing', Rcallback, input)
+}
+
 #'@title Convert the integer to raw vector with endian correction
 #'@param src integer value.
 #'@return raw vector with length 4

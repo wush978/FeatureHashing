@@ -304,3 +304,16 @@ SEXP hashed_model_matrix_dataframe(RObject tf, DataFrame data, unsigned long has
   return hashed_model_matrix<DataFrame>(tf, data, hash_size, transpose, retval, keep_hashing_mapping, is_xi);
 }
 
+//'@title Test the callback function.
+//'@param Rcallback external pointer. The pointer of the callback function.
+//'@param input string. The input.
+//'@details The Rcallback is an external pointer which points to a functional pointer..
+//'The signature of the functional pointer should be:
+//'\code{std::vector<std::string> (*f)(const char* str)}
+//'@return character
+//'@export
+//[[Rcpp::export("test_callback")]]
+SEXP test_callback(SEXP Rcallback, const std::string& input) {
+  XPtr<CallbackCharacterVectorStdVectorConverter::callback> callback(Rcallback);
+  return wrap((*callback)(input.c_str()));
+}

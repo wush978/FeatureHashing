@@ -539,4 +539,92 @@ private:
   
 };
 
+template<typename OutputType>
+class CallbackCharacterVectorConverter : public VectorConverter {
+  
+  void correct_feature(uint32_t& feature) {
+    feature = feature % hash_size;
+  }
+  
+public:
+  
+  typedef OutputType (*callback)(const char* input);
+
+protected:
+  
+  callback f;
+  OutputType cache;
+  Rcpp::CharacterVector src;
+  SEXP psrc;
+  
+public:
+  
+  explicit CallbackCharacterVectorConverter(SEXP _src, callback _f, const Param& param) 
+  : src(_src), psrc(_src), f(_f), VectorConverter(param)
+  {  }
+  
+  virtual ~CallbackCharacterVectorConverter() { }
+  
+  virtual void get_feature() = 0;
+
+  virtual const std::vector<uint32_t>& get_feature(size_t i) {
+    SEXP pstr = STRING_ELT(psrc, i);
+    if (pstr == NA_STRING) {
+      feature_buffer.clear();
+    } else {
+      const char* str = CHAR(pstr);
+      cache = f(str);
+      get_feature();
+      if (is_final) {
+        size_t hash_size = this->hash_size;
+        std::for_each(feature_buffer.begin(), feature_buffer.end(), [this](uint32_t& feature) {
+          feature = feature % this->hash_size;
+        });
+      }
+    }
+    return feature_buffer;
+  }
+  
+  virtual void get_value() = 0;
+
+  virtual const std::vector<double>& get_value(size_t i) {
+    SEXP pstr = STRING_ELT(psrc, i);
+    if (pstr == NA_STRING) {
+      value_buffer.clear();
+    } else {
+      get_value();
+    }
+    return value_buffer;
+  }    
+};
+
+class CallbackCharacterVectorStdVectorConverter 
+  : public CallbackCharacterVectorConverter< std::vector<std::string> > {
+
+protected:
+  
+  virtual void get_feature() {
+    feature_buffer.resize(cache.size());
+    std::transform(cache.begin(), cache.end(), feature_buffer.begin(), [this](const std::string& s) {
+      return get_hashed_feature(h_main, s.c_str());
+    });
+  }
+  
+  virtual void get_value() {
+    value_buffer.resize(cache.size());
+    std::transform(cache.begin(), cache.end(), value_buffer.begin(), [this](const std::string& s) {
+      return get_hashed_feature(h_binary, s.c_str());
+    });
+  }
+  
+public:
+  
+  explicit CallbackCharacterVectorStdVectorConverter(SEXP _src, callback _f, const Param& param)
+    : CallbackCharacterVectorConverter(_src, _f, param)
+  { }
+  
+  virtual ~CallbackCharacterVectorStdVectorConverter() { }
+  
+};
+
 #endif // __VECTOR_CONVERTER_HPP__

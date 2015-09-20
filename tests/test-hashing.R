@@ -12,7 +12,7 @@ if (require(RUnit)) {
   checkTrue(all(hashed.value(names(mapping_value)) %% 2^32 == mapping_value),
             "Unexpected hashing result by hashed.value")
   
-  m <- hashed.model.matrix(~ ., CO2, hash.size = 2^10, create.mapping = TRUE, transpose = TRUE, is.dgCMatrix = FALSE)
+  m <- hashed.model.matrix(~ ., CO2, hash.size = 2^10, create.mapping = TRUE, transpose = TRUE, is.dgCMatrix = FALSE, signed.hash = TRUE)
   mapping <- as.list(attr(m, "mapping"))
   checkTrue(all(!duplicated(unlist(mapping) %% 2^10 + 1)),
             "Unexpected collision of hashing example")
@@ -41,7 +41,7 @@ if (require(RUnit)) {
   }
   
   m <- hashed.model.matrix(~ .^2, CO2, hash.size = 2^10, create.mapping = TRUE,
-                           transpose = TRUE, is.dgCMatrix = FALSE)
+                           transpose = TRUE, is.dgCMatrix = FALSE, signed.hash = TRUE)
   mapping_value <- hash.mapping(m)
   
   mapping_value.expected <- structure(list(PlantQc1 = 2636986885, PlantQn1 = 3789462177, 
@@ -112,7 +112,7 @@ if (require(RUnit)) {
             "Unexpected hashing result of interaction term")
   
   m2 <- hashed.model.matrix(~ . ^ 2, data = CO2, hash.size = 32, create.mapping = TRUE,
-                            transpose = TRUE, is.dgCMatrix = FALSE)
+                            transpose = TRUE, is.dgCMatrix = FALSE, signed.hash = TRUE)
   checkTrue(!all(m2@i == 0),
             "All hashed indices created by hashed.model.matrix are zero")
   checkTrue(sum(m2 %*% rep(1, ncol(m2)) != 0) > 1,
@@ -136,13 +136,13 @@ if (require(RUnit)) {
   }
   
   # check handling of NA
-  tryCatch(m <- hashed.model.matrix(~ PlAnT, CO2, 8,
+  tryCatch(m <- hashed.model.matrix(~ PlAnT, CO2, 8, signed.hash = TRUE,
                                     transpose = TRUE, is.dgCMatrix = FALSE), error = function(e) {
     if (class(e)[1] != "std::invalid_argument") stop(e)
     if (conditionMessage(e) != "Failed to find the column:PlAnT") stop(e)
   })
   
-  m <- hashed.model.matrix(~ Plant:Type:Treatment, CO2, create.mapping = TRUE)
+  m <- hashed.model.matrix(~ Plant:Type:Treatment, CO2, create.mapping = TRUE, signed.hash = TRUE)
   map <- hash.mapping(m)
   map <- map[grepl("\\w+:\\w+:\\w+", names(map))]
   checkTrue(all(hashed.interaction.value(names(map)) %% (2^18) + 1== map),

@@ -8,7 +8,7 @@
 \title{Create a model matrix with feature hashing}
 \usage{
 hashed.model.matrix(formula, data, hash.size = 2^18, transpose = FALSE,
-  create.mapping = FALSE, is.dgCMatrix = TRUE, signed.hash = TRUE,
+  create.mapping = FALSE, is.dgCMatrix = TRUE, signed.hash = FALSE,
   progress = FALSE)
 }
 \arguments{

@@ -17,6 +17,18 @@ tomatrix <- function(m) {
     .Call('FeatureHashing_tomatrix', PACKAGE = 'FeatureHashing', m)
 }
 
+#'@title Test the callback function.
+#'@param Rcallback external pointer. The pointer of the callback function.
+#'@param input string. The input.
+#'@details The Rcallback is an external pointer which points to a functional pointer..
+#'The signature of the functional pointer should be:
+#'\code{std::vector<std::string> (*f)(const char* str)}
+#'@return character
+#'@export
+test_callback <- function(Rcallback, input) {
+    .Call('FeatureHashing_test_callback', PACKAGE = 'FeatureHashing', Rcallback, input)
+}
+
 .hashed.model.matrix.dataframe <- function(tf, data, hash_size, transpose, retval, keep_hashing_mapping, is_xi) {
     .Call('FeatureHashing_hashed_model_matrix_dataframe', PACKAGE = 'FeatureHashing', tf, data, hash_size, transpose, retval, keep_hashing_mapping, is_xi)
 }
@@ -34,18 +46,6 @@ hashed.value <- function(src) {
 #'@export hashed.interaction.value
 hashed.interaction.value <- function(src) {
     .Call('FeatureHashing_h2', PACKAGE = 'FeatureHashing', src)
-}
-
-#'@title Test the callback function.
-#'@param Rcallback external pointer. The pointer of the callback function.
-#'@param input string. The input.
-#'@details The Rcallback is an external pointer which points to a functional pointer..
-#'The signature of the functional pointer should be:
-#'\code{std::vector<std::string> (*f)(const char* str)}
-#'@return character
-#'@export
-test_callback <- function(Rcallback, input) {
-    .Call('FeatureHashing_test_callback', PACKAGE = 'FeatureHashing', Rcallback, input)
 }
 
 #'@title Convert the integer to raw vector with endian correction
@@ -70,6 +70,10 @@ split_existence <- function(src, delim) {
 
 split_count <- function(src, delim) {
     .Call('FeatureHashing_split_count', PACKAGE = 'FeatureHashing', src, delim)
+}
+
+init_split_callback <- function(delim, type) {
+    .Call('FeatureHashing_init_split_callback', PACKAGE = 'FeatureHashing', delim, type)
 }
 
 .selectColumn <- function(m, index, drop = TRUE, Rretval = NULL) {

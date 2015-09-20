@@ -256,17 +256,6 @@ tf.idf.transfo <- function(hash.matrix){
   hash.matrix %*% idf.train
 }
 
-.callback <- new.env()
-
-#'@export
-#'@title Register Special Function for Formula Interface
-#'@param special string. The name which will be used in formula interface.
-#'@param callback external pointer. The pointer to the callback function. Please see the details.
-register_callback <- function(special, callback) {
-  .callback[[special]] <- callback
-  invisible(NULL)
-}
-
 # Avoid error messages during CRAN check.
 # The reason is that these variables are never declared
 # They are mainly column names inferred by Data.table...

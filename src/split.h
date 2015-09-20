@@ -16,7 +16,58 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __SPLIT_H__
+#define __SPLIT_H__
+
 #include <string>
 #include <vector>
+#include <set>
+#include <algorithm>
+#include "callback.h"
 
 std::vector<std::string> split(const std::string& src, const std::string& delim);
+
+enum class SplitType {
+  Count,
+  Existence
+};
+
+class SplitCallbackFunctor : public CallbackFunctor {
+  
+  SplitType type;
+  const std::string delim;
+
+  const std::vector<std::string> split_count(const char* input) const {
+    std::vector<std::string> temp(split(input, delim));
+    temp.erase(std::remove(temp.begin(), temp.end(), ""), temp.end());
+    return temp;
+  }
+  
+  const std::vector<std::string> split_existence(const char* input) const {
+    std::vector<std::string> temp(split(input, delim));
+    std::set<std::string> temp2(temp.begin(), temp.end());
+    temp2.erase("");
+    temp.assign(temp2.begin(), temp2.end());
+    return temp;
+  }
+  
+public:
+  
+  explicit SplitCallbackFunctor(const std::string& _delim, SplitType _type)
+    : type(_type), delim(_delim), CallbackFunctor()
+    { }
+  
+  virtual ~SplitCallbackFunctor() { }
+  
+  virtual const std::vector<std::string> operator()(const char* input) const {
+    switch (type) {
+    case SplitType::Count : 
+      return split_count(input);
+    case SplitType::Existence :
+      return split_existence(input);
+    }
+  }
+  
+};
+
+#endif //__SPLIT_H__

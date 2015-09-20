@@ -1,6 +1,6 @@
 /*
  * This file is part of FeatureHashing
- * Copyright (C) 2014-2015 Wush Wu
+ * Copyright (C) 2015 Wush Wu
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -16,18 +16,22 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __HASHED_MODEL_MATRIX_HPP__
-#define __HASHED_MODEL_MATRIX_HPP__
-
-#include <cstring>
-#include <memory>
-#include <boost/detail/endian.hpp>
-#include <Rcpp.h>
 #include "callback.h"
-#include "hash_function.h"
-#include "vector_converter.h"
+#include "split.h"
+#include <Rcpp.h>
 
-typedef std::map< std::string, std::string > NameClassMapping;
-typedef std::vector< std::string > StrVec;
+using namespace Rcpp;
 
-#endif //__HASHED_MODEL_MATRIX_HPP__
+//'@title Test the callback function.
+//'@param Rcallback external pointer. The pointer of the callback function.
+//'@param input string. The input.
+//'@details The Rcallback is an external pointer which points to a functional pointer..
+//'The signature of the functional pointer should be:
+//'\code{std::vector<std::string> (*f)(const char* str)}
+//'@return character
+//'@export
+//[[Rcpp::export("test_callback")]]
+SEXP test_callback(SEXP Rcallback, const std::string& input) {
+  XPtr<CallbackFunctor> callback(Rcallback);
+  return wrap((*callback)(input.c_str()));
+}

@@ -196,7 +196,7 @@
 #'@importClassesFrom Matrix dgCMatrix
 #'@aliases hashed.value hash.sign hashed.interaction.value
 hashed.model.matrix <- function(formula, data, hash.size = 2^18, transpose = FALSE, 
-                                create.mapping = FALSE, is.dgCMatrix = TRUE, signed.hash = TRUE,
+                                create.mapping = FALSE, is.dgCMatrix = TRUE, signed.hash = FALSE,
                                 progress = FALSE) {
   stopifnot(hash.size >= 0)
   stopifnot(is.data.frame(data))

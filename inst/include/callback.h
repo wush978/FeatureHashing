@@ -32,4 +32,8 @@ public:
   
 };
 
+#include <RcppCommon.h>
+
+RCPP_EXPOSED_CLASS(CallbackFunctor)
+
 #endif //__CALLBACK_H__

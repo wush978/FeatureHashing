@@ -173,18 +173,6 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// init_split_callback
-SEXP init_split_callback(const std::string& delim, const std::string& type);
-RcppExport SEXP FeatureHashing_init_split_callback(SEXP delimSEXP, SEXP typeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< const std::string& >::type delim(delimSEXP);
-    Rcpp::traits::input_parameter< const std::string& >::type type(typeSEXP);
-    __result = Rcpp::wrap(init_split_callback(delim, type));
-    return __result;
-END_RCPP
-}
 // selectColumn
 SEXP selectColumn(S4 m, IntegerVector index, bool drop, SEXP Rretval);
 RcppExport SEXP FeatureHashing_selectColumn(SEXP mSEXP, SEXP indexSEXP, SEXP dropSEXP, SEXP RretvalSEXP) {

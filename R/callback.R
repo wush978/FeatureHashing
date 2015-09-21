@@ -11,6 +11,7 @@ register_callback <- function(special, callback) {
 }
 
 #'@export
-generate_split_callback <- function(sep, type) {
-  
+generate_split_callback <- function(delim, type = c("existence", "count")) {
+  callback <- new(split_callback, delim, type[1])
+  callback
 }

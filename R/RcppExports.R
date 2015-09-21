@@ -72,10 +72,6 @@ split_count <- function(src, delim) {
     .Call('FeatureHashing_split_count', PACKAGE = 'FeatureHashing', src, delim)
 }
 
-init_split_callback <- function(delim, type) {
-    .Call('FeatureHashing_init_split_callback', PACKAGE = 'FeatureHashing', delim, type)
-}
-
 .selectColumn <- function(m, index, drop = TRUE, Rretval = NULL) {
     .Call('FeatureHashing_selectColumn', PACKAGE = 'FeatureHashing', m, index, drop, Rretval)
 }

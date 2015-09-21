@@ -30,8 +30,16 @@ using namespace Rcpp;
 //'\code{std::vector<std::string> (*f)(const char* str)}
 //'@return character
 //'@export
-//[[Rcpp::export("test_callback")]]
+//[[Rcpp::export]]
 SEXP test_callback(SEXP Rcallback, const std::string& input) {
-  XPtr<CallbackFunctor> callback(Rcallback);
+  CallbackFunctor* callback(as<CallbackFunctor*>(Rcallback));
   return wrap((*callback)(input.c_str()));
+  // return R_NilValue;
+}
+
+RCPP_MODULE(callback) {
+  
+  class_<CallbackFunctor>("callback")
+  ;
+
 }

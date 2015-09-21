@@ -85,16 +85,3 @@ SEXP split_count(CharacterVector src, const std::string& delim) {
   retval.attr("names") = retval_name;
   return retval;  
 }
-
-//[[Rcpp::export]]
-SEXP init_split_callback(const std::string& delim, const std::string& type) {
-  if (type.compare("existence") == 0) {
-    return XPtr<CallbackFunctor>(new SplitCallbackFunctor(delim, SplitType::Existence));
-  } else if (type.compare("count") == 0) {
-    return XPtr<CallbackFunctor>(new SplitCallbackFunctor(delim, SplitType::Count));
-  } else if (type.compare("tf-idf") == 0) {
-    return XPtr<CallbackFunctor>(new SplitCallbackFunctor(delim, SplitType::Count));
-  } else {
-    throw std::invalid_argument("Unknown type");
-  }
-}

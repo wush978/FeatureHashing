@@ -12,8 +12,8 @@ struct SplitCallbackFunctor : public CallbackFunctor {
   std::string delim;
   SplitType type;
   
-  SplitCallbackFunctor(const std::string& _delim, const std::string& _type) 
-    : delim(_delim)
+  SplitCallbackFunctor(SEXP input, const std::string& _delim, const std::string& _type) 
+    : delim(_delim), CallbackFunctor(input)
     { 
       set_type(_type);
     }
@@ -61,7 +61,7 @@ RCPP_MODULE(split_callback) {
 
   class_<SplitCallbackFunctor>("split_callback")
   .derives<CallbackFunctor>("callback")
-  .constructor<std::string, std::string>()
+  .constructor<SEXP, std::string, std::string>()
   .field("delim", &SplitCallbackFunctor::delim)
   .property("type", &SplitCallbackFunctor::get_type, &SplitCallbackFunctor::set_type)
   ;

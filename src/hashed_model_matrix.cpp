@@ -47,15 +47,29 @@ const ConvertersVec get_converters(
   NumericMatrix tfactors(wrap(tf.attr("factors")));
   CharacterVector reference_name, feature_name;
   Environment feature_hashing(Environment::namespace_env("FeatureHashing"));
-  Function parse_split(feature_hashing["parse_split"]);
-  std::set<int> specials;
+  Function parse_special(feature_hashing["parse_special"]);
+  std::map<int, std::string> specials;
   {
     List tmp(tf.attr("specials"));
-    SEXP ptag = tmp["split"];
-    if (!Rf_isNull(ptag)) {
-      IntegerVector tmpvec(ptag);
-      specials.insert(tmpvec.begin(), tmpvec.end());
+    CharacterVector tmp_name(tmp.attr("names"));
+    for(int i = 0;i < tmp.size();i++) {
+      SEXP ptag = tmp[i];
+      if (!Rf_isNull(ptag)) {
+        IntegerVector tmp_index(tmp[i]);
+        const char* callback_generator_name = CHAR(wrap(tmp_name[i]));
+#ifdef NOISY_DEBUG
+        Rprintf("Extract generator: %s from .callback\n", CHAR(wrap(tmp_name[i])));
+#endif
+        std::for_each(tmp_index.begin(), tmp_index.end(), [&specials, &callback_generator_name](const int index) {
+          specials.insert(std::make_pair(index, callback_generator_name));
+        });
+      }
     }
+#ifdef NOISY_DEBUG
+    for(auto i = specials.begin();i != specials.end();i++) {
+      Rprintf("special %s at index: %d\n", i->second.c_str(), i->first);
+    }
+#endif
   }
   {
     List tmp(tfactors.attr("dimnames"));
@@ -73,11 +87,12 @@ const ConvertersVec get_converters(
       #endif
       pVectorConverter p(NULL);
       try{
-        if (specials.find(j + 1) == specials.end()) {
+        const auto j_special = specials.find(j + 1);
+        if (j_special == specials.end()) {
           if (reference_class.find(rname) == reference_class.end()) throw std::invalid_argument("Failed to find the column:");
           const std::string& rclass(reference_class.find(rname)->second);
           #ifdef NOISY_DEBUG
-          Rprintf("%s\n", rclass.c_str());
+          Rprintf("rclass: %s\n", rclass.c_str());
           #endif
           Param param(rname, _h_main, _h_binary, hash_size);
           if (rclass.compare("factor") == 0) {
@@ -111,56 +126,21 @@ const ConvertersVec get_converters(
         } 
         else {
           #ifdef NOISY_DEBUG
-          Rprintf(" (parsing tag..) ");
+          Rprintf(" (parsing spetial..) text: %s special: %s\n", rname.c_str(), j_special->second.c_str());
           #endif
-          List expression(parse_split(wrap(rname)));
-          rname.assign(as<std::string>(expression["reference_name"]));
+          RObject callback_functor(parse_special(wrap(rname), wrap(j_special->second.c_str()), data));
+          rname.assign(as<std::string>(callback_functor.attr("rname")));
           Param param(rname, _h_main, _h_binary, hash_size);
           #ifdef NOISY_DEBUG
           Rprintf(" (rname ==> %s) ", rname.c_str());
           #endif
-          if (reference_class.find(rname) == reference_class.end()) throw std::invalid_argument("Failed to find the column: ");
-          const std::string& rclass(reference_class.find(rname)->second);
-          #ifdef NOISY_DEBUG
-          Rprintf("%s\n", rclass.c_str());
-          #endif
-          std::string 
-            delim(as<std::string>(expression["delim"])), 
-            type(as<std::string>(expression["type"]));
-          #ifdef NOISY_DEBUG
-          Rprintf("delim: %s type: %s\n", delim.c_str(), type.c_str());
-          #endif
-          if (rclass.compare("factor") == 0) {
-            if (type.compare("existence") == 0) {
-              #ifdef NOISY_DEBUG
-              Rprintf("Initialize TagExistenceFactorConverter\n");
-              #endif
-              p.reset(new TagExistenceFactorConverter(wrap(data[rname.c_str()]), param, delim));
-            } else if (type.compare("count") == 0) {
-              #ifdef NOISY_DEBUG
-              Rprintf("Initialize TagCountFactorConverter\n");
-              #endif
-              p.reset(new TagCountFactorConverter(wrap(data[rname.c_str()]), param, delim));
-            } else {
-              throw std::invalid_argument("Non supported type at name: ");
-            }
-          } else if (rclass.compare("character") == 0) {
-            if (type.compare("existence") == 0) {
-              #ifdef NOISY_DEBUG
-              Rprintf("Initialize TagExistenceCharacterConverter\n");
-              #endif
-              p.reset(new TagExistenceCharacterConverter(wrap(data[rname.c_str()]), param, delim));
-            } else if (type.compare("count") == 0) {
-              #ifdef NOISY_DEBUG
-              Rprintf("Initialize TagCountCharacterConverter\n");
-              #endif
-              p.reset(new TagCountCharacterConverter(wrap(data[rname.c_str()]), param, delim));
-            } else {
-              throw std::invalid_argument("Non supported type at name: ");
-            }
-          } else {
-            throw std::invalid_argument("Non supported type at name: ");
+          if (reference_class.find(rname) == reference_class.end()) {
+            throw std::invalid_argument("The first argument of the callback should be one of the column name of the data");
           }
+          #ifdef NOISY_DEBUG
+          Rprintf("Initialize CallbackConverter\n");
+          #endif
+          p.reset(new CallbackConverter(as<CallbackFunctor*>(callback_functor), param));
         }
       } catch(std::invalid_argument& e) {
         std::string message(e.what());

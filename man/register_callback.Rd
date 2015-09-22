@@ -4,14 +4,17 @@
 \alias{register_callback}
 \title{Register Special Function for Formula Interface}
 \usage{
-register_callback(special, callback)
+register_callback(special, callback_generator)
 }
 \arguments{
 \item{special}{string. The name which will be used in formula interface.}
 
-\item{callback}{external pointer. The pointer to the callback function. Please see the details.}
+\item{callback_generator}{function which will create a callback. Please see the details.}
 }
 \description{
 Register Special Function for Formula Interface
+}
+\examples{
+register_callback("split", generate_split_callback)
 }
 

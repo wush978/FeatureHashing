@@ -211,7 +211,7 @@ hashed.model.matrix <- function(formula, data, hash.size = 2^18, transpose = FAL
     formula <- as.character(formula) %>% gsub(pattern = tf.idf.string, replacement = "type = \"count\"", x = .) %>% paste0(collapse = " ") %>% as.formula
   }
   
-  tf <- terms.formula(formula, data = data, specials = "split")
+  tf <- terms.formula(formula, data = data, specials = ls(FeatureHashing:::.callback))
   retval <- new(.CSCMatrix)
   .hashed.model.matrix.dataframe(tf, data, hash.size, transpose, retval, create.mapping, signed.hash)
   class(retval) <- .CSCMatrix
@@ -226,28 +226,50 @@ hashed.model.matrix <- function(formula, data, hash.size = 2^18, transpose = FAL
 }
 
 # This is the function called from C to parse the \code{split} function.
-parse_split <- function(text) {
+parse_special <- function(text, special, df) {
   origin.keep.source <- options()$keep.source
   tryCatch({
     options(keep.source = TRUE)
     p <- parse(text = text)
     tmp <- getParseData(p)
     reference_name <- tmp$text[which(tmp$token == "SYMBOL")]
-    if ("delim" %in% tmp$text) {
-      delim <- tmp$text[which(tmp$text == "delim")[1] + 2]
-      delim <- gsub(pattern = '"', replacement = '', delim)
-    } else {
-      # the default value of delim
-      delim <- ","
+    params <- list()
+    fname <- NULL
+    first_symbol <- NULL
+    start <- FALSE
+    for(i_symbol in seq_len(nrow(tmp))) {
+      if (tmp$token[i_symbol] != "SYMBOL_FUNCTION_CALL" & !start) next
+      start <- TRUE
+      switch(tmp$token[i_symbol],
+             "SYMBOL_FUNCTION_CALL" = {
+               fname <- tmp$text[i_symbol]
+             },
+             "SYMBOL" = {
+               if (tmp$token[i_symbol - 1] == "EQ_SUB") next
+               value <- eval(parse(text = tmp$text[i_symbol]), envir = df)
+               params <- append(params, list(value))
+               if (is.null(first_symbol)) first_symbol <- tmp$text[i_symbol]
+             },
+             "STR_CONST" = {
+               if (tmp$token[i_symbol - 1] == "EQ_SUB") next
+               value <- eval(parse(text = tmp$text[i_symbol]), envir = parent.frame())
+               params <- append(params, list(value))
+             },
+             "SYMBOL_SUB" = {
+               if (tmp$token[i_symbol + 1] != "EQ_SUB") next
+               element <- list()
+               name <- tmp$text[i_symbol]
+               value <- eval(parse(text = tmp$text[i_symbol + 2]), envir = df)
+               element[[name]] <- value
+               params <- append(params, element)
+             },
+             next)
     }
-    if ("type" %in% tmp$text) {
-      type <- tmp$text[which(tmp$text == "type")[1] + 2]
-      type <- gsub(pattern = '"', replacement = '', type)
-    } else {
-      # the default value of type
-      type <- "existence"
-    }
-    list(reference_name = reference_name, delim = delim, type = type)
+    stopifnot(!is.null(fname))
+    stopifnot(start)
+    retval <- do.call(.callback[[special]], params)
+    attr(retval, "rname") <- first_symbol
+    retval
   }, finally = {options(keep.source = origin.keep.source)})
 }
 

@@ -40,11 +40,15 @@ struct SplitCallbackFunctor : public CallbackFunctor {
   
   virtual const std::vector<std::string> operator()(const char* input) const {
     switch (type) {
-    case SplitType::Count:
-      return split(input, delim);
+    case SplitType::Count: {
+      auto tmp(split(input, delim));
+      tmp.erase(std::remove(tmp.begin(), tmp.end(), ""), tmp.end());
+      return tmp;
+    }
     case SplitType::Existence: {
       std::vector<std::string> tmp(split(input, delim));
       std::set<std::string> tmp2(tmp.begin(), tmp.end());
+      tmp2.erase("");
       tmp.assign(tmp2.begin(), tmp2.end());
       return tmp;
     }

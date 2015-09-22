@@ -20,9 +20,6 @@ tomatrix <- function(m) {
 #'@title Test the callback function.
 #'@param Rcallback external pointer. The pointer of the callback function.
 #'@param input string. The input.
-#'@details The Rcallback is an external pointer which points to a functional pointer..
-#'The signature of the functional pointer should be:
-#'\code{std::vector<std::string> (*f)(const char* str)}
 #'@return character
 #'@export
 test_callback <- function(Rcallback, input) {

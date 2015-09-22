@@ -26,16 +26,12 @@ using namespace Rcpp;
 //'@title Test the callback function.
 //'@param Rcallback external pointer. The pointer of the callback function.
 //'@param input string. The input.
-//'@details The Rcallback is an external pointer which points to a functional pointer..
-//'The signature of the functional pointer should be:
-//'\code{std::vector<std::string> (*f)(const char* str)}
 //'@return character
 //'@export
 //[[Rcpp::export]]
 SEXP test_callback(SEXP Rcallback, const std::string& input) {
   CallbackFunctor* callback(as<CallbackFunctor*>(Rcallback));
   return wrap((*callback)(input.c_str()));
-  // return R_NilValue;
 }
 
 RCPP_MODULE(callback) {

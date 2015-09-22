@@ -17,9 +17,4 @@ character
 \description{
 Test the callback function.
 }
-\details{
-The Rcallback is an external pointer which points to a functional pointer..
-The signature of the functional pointer should be:
-\code{std::vector<std::string> (*f)(const char* str)}
-}
 

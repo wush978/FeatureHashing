@@ -139,6 +139,8 @@ const ConvertersVec get_converters(
           }
           #ifdef NOISY_DEBUG
           Rprintf("Initialize CallbackConverter\n");
+          Rprintf("Test h_main: %zu\n", (*param.h_main)("test", 4));
+          Rprintf("Test h_binary: %zu\n", (*param.h_binary)("test", 4));
           #endif
           p.reset(new CallbackConverter(as<CallbackFunctor*>(callback_functor), param));
         }

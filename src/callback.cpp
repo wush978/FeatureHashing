@@ -17,6 +17,7 @@
  */
 
 #include "callback.h"
+#include "converters.h"
 #include "split.h"
 #include <Rcpp.h>
 

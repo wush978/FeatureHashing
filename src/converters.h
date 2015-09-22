@@ -19,6 +19,7 @@
 #ifndef __CONVERTERS_HPP__
 #define __CONVERTERS_HPP__
 
+#include <memory>
 #include "vector_converter.h"
 #include "split.h"
 
@@ -456,5 +457,29 @@ private:
   }
   
 };
+
+class CallbackConverter : public VectorConverter {
+  
+  // TODO: refactor this
+  Rcpp::CharacterVector src;
+  const CallbackFunctor* f;
+  SEXP psrc;
+  std::vector< std::string > cache;
+  
+public:
+  
+  CallbackConverter(const CallbackFunctor* _f, const Param& param)
+    : f(_f), src(_f->src), psrc(_f->src), VectorConverter(param) 
+    { }
+  
+  virtual ~CallbackConverter() { }
+  
+  virtual const std::vector<uint32_t>& get_feature(size_t i);
+  
+  virtual const std::vector<double>& get_value(size_t i);
+
+};
+
+RCPP_EXPOSED_CLASS(CallbackFunctor)
 
 #endif // __CONVERTERS_HPP__

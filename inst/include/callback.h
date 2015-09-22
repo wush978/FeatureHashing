@@ -22,6 +22,7 @@
 #include <vector>
 #include <string>
 #include "vector_converter.h"
+#include <Rcpp.h>
 
 class CallbackFunctor {
 
@@ -29,67 +30,13 @@ public:
 
   // TODO: let src private
   Rcpp::CharacterVector src;
+  bool decollision;
 
-  CallbackFunctor(SEXP _src) : src(_src) { }
+  CallbackFunctor(SEXP _src) : src(_src), decollision(false) { }
   virtual ~CallbackFunctor() { }
   
   virtual const std::vector<std::string> operator()(const char* input) const = 0;
   
 };
-
-class CallbackConverter : public VectorConverter {
-  
-  // TODO: refactor this
-  Rcpp::CharacterVector src;
-  const CallbackFunctor* f;
-  SEXP psrc;
-  std::vector< std::string > cache;
-  
-public:
-  
-  CallbackConverter(const CallbackFunctor* _f, const Param& param)
-    : f(_f), src(_f->src), psrc(_f->src), VectorConverter(param) 
-    { }
-  
-  virtual ~CallbackConverter() { }
-  
-  virtual const std::vector<uint32_t>& get_feature(size_t i) {
-    SEXP pstr = STRING_ELT(psrc, i);
-    if (pstr == NA_STRING) {
-      feature_buffer.clear();
-    } else {
-      const char* str = CHAR(pstr);
-      cache = f->operator()(str);
-      feature_buffer.resize(cache.size());
-      std::transform(cache.begin(), cache.end(), feature_buffer.begin(), 
-                     [this](const std::string& s) {
-                       return this->get_hashed_feature(this->h_main, s.c_str());
-                     });
-      if (is_final) std::transform(feature_buffer.begin(), feature_buffer.end(), 
-          feature_buffer.begin(), [this](uint32_t feature) {
-            return feature % this->hash_size;
-          });
-    }
-    return feature_buffer;
-  }
-  
-  virtual const std::vector<double>& get_value(size_t i) {
-    SEXP pstr = STRING_ELT(psrc, i);
-    if (pstr == NA_STRING) {
-      value_buffer.clear();
-    } else {
-      const char* str = CHAR(pstr);
-      value_buffer.resize(cache.size());
-      std::transform(cache.begin(), cache.end(), value_buffer.begin(), 
-                     [this](const std::string& s) {
-                       return this->get_hashed_feature(this->h_binary, s.c_str());
-                     });
-    }
-    return value_buffer;
-  }
-  
-};
-
-RCPP_EXPOSED_CLASS(CallbackFunctor)
 
 #endif //__CALLBACK_H__

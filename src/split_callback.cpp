@@ -16,6 +16,7 @@ struct SplitCallbackFunctor : public CallbackFunctor {
     : delim(_delim), CallbackFunctor(input)
     { 
       set_type(_type);
+      if (type == SplitType::Existence) decollision = true;
     }
   
   virtual ~SplitCallbackFunctor() { }

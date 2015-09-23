@@ -225,7 +225,7 @@ hashed.model.matrix <- function(formula, data, hash.size = 2^18, transpose = FAL
   } else if (tf.idf) tf.idf.transfo(retval) else retval
 }
 
-# This is the function called from C to parse the \code{split} function.
+# This is the function called from C to parse the special function.
 parse_special <- function(text, special, df) {
   origin.keep.source <- options()$keep.source
   tryCatch({

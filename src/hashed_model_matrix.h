@@ -22,6 +22,7 @@
 #include <cstring>
 #include <memory>
 #include <boost/detail/endian.hpp>
+#include <boost/progress.hpp>
 #include <Rcpp.h>
 #include "callback.h"
 #include "hash_function.h"

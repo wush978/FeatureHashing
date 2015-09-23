@@ -8,7 +8,8 @@
 \title{Create a model matrix with feature hashing}
 \usage{
 hashed.model.matrix(formula, data, hash.size = 2^18, transpose = FALSE,
-  create.mapping = FALSE, is.dgCMatrix = TRUE, signed.hash = TRUE)
+  create.mapping = FALSE, is.dgCMatrix = TRUE, signed.hash = FALSE,
+  progress = FALSE)
 }
 \arguments{
 \item{formula}{\code{formula} or a \code{character} vector of column names (will be expanded to a \code{formula})}
@@ -28,6 +29,8 @@ Please see the details.}
 
 \item{signed.hash}{logical value. Indicating if the hashed value is multipled by random sign.
 This will reduce the impact of collision. Disable it will enhance the speed.}
+
+\item{progress}{logical value. Indicating if the progress bar is displayed or not.}
 }
 \description{
 Create a model matrix with feature hashing
@@ -42,8 +45,9 @@ respectively. Different seeds are used to implement the hashing function
 \eqn{h} and \eqn{\xi} with MurmurHash3.
 
 The formula is parsed via \code{\link{terms.formula}} with "split" as special
-keyword. The interaction term is hashed (\code{hashed.interaction})in different ways. Please see example for
-the detailed implementation. The "\code{split}" is used to expand the concatenated feature
+keyword. The interaction term is hashed (the reader can try  to expl)in different ways. Please see example for
+the detailed implementation. We provide a helper function: \code{\link{hashed.interaction.value}} to show show the index after interaction.
+The "\code{split}" is used to expand the concatenated feature
 such as "10129,10024,13866,10111,10146,10120,10115,10063" which represents the occurrence of
 multiple categorical variable: "10129", "10024", "13866", "10111", "10146", "10120", "10115", and
 "10063". The \code{hashed.model.matrix} will expand the concatenated feature and produce

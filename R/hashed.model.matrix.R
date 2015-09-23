@@ -20,6 +20,7 @@
 #'@param is.dgCMatrix logical value. Indicating if the result is \code{dgCMatrix} or \code{CSCMatrix}
 #'@param signed.hash logical value. Indicating if the hashed value is multipled by random sign.
 #'This will reduce the impact of collision. Disable it will enhance the speed.
+#'@param progress logical value. Indicating if the progress bar is displayed or not.
 #'
 #'@details
 #'The \code{hashed.model.matrix} hashes the feature during
@@ -31,8 +32,9 @@
 #'\eqn{h} and \eqn{\xi} with MurmurHash3.
 #'
 #'The formula is parsed via \code{\link{terms.formula}} with "split" as special
-#'keyword. The interaction term is hashed (\code{hashed.interaction})in different ways. Please see example for 
-#'the detailed implementation. The "\code{split}" is used to expand the concatenated feature
+#'keyword. The interaction term is hashed (the reader can try  to expl)in different ways. Please see example for 
+#'the detailed implementation. We provide a helper function: \code{\link{hashed.interaction.value}} to show show the index after interaction.
+#'The "\code{split}" is used to expand the concatenated feature
 #'such as "10129,10024,13866,10111,10146,10120,10115,10063" which represents the occurrence of 
 #'multiple categorical variable: "10129", "10024", "13866", "10111", "10146", "10120", "10115", and
 #'"10063". The \code{hashed.model.matrix} will expand the concatenated feature and produce
@@ -189,13 +191,14 @@
 #'names(mapping)
 #'
 #'@export
-#'@importFrom methods new
-#'@importFrom methods checkAtAssignment
+#'@importFrom methods new as checkAtAssignment as
+#'@importFrom stats as.formula terms.formula
+#'@importFrom utils getParseData head
 #'@importClassesFrom Matrix dgCMatrix
 #'@aliases hashed.value hash.sign hashed.interaction.value
 hashed.model.matrix <- function(formula, data, hash.size = 2^18, transpose = FALSE, 
-                                create.mapping = FALSE, is.dgCMatrix = TRUE, signed.hash = TRUE
-                                ) {
+                                create.mapping = FALSE, is.dgCMatrix = TRUE, signed.hash = FALSE,
+                                progress = FALSE) {
   stopifnot(hash.size >= 0)
   stopifnot(is.data.frame(data))
   stopifnot(class(formula) %in% c("formula", "character"))
@@ -213,7 +216,7 @@ hashed.model.matrix <- function(formula, data, hash.size = 2^18, transpose = FAL
   
   tf <- terms.formula(formula, data = data, specials = ls(.callback))
   retval <- new(.CSCMatrix)
-  .hashed.model.matrix.dataframe(tf, data, hash.size, transpose, retval, create.mapping, signed.hash)
+  .hashed.model.matrix.dataframe(tf, data, hash.size, transpose, retval, create.mapping, signed.hash, progress)
   class(retval) <- .CSCMatrix
   retval@Dimnames[[2]] <- paste(seq_len(retval@Dim[2]))
   if (is.dgCMatrix) {

@@ -26,8 +26,8 @@ test_callback <- function(Rcallback, input) {
     .Call('FeatureHashing_test_callback', PACKAGE = 'FeatureHashing', Rcallback, input)
 }
 
-.hashed.model.matrix.dataframe <- function(tf, data, hash_size, transpose, retval, keep_hashing_mapping, is_xi) {
-    .Call('FeatureHashing_hashed_model_matrix_dataframe', PACKAGE = 'FeatureHashing', tf, data, hash_size, transpose, retval, keep_hashing_mapping, is_xi)
+.hashed.model.matrix.dataframe <- function(tf, data, hash_size, transpose, retval, keep_hashing_mapping, is_xi, progress) {
+    .Call('FeatureHashing_hashed_model_matrix_dataframe', PACKAGE = 'FeatureHashing', tf, data, hash_size, transpose, retval, keep_hashing_mapping, is_xi, progress)
 }
 
 #'@export hash.sign

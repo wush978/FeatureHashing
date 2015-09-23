@@ -211,7 +211,7 @@ hashed.model.matrix <- function(formula, data, hash.size = 2^18, transpose = FAL
     formula <- as.character(formula) %>% gsub(pattern = tf.idf.string, replacement = "type = \"count\"", x = .) %>% paste0(collapse = " ") %>% as.formula
   }
   
-  tf <- terms.formula(formula, data = data, specials = ls(FeatureHashing:::.callback))
+  tf <- terms.formula(formula, data = data, specials = ls(.callback))
   retval <- new(.CSCMatrix)
   .hashed.model.matrix.dataframe(tf, data, hash.size, transpose, retval, create.mapping, signed.hash)
   class(retval) <- .CSCMatrix

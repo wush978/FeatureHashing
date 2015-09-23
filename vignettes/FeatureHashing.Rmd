@@ -62,7 +62,7 @@ The following scripts show how to use the **FeatureHashing** to construct `Matri
 
 The dataset is a sample from iPinYou dataset which is described in @zhang2014real.
 
-## Logistic Regression with [`glmnet`](http://cran.r-project.org/web/packages/glmnet/index.html)
+## Logistic Regression with [`glmnet`](http://cran.r-project.org/package=glmnet)
 
 ```{r lr}
 # The following script assumes that the data.frame
@@ -95,7 +95,7 @@ p.lr <- predict(cv.g.lr, m.test, s="lambda.min")
 auc(ipinyou.test$IsClick, p.lr)
 ```
 
-## Gradient Boosted Decision Tree with [`xgboost`](http://cran.r-project.org/web/packages/xgboost/index.html)
+## Gradient Boosted Decision Tree with [`xgboost`](http://cran.r-project.org/package=xgboost)
 
 Following the script above, 
 

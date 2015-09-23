@@ -1,3 +1,13 @@
+2015-03-29 ~ 2015-09-22  Wush Wu <wush978@gmail.com>
+- Version 0.9.1
+- Include two vignettes.
+- Change the default behavior of `hashed.model.matrix`:
+    - The `signed.hash` is disabled.
+    - The output of `split` with type `\"existence\"` will filter the collision.
+- Add a helper function to calculate the index of interaction.
+- Add progress bar to `hashed.model.matrix`.
+- Add the type `tf-idf` to split.
+
 2015-01-01 ~ 2015-03-28  Wush Wu <wush978@gmail.com>
 
 - Version 0.9

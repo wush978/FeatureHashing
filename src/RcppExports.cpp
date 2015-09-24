@@ -50,6 +50,18 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// test_callback
+SEXP test_callback(SEXP Rcallback, const std::string& input);
+RcppExport SEXP FeatureHashing_test_callback(SEXP RcallbackSEXP, SEXP inputSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< SEXP >::type Rcallback(RcallbackSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type input(inputSEXP);
+    __result = Rcpp::wrap(test_callback(Rcallback, input));
+    return __result;
+END_RCPP
+}
 // hashed_model_matrix_dataframe
 SEXP hashed_model_matrix_dataframe(RObject tf, DataFrame data, unsigned long hash_size, bool transpose, S4 retval, bool keep_hashing_mapping, bool is_xi, bool progress);
 RcppExport SEXP FeatureHashing_hashed_model_matrix_dataframe(SEXP tfSEXP, SEXP dataSEXP, SEXP hash_sizeSEXP, SEXP transposeSEXP, SEXP retvalSEXP, SEXP keep_hashing_mappingSEXP, SEXP is_xiSEXP, SEXP progressSEXP) {

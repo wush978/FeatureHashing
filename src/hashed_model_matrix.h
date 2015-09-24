@@ -22,10 +22,24 @@
 #include <cstring>
 #include <memory>
 #include <boost/detail/endian.hpp>
+#include <boost/progress.hpp>
 #include <Rcpp.h>
+#include "callback.h"
 #include "hash_function.h"
 #include "vector_converter.h"
-#include <boost/progress.hpp>
+#include "converters.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+uint32_t PMurHash32(uint32_t, const void*, int);
+
+extern const uint32_t MURMURHASH3_H_SEED, MURMURHASH3_XI_SEED;
+
+#ifdef __cplusplus
+}
+#endif
 
 typedef std::map< std::string, std::string > NameClassMapping;
 typedef std::vector< std::string > StrVec;

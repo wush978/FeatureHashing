@@ -1,7 +1,12 @@
 #'@useDynLib FeatureHashing
-#'@importFrom Rcpp evalCpp
+#'@importFrom Rcpp loadModule cpp_object_initializer
 #'@import digest
-.onLoad <- function(libname, pkgname) { }
+.onLoad <- function(libname, pkgname) {
+  # loadRcppModules()
+}
+
+loadModule("callback", TRUE)
+loadModule("split_callback", TRUE)
 
 .onAttach <- function(libname, pkgname) {
   if (interactive()) {

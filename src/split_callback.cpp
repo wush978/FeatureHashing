@@ -36,6 +36,7 @@ struct SplitCallbackFunctor : public CallbackFunctor {
     case SplitType::Existence:
       return "existence";
     }
+    throw std::logic_error("Invalid SplitType");
   }
   
   virtual const std::vector<std::string> operator()(const char* input) const {
@@ -53,6 +54,7 @@ struct SplitCallbackFunctor : public CallbackFunctor {
       return tmp;
     }
     }
+    throw std::logic_error("Invalid SplitType");
   }
   
 };

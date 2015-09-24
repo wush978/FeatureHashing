@@ -1,0 +1,27 @@
+---
+title: "Register Callback for FeatureHashing"
+author: "Wush Wu"
+output: 
+  rmarkdown::html_vignette:
+    css: vignette.css
+    number_sections: yes
+    toc: yes
+date: "September 24, 2015"
+vignette: >
+  %\VignetteIndexEntry{FeatureHashing}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+This is an introduction of registering callback for the formula interface of FeatureHashing.
+
+## Demo
+
+## Getting Started
+
+### Implement Rcpp Module
+
+### Implement Generator
+
+### Register the Generator to the Formula Interface
+

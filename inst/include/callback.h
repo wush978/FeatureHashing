@@ -21,7 +21,6 @@
 
 #include <vector>
 #include <string>
-#include "vector_converter.h"
 #include <Rcpp.h>
 
 class CallbackFunctor {

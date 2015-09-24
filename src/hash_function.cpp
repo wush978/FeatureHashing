@@ -1,26 +1,51 @@
-/*
- * This file is part of FeatureHashing
- * Copyright (C) 2014-2015 Wush Wu
- *
- * This program is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include <cstring>
 #include <deque>
 #include <boost/algorithm/string.hpp>
+#include "hash_function.h"
+#include "pmurhashAPI.h"
+#include "bswap_32.h"
 #include <Rcpp.h>
-#include "digestlocal.h"
+#include "hashed_model_matrix.h"
+
+const uint32_t 
+  MURMURHASH3_H_SEED = 3120602769LL,
+  MURMURHASH3_XI_SEED = 79193439LL;
+
+uint32_t NullHashFunction::operator()(const char* buf, int size, bool is_interaction) {
+  return 1;
+}
+
+uint32_t MurmurHash3HashFunction::operator()(const char* buf, int size, bool is_interaction) {
+  return ::PMurHash32(seed, buf, size);
+}
+
+uint32_t MurmurHash3LogHashFunction::operator()(const char* buf, int size, bool is_interaction) {
+  uint32_t retval = PMurHash32(seed, buf, size);
+  if (is_interaction) {
+    const uint32_t* src = reinterpret_cast<const uint32_t*>(buf);
+    #ifdef BOOST_BIG_ENDIAN
+    if (inverse_mapping.find(bswap_32(src[0])) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
+    if (inverse_mapping.find(bswap_32(src[1])) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
+    std::string key(inverse_mapping[bswap_32(src[0])]);
+    key.append(":");
+    key.append(inverse_mapping[bswap_32(src[1])]);
+    #else
+    if (inverse_mapping.find(src[0]) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
+    if (inverse_mapping.find(src[1]) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
+    std::string key(inverse_mapping[src[0]]);
+    key.append(":");
+    key.append(inverse_mapping[src[1]]);
+    #endif
+    e[key.c_str()] = Rcpp::wrap((int) retval);
+    inverse_mapping[retval] = key;
+  } 
+  else {
+    e[buf] = Rcpp::wrap((int) retval);
+    inverse_mapping[retval] = buf;
+  }
+  return retval;
+}
+
 using namespace Rcpp;
 
 //'@export hash.sign
@@ -84,4 +109,3 @@ IntegerVector h2(CharacterVector src) {
   }
   return retval;
 }
-

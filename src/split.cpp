@@ -26,7 +26,7 @@ std::vector<std::string> split(const std::string& src, const std::string& delim)
   const char* end = std::strstr(start, delim.c_str());
   std::vector<std::string> retval;
   while(end != NULL) {
-    retval.push_back(std::string(start, end));
+    if (end - start > 0) retval.push_back(std::string(start, end));
     start = end + delim.size();
     end = std::strstr(start, delim.c_str());
   }

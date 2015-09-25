@@ -14,7 +14,11 @@ register_callback(special, callback_generator)
 \description{
 Register Special Function for Formula Interface
 }
-\examples{
+\details{
+The callback_generator is a function whose first argument is the
+input data and the other arguments could be used to initialize the callback
+function properly. The result should be a Rcpp module which derives the
+`CallbackFunctor` class. Please see the vignette for details.
 register_callback("split", generate_split_callback)
 }
 

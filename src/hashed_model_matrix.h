@@ -25,7 +25,7 @@
 #include <boost/progress.hpp>
 #include <Rcpp.h>
 #include "callback.h"
-#include "hash_function.h"
+#include "hash_function_implementation.h"
 #include "vector_converter.h"
 #include "converters.h"
 

@@ -24,7 +24,7 @@ Imports:
   digest(>= 0.6.8),
   magrittr (>= 1.5)
 LinkingTo: Rcpp, digest(>= 0.6.8), BH
-Suggests: RUnit, glmnet, knitr, xgboost, rmarkdown
+Suggests: RUnit, glmnet, knitr, xgboost, rmarkdown, jiebaR(>= 0.5.1)
 RcppModules: callback, split_callback
 SystemRequirements: C++11
 BugReports: https://github.com/wush978/FeatureHashing/issues

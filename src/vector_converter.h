@@ -21,7 +21,9 @@
 
 #include "callback.h"
 #include "hash_function.h"
-#include <RcppCommon.h>
+#ifdef NOISY_DEBUG
+#include <Rcpp.h>
+#endif
 
 struct VectorConverterParam;
 class VectorConverter;

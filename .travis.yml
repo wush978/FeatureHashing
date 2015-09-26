@@ -16,6 +16,7 @@ before_install:
   - curl -OL http://raw.github.com/wush978/r-travis-mac/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
+  - Rscript -e "install.packages('devtools')"
   - Rscript -e "devtools::install_github('qinwf/jiebaR', build_vignettes = FALSE)"
 
 install:

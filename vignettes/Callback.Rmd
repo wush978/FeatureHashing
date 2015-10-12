@@ -1,0 +1,75 @@
+---
+title: "Register Callback for FeatureHashing"
+author: "Wush Wu"
+output: 
+  rmarkdown::html_vignette:
+    css: vignette.css
+    number_sections: yes
+    toc: yes
+date: "September 24, 2015"
+vignette: >
+  %\VignetteIndexEntry{FeatureHashing}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+This is an introduction of registering callback for the formula interface of FeatureHashing.
+
+The file under `r system.file("callback/jiebaR_callback.cp", package = "FeatureHashing")` register the tokenizer implemented in jiebaR to the formulat interface.
+
+The reader can check this file for details. 
+In the following content, I will show how to register your own special function into the formula interface used in FeatureHashing.
+
+## Demo
+
+Please install the jiebaR from the github which provides a C interface.
+
+```r
+devtools::install_github("qinwf/jiebaR")
+```
+
+Then, we can register the jiebaR to FeatureHashing via:
+
+```{r}
+library(FeatureHashing)
+init_jiebaR_callback()
+```
+
+After registration, we could use the segmentation provided by jiebaR:
+
+```{r}
+df <- data.frame(title = c(
+  "貶值取代降息？ 台幣貶破33元",
+  "優生 培寶4款毒奶瓶下架",
+  " 秋節上國道 閃11塞車點",
+  "習近平訪美前…//中國戰機公海危險攔截美機",
+  "352億公開收購 日月光成矽品最大股東",
+  "驚 AT-3又出事 南投深山失聯 2飛官生死未卜",
+  "誰說該廢死的？怕死鄭捷首度道歉",
+  "歐習會前夕// 美國安顧問：反對片面改變台海現狀"
+))
+m <- hashed.model.matrix(~ jiebaR(title), df, create.mapping = TRUE)
+head(hash.mapping(m))
+```
+
+As you can see, the FeatureHashing will call jiebaR to do the segmentation first and hash the output to construct the sparse matrix.
+
+You can use pass the argument to `jiebaR::worker` as follow:
+
+```{r}
+m <- hashed.model.matrix(~ jiebaR(title, type = "mix"), df, create.mapping = TRUE)
+head(hash.mapping(m))
+```
+
+In this documentation, you will learn how to register your own callback to FeatureHashing.
+
+## Getting Started
+
+
+
+### Implement Rcpp Module
+
+### Implement Generator
+
+### Register the Generator to the Formula Interface
+

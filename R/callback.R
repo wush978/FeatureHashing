@@ -23,3 +23,32 @@ generate_split_callback <- function(input, delim = ",", type = c("existence", "c
 
 .callback <- new.env()
 .callback[["split"]] <- generate_split_callback
+
+#'@title Initialize and register jiebaR to the formula interface
+#'@details This function will register the callback of word segmentation
+#'function provided by jiebaR to the formula interface. 
+#'For example, `~ jiebaR(...)` will use the feature of word segmentation
+#'provided by jiebaR to segment a given column of the data.
+#'The first argument of the jiebaR is a character which will be segmented.
+#'The left arguments are the same as \code{\link[jiebaR]{worker}}. These
+#'arguments will be used to initialize a jiebaR worker which will segment
+#'the input data.
+#'
+#'@examples
+#'\dontrun{
+#'library(FeatureHashing)
+#'init_jiebaR_callback()
+#'m <- hashed.model.matrix(~ jiebaR(title, type = "mix", df))
+#'# the column `df$title` will be feed into `worker <- worker(type = "mix")`
+#'# the result of `worker <= df$title` will be hashed into the sparse matrix
+#'# the result is `m`
+#'}
+#'@export
+#'@importFrom Rcpp sourceCpp
+init_jiebaR_callback <- function() {
+  if (!requireNamespace("jiebaR")) stop("Please install the package jiebaR first")
+  tryCatch({
+    sourceCpp(system.file("callback/jiebaR_callback.cpp", package = "FeatureHashing"))
+  }, finally = {
+  })
+}

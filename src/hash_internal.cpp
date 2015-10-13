@@ -18,9 +18,10 @@
 
 #include <cstring>
 #include <deque>
+#include <boost/detail/endian.hpp>
 #include <boost/algorithm/string.hpp>
 #include <Rcpp.h>
-#include "digestlocal.h"
+#include "hash_function.h"
 using namespace Rcpp;
 
 //'@export hash.sign

@@ -19,6 +19,7 @@
 #ifndef __HASH_FUNCTION_HPP__
 #define __HASH_FUNCTION_HPP__
 
+#include <boost/detail/endian.hpp>
 #include "digestlocal.h"
 #include "bswap_32.h"
 

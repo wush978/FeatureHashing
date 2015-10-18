@@ -696,6 +696,7 @@ getParseData(p)
 
 `r center_fig("commpraxis-audience-confusion.png", 75)`
 <small>source: http://www.commpraxis.com/wp-content/uploads/2015/01/commpraxis-audience-confusion.png</small>
+
 --- .dark .segue
 
 ## Incoming Feature

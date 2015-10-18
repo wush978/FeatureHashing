@@ -35,9 +35,11 @@ center_fig <- function(path, size = 100, style = NULL) {
 ## [Wush Chi-Hsuan Wu](https://github.com/wush978)
 
 - Ph.D. Student
-    - Display Advertising
-    - Large Scale Machine Learning
-- Familiar tools: R, C++, [Apache Spark](http://spark.apache.org/)
+    - Display Advertising and Real Time Bidding
+    - Large-Scale Machine Learning
+- Cofounder of Taiwan R User Group
+    - Machine Learning and Data Mining Monday
+    - R Workshop in Data Science Conference in Taiwan 2014 and 2015
 
 --- &twocol
 
@@ -60,21 +62,14 @@ center_fig <- function(path, size = 100, style = NULL) {
 ## Taipei City and Taipei 101
 
 `r center_fig("tpnightview.jpg", 75)`
-<small>source: <https://c2.staticflickr.com/6/5208/5231215951_c0e0036b17_b.jpg></small>
+<center><small>source: <https://c2.staticflickr.com/6/5208/5231215951_c0e0036b17_b.jpg></small></center>
 
----
-
-## New Landmark of Taipei
-
-`r center_fig("mailbox.jpg")`
-
---- &vcenter .largecontent
+--- &twocol
 
 ## Taiwan R User Group
 
-<http://www.meetup.com/Taiwan-R>
-
 `r center_fig("taiwan-r.jpg", 60)`
+<center><small><http://www.meetup.com/Taiwan-R></small></center>
 
 --- .dark .segue
 
@@ -701,6 +696,37 @@ getParseData(p)
 
 `r center_fig("commpraxis-audience-confusion.png", 75)`
 <small>source: http://www.commpraxis.com/wp-content/uploads/2015/01/commpraxis-audience-confusion.png</small>
+--- .dark .segue
+
+## Incoming Feature
+
+--- &vcenter
+
+## FeatureHashing + jiebaR
+
+```r
+library(FeatureHashing)
+df <- data.frame(title = c(
+    "貶值取代降息？ 台幣貶破33元",
+    "優生 培寶4款毒奶瓶下架",
+    "習近平訪美前…//中國戰機公海危險攔截美機"
+  ))
+init_jiebaR_callback()
+m <- hashed.model.matrix(~ jiebaR(title), df, create.mapping = TRUE)
+```
+
+- Require jiebaR-devel and FeatureHashing-devel
+    - `devtools::install_github('qinwf/jiebaR')`
+    - `devtools::install_github('wush978/FeatureHashing', ref = 'dev/0.10')`
+
+--- &vcenter .largecontent
+
+## Customized Formula Special Function
+
+- Defines the specail function in R or C++(through Rcpp)
+- Register the function to the FeatureHashing
+- Call these function before FeatureHashing via Formula Interface
+- Might be useful for `n-gram`
 
 --- &vcenter .largecontent
 

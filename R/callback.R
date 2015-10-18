@@ -57,7 +57,7 @@ generate_split_callback <- function(input, delim = ",", type = c("existence", "c
 #'@export
 #'@importFrom Rcpp sourceCpp
 init_jiebaR_callback <- function() {
-  if (!requireNamespace("jiebaR", character.only = TRUE)) stop("Please install the package jiebaR first")
+  if (!requireNamespace("jiebaR")) stop("Please install the package jiebaR first")
   tryCatch({
     sourceCpp(system.file("callback/jiebaR_callback.cpp", package = "FeatureHashing"))
   }, finally = {

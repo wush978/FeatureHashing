@@ -43,29 +43,6 @@ center_fig <- function(path, size = 100, style = NULL) {
 
 --- &twocol
 
-## Taiwan, a Mountainous Island
-
-*** =left
-
-`r center_fig("TaiwanMap.jpg", 80)`
-
-<small>source: <http://www.nbcnews.com> </small>
-
-*** =right
-
-- Highest Mountain: Yushan (3952m)
-
-`r center_fig("Mount_Yu_Shan_-_Taiwan.jpg")`
-
---- &twocol
-
-## Taipei City and Taipei 101
-
-`r center_fig("tpnightview.jpg", 75)`
-<center><small>source: <https://c2.staticflickr.com/6/5208/5231215951_c0e0036b17_b.jpg></small></center>
-
---- &twocol
-
 ## Taiwan R User Group
 
 `r center_fig("taiwan-r.jpg", 60)`
@@ -127,7 +104,7 @@ strsplit(imdb$review[457], " ")[[1]]
 
 --- &vcenter .largecontent
 
-## Word Segmentation and Feature Extraction
+## Document-term Matrix
 
 ```{r imdb.tokenize.vectorize, dependson="imdb"}
 tokens <- strsplit(head(imdb$review), " ")
@@ -143,9 +120,9 @@ kable(tmp[,c(6,1:5)])
 
 --- &vcenter .largecontent
 
-## `FeatureHashing`
+## `FeatureHashing` and it's Formula Interface
 
-- `FeatureHashing` implements `split` in the formula interface.
+- `FeatureHashing` provides `split` in the formula.
 
 ```{r imdb.m, dependson="imdb.split", echo = TRUE}
 hash_size <- 2^16
@@ -169,7 +146,34 @@ m.valid <- hashed.model.matrix(~ split(review, delim = " ", type = "existence"),
 
 --- &vcenter .largecontent
 
-## Gradient Boosted Decision Tree with `xgboost`
+## Document-term Matrix and `tm`
+
+```{r tm, dependson = "imdb.split", echo = TRUE}
+suppressPackageStartupMessages(library(tm))
+corpus.train <- VCorpus(VectorSource(imdb.train$review))
+dtm.train <- DocumentTermMatrix(corpus.train)
+dim(dtm.train)
+corpus.valid <- VCorpus(VectorSource(imdb.valid$review))
+dtm.valid <- DocumentTermMatrix(corpus.valid)
+dim(dtm.valid)
+```
+
+--- &vcenter .largecontent
+
+## Efficiency
+
+```
+  test replications elapsed relative user.self sys.self user.child
+2   fh           10  73.316    1.000    70.083    1.898      0.000
+1   tm           10 203.663    2.778    66.950    4.440    239.018
+  sys.child
+2     0.000
+1    12.413
+```
+
+--- &vcenter .largecontent
+
+## Document-Term Matrix and `xgboost`
 
 ```{r, dependson="imdb.m", echo = TRUE, results='hide'}
 dtrain <- xgb.DMatrix(m.train, label = imdb.train$sentiment)
@@ -203,13 +207,13 @@ g <- xgb.train(booster = "gblinear", nrounds = 100, eta = 0.0001, max.depth = 2,
 
 - **Make our life easier**
 
---- .segue .dark
+--- .dark .segue
 
 ```{r, include=FALSE}
 opts_chunk$set(cache = FALSE)
 ```
 
-## Formula Interface in R
+## Basic Feature Extraction in R
 
 --- &vcenter .largecontent
 
@@ -241,102 +245,6 @@ model.matrix(~ ., iris.demo)
 ```{r model.matrix.result}
 kable(model.matrix(~ ., iris.demo))
 ```
-
---- &vcenter .largecontent
-
-## Formula Interface
-
-- `y ~ a + b`
-    - `y` is the response
-    - `a` and `b` are predictors
-
-```{r data.demo, echo = FALSE, eval = TRUE, results='hide'}
-data.demo <- iris.demo
-colnames(data.demo) <- c("a", "b", "c", "d", "e")
-```
-
---- &vcenter .largecontent
-
-## Formula Interface: `+`
-
-- `+` is the operator of combining linear predictors
-
-```{r fi.+1, echo = TRUE, eval = FALSE}
-model.matrix(~ a + b, data.demo)
-```
-
-```{r fi.+2}
-kable(model.matrix(~ a + b, data.demo))
-```
-
---- &vcenter .largecontent
-
-## Formula Interface: `:`
-
-- `:` is the interaction operator
-
-```{r fi.:1, echo = TRUE, eval = FALSE}
-model.matrix(~ a + b + a:b, data.demo)
-```
-
-```{r fi.:2}
-kable(model.matrix(~ a + b + a:b, data.demo))
-```
-
---- &vcenter .largecontent
-
-## Formula Interface: `*`
-
-- `*` is the operator of cross product
-
-```{r fi.*1, echo = TRUE, eval = FALSE}
-# a + b + a:b
-model.matrix(~ a * b, data.demo)
-```
-
-```{r fi.*2}
-kable(model.matrix(~ a * b, data.demo))
-```
-
---- &vcenter .largecontent
-
-## Formula Interface: `(`
-
-- `:` and `*` are distributive over `+`
-
-```{r fi.(1, echo = TRUE, eval = FALSE}
-# a:c + b:c
-model.matrix(~ (a + b):c, data.demo)
-```
-
-```{r fi.(2}
-model.matrix(~ (a + b):c, data.demo) %>% kable
-```
-
---- &vcenter .largecontent
-
-## Formula Interface: `.`
-
-- `.` means all columns of the `data`.
-
-```{r fi..1, echo = TRUE, eval = FALSE}
-# ~ Sepal.Length + Sepal.Width + Petal.Length +
-#   Petal.Width + Species
-model.matrix(~ ., iris.demo)
-```
-
-```{r fi..2}
-model.matrix(~ ., iris.demo) %>% kable
-```
-
-
---- &vcenter .largecontent
-
-- Please check `?formula`
-
---- .dark .segue
-
-## Categorical Features
 
 --- &vcenter .largecontent
 
@@ -481,7 +389,7 @@ charToRaw("setosa")
 
 - A method to do feature vectorization with a [hash function](https://en.wikipedia.org/wiki/Hash_function)
 
-`r center_fig("hash.jpeg", 150)`
+`r center_fig("hash.png", 75)`
 
 - For example, Mod `%%` is a family of hash function.
 
@@ -589,9 +497,10 @@ m_test <- hashed.model.matrix(model, data_test, hash_size)
 
 ## Cons of FeatureHashing
 
-### Hash Size
+### Hash Size v.s. Log Likelihood
 
 ```{r cons1, cache = TRUE}
+par(bg = "transparent")
 criteo.train <- head(criteo, 9000)
 y.train <- criteo.train$V1
 criteo.test <- tail(criteo, 1000)
@@ -599,14 +508,35 @@ y.test <- criteo.test$V1
 x <- 10:22
 hash_size.set <- 2^x
 retval <- numeric(length(hash_size.set))
+retval.time <- numeric(length(hash_size.set))
 for(i in seq_along(hash_size.set)) {
-  m.train <- hashed.model.matrix(V1 ~ .^2, criteo.train, hash_size.set[i])
-  m.test <- hashed.model.matrix(V1 ~ .^2, criteo.test, hash_size.set[i])
-  g <- xgboost(m.train, y.train, nrounds = 100, nthread = 8, objective = "binary:logistic", verbose = 0)
-  p <- predict(g, m.test)
-  retval[i] <- mean(y.test * log(p) + (1 - y.test) * log(1 - p))
+  retval.time[i] <- system.time({
+    m.train <- hashed.model.matrix(V1 ~ .^2, criteo.train, hash_size.set[i])
+    m.test <- hashed.model.matrix(V1 ~ .^2, criteo.test, hash_size.set[i])
+    g <- xgboost(m.train, y.train, nrounds = 100, nthread = 8, objective = "binary:logistic", verbose = 0)
+    p <- predict(g, m.test)
+    retval[i] <- mean(y.test * log(p) + (1 - y.test) * log(1 - p))
+  })[3]
 }
-plot(x, - retval, type = "l", xaxt = "n", xlab = "hash size", ylab = "logarithmic loss")
+rm(criteo.train, criteo.test, y.train, y.test, x)
+```
+
+```{r cons1.plot1, fig.width = 10, fig.height = 7, dependson = "cons1"}
+x <- 10:22
+plot(x, retval, type = "l", xaxt = "n", xlab = "hash size", ylab = "log likelihood")
+axis(1, at = x, labels = parse(text = sprintf("2^%d", x)))
+```
+
+--- &vcenter .largecontent
+
+
+## Cons of FeatureHashing
+
+### Hash Size v.s. computation time
+
+```{r cons1.plot2, fig.width = 10, fig.height = 7, dependson = "cons1"}
+x <- 10:22
+plot(x, retval.time, type = "l", xaxt = "n", xlab = "hash size", ylab = "computation time")
 axis(1, at = x, labels = parse(text = sprintf("2^%d", x)))
 ```
 
@@ -633,6 +563,102 @@ hash.mapping(m) %% 2^4
 apply the hashing trick only because it makes their life easier to generate
 features.](https://www.kaggle.com/c/criteo-display-ad-challenge/forums/t/10555/3-idiots-solution-libffm/55888#post55888).
 - No.3, no.4 and no.9 (we): Neuron Network
+
+--- .segue .dark
+
+## Formula Interface in R
+
+--- &vcenter .largecontent
+
+## Formula Interface
+
+- `y ~ a + b`
+    - `y` is the response
+    - `a` and `b` are predictors
+
+```{r data.demo, echo = FALSE, eval = TRUE, results='hide'}
+data.demo <- iris.demo
+colnames(data.demo) <- c("a", "b", "c", "d", "e")
+```
+
+--- &vcenter .largecontent
+
+## Formula Interface: `+`
+
+- `+` is the operator of combining linear predictors
+
+```{r fi.+1, echo = TRUE, eval = FALSE}
+model.matrix(~ a + b, data.demo)
+```
+
+```{r fi.+2}
+kable(model.matrix(~ a + b, data.demo))
+```
+
+--- &vcenter .largecontent
+
+## Formula Interface: `:`
+
+- `:` is the interaction operator
+
+```{r fi.:1, echo = TRUE, eval = FALSE}
+model.matrix(~ a + b + a:b, data.demo)
+```
+
+```{r fi.:2}
+kable(model.matrix(~ a + b + a:b, data.demo))
+```
+
+--- &vcenter .largecontent
+
+## Formula Interface: `*`
+
+- `*` is the operator of cross product
+
+```{r fi.*1, echo = TRUE, eval = FALSE}
+# a + b + a:b
+model.matrix(~ a * b, data.demo)
+```
+
+```{r fi.*2}
+kable(model.matrix(~ a * b, data.demo))
+```
+
+--- &vcenter .largecontent
+
+## Formula Interface: `(`
+
+- `:` and `*` are distributive over `+`
+
+```{r fi.(1, echo = TRUE, eval = FALSE}
+# a:c + b:c
+model.matrix(~ (a + b):c, data.demo)
+```
+
+```{r fi.(2}
+model.matrix(~ (a + b):c, data.demo) %>% kable
+```
+
+--- &vcenter .largecontent
+
+## Formula Interface: `.`
+
+- `.` means all columns of the `data`.
+
+```{r fi..1, echo = TRUE, eval = FALSE}
+# ~ Sepal.Length + Sepal.Width + Petal.Length +
+#   Petal.Width + Species
+model.matrix(~ ., iris.demo)
+```
+
+```{r fi..2}
+model.matrix(~ ., iris.demo) %>% kable
+```
+
+
+--- &vcenter .largecontent
+
+- Please check `?formula`
 
 --- .dark .segue
 

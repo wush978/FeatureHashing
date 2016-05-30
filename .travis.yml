@@ -3,8 +3,9 @@ language: c
 sudo: true
 
 addons:
-  apt_packages:
+  packages:
     - pandoc
+    - pandoc-citeproc
 
 script: ./travis-tool.sh run_tests
 

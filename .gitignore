@@ -3,6 +3,7 @@
 .Rproj.user
 .Rhistory
 .RData
+.Rprofile
 
 *.o
 *.so

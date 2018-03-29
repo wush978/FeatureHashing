@@ -19,6 +19,7 @@
 #ifndef __HASH_FUNCTION_HPP__
 #define __HASH_FUNCTION_HPP__
 
+#include "pmurhashAPI.h"
 #include <cstdint>
 #include <map>
 #include <string>

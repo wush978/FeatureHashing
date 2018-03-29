@@ -2,7 +2,6 @@
 #include <deque>
 #include <boost/algorithm/string.hpp>
 #include "hash_function.h"
-#include "pmurhashAPI.h"
 #include "bswap_32.h"
 #include <Rcpp.h>
 #include "hashed_model_matrix.h"

@@ -26,7 +26,7 @@ SEXP selectColumn(S4 m, IntegerVector index, bool drop = true, SEXP Rretval = R_
   NumericVector x(m.slot("x"));
   #pragma omp parallel for
   for(auto pindex = index.begin();pindex < index.end();pindex++) {
-    if (*pindex <= 0 | *pindex > Dim[1]) throw std::invalid_argument("Out of range!");
+    if ((*pindex <= 0) | (*pindex > Dim[1])) throw std::invalid_argument("Out of range!");
   }
   switch(index.size()) {
     case 0:

@@ -17,6 +17,15 @@ tomatrix <- function(m) {
     .Call('_FeatureHashing_tomatrix', PACKAGE = 'FeatureHashing', m)
 }
 
+#'@title Test the callback function.
+#'@param Rcallback external pointer. The pointer of the callback function.
+#'@param input string. The input.
+#'@return character
+#'@export
+test_callback <- function(Rcallback, input) {
+    .Call('_FeatureHashing_test_callback', PACKAGE = 'FeatureHashing', Rcallback, input)
+}
+
 #'@export hash.sign
 hash.sign <- function(src) {
     .Call('_FeatureHashing_xi', PACKAGE = 'FeatureHashing', src)

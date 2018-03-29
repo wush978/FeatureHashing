@@ -1,6 +1,6 @@
 /*
  * This file is part of FeatureHashing
- * Copyright (C) 2014-2015 Wush Wu
+ * Copyright (C) 2015 Wush Wu
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -16,9 +16,27 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "pmurhashAPI.h"
-#include <stdint.h>
+#include "callback.h"
+#include "converters.h"
+#include "split.h"
+#include <Rcpp.h>
 
-const uint32_t 
-  MURMURHASH3_H_SEED = 3120602769LL,
-  MURMURHASH3_XI_SEED = 79193439LL;
+using namespace Rcpp;
+
+//'@title Test the callback function.
+//'@param Rcallback external pointer. The pointer of the callback function.
+//'@param input string. The input.
+//'@return character
+//'@export
+//[[Rcpp::export]]
+SEXP test_callback(SEXP Rcallback, const std::string& input) {
+  CallbackFunctor* callback(as<CallbackFunctor*>(Rcallback));
+  return wrap((*callback)(input.c_str()));
+}
+
+RCPP_MODULE(callback) {
+  
+  class_<CallbackFunctor>("callback")
+  ;
+
+}

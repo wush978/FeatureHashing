@@ -50,6 +50,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// test_callback
+SEXP test_callback(SEXP Rcallback, const std::string& input);
+RcppExport SEXP _FeatureHashing_test_callback(SEXP RcallbackSEXP, SEXP inputSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type Rcallback(RcallbackSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type input(inputSEXP);
+    rcpp_result_gen = Rcpp::wrap(test_callback(Rcallback, input));
+    return rcpp_result_gen;
+END_RCPP
+}
 // xi
 IntegerVector xi(CharacterVector src);
 RcppExport SEXP _FeatureHashing_xi(SEXP srcSEXP) {
@@ -191,11 +203,15 @@ BEGIN_RCPP
 END_RCPP
 }
 
+RcppExport SEXP _rcpp_module_boot_callback();
+RcppExport SEXP _rcpp_module_boot_split_callback();
+
 static const R_CallMethodDef CallEntries[] = {
     {"_FeatureHashing_pair_sort", (DL_FUNC) &_FeatureHashing_pair_sort, 2},
     {"_FeatureHashing_merge", (DL_FUNC) &_FeatureHashing_merge, 2},
     {"_FeatureHashing_todgCMatrix", (DL_FUNC) &_FeatureHashing_todgCMatrix, 1},
     {"_FeatureHashing_tomatrix", (DL_FUNC) &_FeatureHashing_tomatrix, 1},
+    {"_FeatureHashing_test_callback", (DL_FUNC) &_FeatureHashing_test_callback, 2},
     {"_FeatureHashing_xi", (DL_FUNC) &_FeatureHashing_xi, 1},
     {"_FeatureHashing_h", (DL_FUNC) &_FeatureHashing_h, 1},
     {"_FeatureHashing_h2", (DL_FUNC) &_FeatureHashing_h2, 1},
@@ -207,6 +223,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FeatureHashing_split_count", (DL_FUNC) &_FeatureHashing_split_count, 2},
     {"_FeatureHashing_selectColumn", (DL_FUNC) &_FeatureHashing_selectColumn, 4},
     {"_FeatureHashing_selectRow", (DL_FUNC) &_FeatureHashing_selectRow, 4},
+    {"_rcpp_module_boot_callback", (DL_FUNC) &_rcpp_module_boot_callback, 0},
+    {"_rcpp_module_boot_split_callback", (DL_FUNC) &_rcpp_module_boot_split_callback, 0},
     {NULL, NULL, 0}
 };
 

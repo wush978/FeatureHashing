@@ -21,7 +21,7 @@ vignette: >
 
 # Introduction
 
-[Feature hashing](http://en.wikipedia.org/wiki/Feature_hashing), also called as the hashing trick, is a method to
+[Feature hashing](https://en.wikipedia.org/wiki/Feature_hashing), also called as the hashing trick, is a method to
 transform features to vector. Without looking the indices up in an
 associative array, it applies a hash function to the features and uses their
 hash values as indices directly.
@@ -38,7 +38,7 @@ To install the stable version from Cran, run this command:
 install.packages("FeatureHashing")
 ```
 
-For up-to-date version, please install from github. Windows user will need to install [RTools](http://cran.r-project.org/bin/windows/Rtools/) first.
+For up-to-date version, please install from github. Windows user will need to install [RTools](https://cran.r-project.org/bin/windows/Rtools/) first.
 
 ```r
 devtools::install_github('wush978/FeatureHashing')
@@ -62,7 +62,7 @@ The following scripts show how to use the **FeatureHashing** to construct `Matri
 
 The dataset is a sample from iPinYou dataset which is described in @zhang2014real.
 
-## Logistic Regression with [`glmnet`](http://cran.r-project.org/package=glmnet)
+## Logistic Regression with [`glmnet`](https://cran.r-project.org/package=glmnet)
 
 ```{r lr}
 # The following script assumes that the data.frame
@@ -95,7 +95,7 @@ p.lr <- predict(cv.g.lr, m.test, s="lambda.min")
 auc(ipinyou.test$IsClick, p.lr)
 ```
 
-## Gradient Boosted Decision Tree with [`xgboost`](http://cran.r-project.org/package=xgboost)
+## Gradient Boosted Decision Tree with [`xgboost`](https://cran.r-project.org/package=xgboost)
 
 Following the script above, 
 

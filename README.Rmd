@@ -139,6 +139,6 @@ If we use the same algorithm to predict the click through rate of the 3rd season
 
 ## Reference
 
-```{r bibliograph, results='asis', echo=FALSE}
-bibliography()
+```{r bibliograph, results='asis', echo=FALSE, warning=FALSE}
+bibliography(style="text")
 ```

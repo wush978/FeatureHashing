@@ -1,3 +1,8 @@
+---
+output: 
+  html_document: 
+    keep_md: yes
+---
 FeatureHashing
 ==============
 
@@ -7,8 +12,8 @@ OS X: [![Travis-ci Status](https://travis-ci.org/wush978/FeatureHashing.svg?bran
 
 
 [![Coverage Status](https://img.shields.io/coveralls/wush978/FeatureHashing.svg)](https://coveralls.io/r/wush978/FeatureHashing?branch=master)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/FeatureHashing)](http://cran.r-project.org/package=FeatureHashing/)
-[![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/FeatureHashing)](https://github.com/metacran/cranlogs.app)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/FeatureHashing)](https://cran.r-project.org/package=FeatureHashing/)
+[![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/FeatureHashing)](https://github.com/metacran/cranlogs.app)
 
 Implement feature hashing with R
 
@@ -16,7 +21,7 @@ Implement feature hashing with R
 
 ## Introduction
 
-[Feature hashing](http://en.wikipedia.org/wiki/Feature_hashing), also called as the hashing trick, is a method to
+[Feature hashing](https://en.wikipedia.org/wiki/Feature_hashing), also called as the hashing trick, is a method to
 transform features to vector. Without looking the indices up in an
 associative array, it applies a hash function to the features and uses their
 hash values as indices directly.
@@ -33,7 +38,7 @@ To install the stable version from Cran, run this command:
 install.packages("FeatureHashing")
 ```
 
-For up-to-date version, please install from github. Windows user will need to install [RTools](http://cran.r-project.org/bin/windows/Rtools/) first.
+For up-to-date version, please install from github. Windows user will need to install [RTools](https://cran.r-project.org/bin/windows/Rtools/) first.
 
 ```r
 devtools::install_github('wush978/FeatureHashing')
@@ -57,7 +62,7 @@ The following scripts show how to use the `FeatureHashing` to construct `Matrix:
 
 The dataset is a sample from iPinYou dataset which is described in (Zhang, Yuan, Wang, and Shen, 2014).
 
-### Logistic Regression with [`glmnet`](http://cran.r-project.org/package=glmnet)
+### Logistic Regression with [`glmnet`](https://cran.r-project.org/package=glmnet)
 
 
 ```r
@@ -94,8 +99,14 @@ library(glmnet)
 
 ```
 ## Loading required package: Matrix
+```
+
+```
 ## Loading required package: foreach
-## Loaded glmnet 2.0-2
+```
+
+```
+## Loaded glmnet 2.0-16
 ```
 
 ```r
@@ -106,10 +117,10 @@ auc(ipinyou.test$IsClick, p.lr)
 ```
 
 ```
-## [1] 0.5076923
+## [1] 0.5187244
 ```
 
-### Gradient Boosted Decision Tree with [`xgboost`](http://cran.r-project.org/package=xgboost)
+### Gradient Boosted Decision Tree with [`xgboost`](https://cran.r-project.org/package=xgboost)
 
 Following the script above, 
 
@@ -126,7 +137,7 @@ glmnet::auc(ipinyou.test$IsClick, p.lm)
 ```
 
 ```
-## [1] 0.6554945
+## [1] 0.6555304
 ```
 
 
@@ -146,7 +157,7 @@ auc(ipinyou.train$IsClick, attr(ftprl, "predict"))
 ```
 
 ```
-## [1] 0.5986472
+## [1] 0.5993447
 ```
 
 If we use the same algorithm to predict the click through rate of the 3rd season of iPinYou, the overall AUC will be 0.77 which is comparable to the overall AUC of the 3rd season 0.76 reported in (Zhang, Yuan, Wang, et al., 2014).

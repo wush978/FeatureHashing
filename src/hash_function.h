@@ -26,6 +26,8 @@
 class HashFunction {
 
 public:
+  
+  virtual ~HashFunction() { }
 
   virtual uint32_t operator()(const char* buf, int size, bool is_interaction = false) = 0;
 
@@ -34,6 +36,8 @@ public:
 class NullHashFunction : public HashFunction {
   
   public:
+    
+  virtual ~NullHashFunction() { }
   
   virtual uint32_t operator()(const char* buf, int size, bool is_interaction = false) {
     return 1;
@@ -48,6 +52,8 @@ class MurmurHash3HashFunction : public HashFunction {
 public :
 
   MurmurHash3HashFunction(uint32_t _seed) : seed(_seed) { }
+  
+  virtual ~MurmurHash3HashFunction() { }
 
   virtual uint32_t operator()(const char* buf, int size, bool is_interaction = false) {
     return ::PMurHash32(seed, buf, size);
@@ -65,6 +71,8 @@ public:
   MurmurHash3LogHashFunction(SEXP _e, uint32_t _seed) 
   : HashFunction(), seed(_seed), e(_e)
   { }
+  
+  virtual ~MurmurHash3LogHashFunction() { }
   
   virtual uint32_t operator()(const char* buf, int size, bool is_interaction = false) {
     uint32_t retval = PMurHash32(seed, buf, size);

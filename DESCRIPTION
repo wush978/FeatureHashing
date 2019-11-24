@@ -23,7 +23,7 @@ Imports:
   Matrix,
   digest(>= 0.6.8),
   magrittr (>= 1.5)
-LinkingTo: Rcpp, digest(>= 0.6.8), BH
+LinkingTo: Rcpp, digest(>= 0.6.8), BH(>= 1.54.0-1)
 Suggests: RUnit, glmnet, knitr, xgboost, rmarkdown, pROC
 SystemRequirements: C++11
 BugReports: https://github.com/wush978/FeatureHashing/issues

@@ -19,9 +19,9 @@
 #ifndef __HASH_FUNCTION_HPP__
 #define __HASH_FUNCTION_HPP__
 
-#include <boost/detail/endian.hpp>
+#include <boost/predef/other/endian.h>
+#include <boost/endian/conversion.hpp>
 #include "digestlocal.h"
-#include "bswap_32.h"
 
 class HashFunction {
 
@@ -78,18 +78,20 @@ public:
     uint32_t retval = PMurHash32(seed, buf, size);
     if (is_interaction) {
       const uint32_t* src = reinterpret_cast<const uint32_t*>(buf);
-      #ifdef BOOST_BIG_ENDIAN
-      if (inverse_mapping.find(bswap_32(src[0])) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
-      if (inverse_mapping.find(bswap_32(src[1])) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
-      std::string key(inverse_mapping[bswap_32(src[0])]);
+      #if BOOST_ENDIAN_BIG_BYTE && !BOOST_ENDIAN_LITTLE_BYTE
+      if (inverse_mapping.find(boost::endian::endian_reverse(src[0])) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
+      if (inverse_mapping.find(boost::endian::endian_reverse(src[1])) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
+      std::string key(inverse_mapping[boost::endian::endian_reverse(src[0])]);
       key.append(":");
-      key.append(inverse_mapping[bswap_32(src[1])]);
-      #else
+      key.append(inverse_mapping[boost::endian::endian_reverse(src[1])]);
+      #elif !BOOST_ENDIAN_BIG_BYTE && BOOST_ENDIAN_LITTLE_BYTE
       if (inverse_mapping.find(src[0]) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
       if (inverse_mapping.find(src[1]) == inverse_mapping.end()) throw std::logic_error("interaction is hashed before main effect!");
       std::string key(inverse_mapping[src[0]]);
       key.append(":");
       key.append(inverse_mapping[src[1]]);
+      #else
+      #error Unknown endianness
       #endif
       e[key.c_str()] = Rcpp::wrap((int) retval);
       inverse_mapping[retval] = key;

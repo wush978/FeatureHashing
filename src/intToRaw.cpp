@@ -1,16 +1,9 @@
 #include <Rcpp.h>
-#include <boost/detail/endian.hpp>
+#include <boost/predef/other/endian.h>
+#include <boost/endian/conversion.hpp>
 
-#ifdef linux
-#include <byteswap.h>
-#endif
-
-#ifndef bswap_32
-#ifdef __APPLE__
-#include <libkern/OSByteOrder.h>
-#else
-uint32_t bswap_32(uint32_t x);
-#endif
+#ifndef BOOST_ENDIAN_BIG_BYTE
+  #error No BOOST_ENDIAN_BIG_BYTE
 #endif
 
 using namespace Rcpp;
@@ -23,10 +16,12 @@ using namespace Rcpp;
 SEXP intToRaw(int src) {
   RawVector retval(4);
   uint32_t *p = (uint32_t*) &retval[0];
-  #ifdef BOOST_BIG_ENDIAN
-  p[0] = bswap_32(src);
-  #else
+  #if BOOST_ENDIAN_BIG_BYTE && !BOOST_ENDIAN_LITTLE_BYTE
+  p[0] = boost::endian::endian_reverse(src);
+  #elif !BOOST_ENDIAN_BIG_BYTE && BOOST_ENDIAN_LITTLE_BYTE
   p[0] = src;
+  #else
+  #error Unknown endianness
   #endif
   return retval;
 }

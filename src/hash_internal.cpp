@@ -18,7 +18,6 @@
 
 #include <cstring>
 #include <deque>
-#include <boost/detail/endian.hpp>
 #include <boost/algorithm/string.hpp>
 #include <Rcpp.h>
 #include "hash_function.h"
@@ -52,12 +51,14 @@ IntegerVector h(CharacterVector src) {
 
 MH_UINT32 interaction(MH_UINT32 a, MH_UINT32 b) {
   MH_UINT32 buf[2];
-#ifdef BOOST_BIG_ENDIAN
-  buf[0] = bswap_32(a);
-  buf[1] = bswap_32(b);
-#else
+#if BOOST_ENDIAN_BIG_BYTE && !BOOST_ENDIAN_LITTLE_BYTE
+  buf[0] = boost::endian::endian_reverse(a);
+  buf[1] = boost::endian::endian_reverse(b);
+#elif !BOOST_ENDIAN_BIG_BYTE && BOOST_ENDIAN_LITTLE_BYTE
   buf[0] = a;
   buf[1] = b;
+#else
+  #error Unknown endianness
 #endif
   return PMurHash32(MURMURHASH3_H_SEED, reinterpret_cast<char*>(buf), sizeof(MH_UINT32) * 2);
 }

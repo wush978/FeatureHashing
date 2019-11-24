@@ -21,7 +21,6 @@
 
 #include <cstring>
 #include <memory>
-#include <boost/detail/endian.hpp>
 #include <Rcpp.h>
 #include "hash_function.h"
 #include "vector_converter.h"

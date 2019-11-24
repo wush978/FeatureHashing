@@ -173,6 +173,9 @@ const ConvertersVec get_converters(
       } else {
         pVectorConverter q(*retval.rbegin());
         Param param("", _h_main, _h_binary, hash_size);
+        #ifdef NOISY_DEBUG
+        Rprintf("Initialize InteractionConverter\n");
+        #endif
         *retval.rbegin() = pInteractionConverter(new InteractionConverter(q, p, param));
       }
     }

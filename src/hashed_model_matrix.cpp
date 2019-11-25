@@ -173,6 +173,9 @@ const ConvertersVec get_converters(
       } else {
         pVectorConverter q(*retval.rbegin());
         Param param("", _h_main, _h_binary, hash_size);
+        #ifdef NOISY_DEBUG
+        Rprintf("Initialize InteractionConverter\n");
+        #endif
         *retval.rbegin() = pInteractionConverter(new InteractionConverter(q, p, param));
       }
     }
@@ -222,7 +225,7 @@ SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size
         });
         Rprintf("\n");
         #endif
-        std::for_each(i_origin.begin(), i_origin.end(), [&ivec, &xvec, &hash_size](uint32_t hashed_value) {
+        std::for_each(i_origin.begin(), i_origin.end(), [&ivec](uint32_t hashed_value) {
           ivec.push_back(hashed_value);
         });
         xvec.insert(xvec.end(), x_origin.begin(), x_origin.end());
@@ -248,7 +251,7 @@ SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size
         const std::vector<uint32_t>& i_origin(p->get_feature(i));
         const std::vector<double>& x_origin(p->get_value(i));
         auto x_value = x_origin.begin();
-        std::for_each(i_origin.begin(), i_origin.end(), [&cache, &hash_size, &x_value, &i](uint32_t hashed_value) {
+        std::for_each(i_origin.begin(), i_origin.end(), [&cache, &x_value, &i](uint32_t hashed_value) {
           std::pair< std::vector<int>, std::vector<double> >& k(cache[hashed_value]);
           k.first.push_back(i);
           k.second.push_back(*(x_value++));

@@ -92,7 +92,9 @@ library(glmnet)
 cv.g.lr <- cv.glmnet(m.train, ipinyou.train$IsClick,
   family = "binomial")#, type.measure = "auc")
 p.lr <- predict(cv.g.lr, m.test, s="lambda.min")
-auc(ipinyou.test$IsClick, p.lr)
+
+library(pROC)
+auc(ipinyou.test$IsClick, c(p.lr))
 ```
 
 ## Gradient Boosted Decision Tree with [`xgboost`](https://cran.r-project.org/package=xgboost)
@@ -103,9 +105,9 @@ Following the script above,
 # GBDT with xgboost
 if(require("xgboost")){
   cv.g.gdbt <- xgboost(m.train, ipinyou.train$IsClick, max.depth=7, eta=0.1, subsample = 0.7, colsample_bytree = 0.7,
-    nround = 100, objective = "binary:logistic", verbose = ifelse(interactive(), 1, 0))
+    nround = 10, objective = "binary:logistic", verbose = ifelse(interactive(), 1, 0))
   p.lm <- predict(cv.g.gdbt, m.test)
-  glmnet::auc(ipinyou.test$IsClick, p.lm)  
+  auc(ipinyou.test$IsClick, p.lm)  
 }
 
 ```

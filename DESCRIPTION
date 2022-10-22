@@ -1,9 +1,9 @@
 Package: FeatureHashing
 Type: Package
 Title: Creates a Model Matrix via Feature Hashing with a Formula Interface
-Version: 0.9.1.4
+Version: 0.9.1.5
 Date: 2019-11-24
-Authors@R:   c(
+Authors@R: c(
   person("Wush", "Wu", email = "wush978@gmail.com", role = c("aut", "cre")), 
   person("Michael", "Benesty", email = "michael@benesty.fr", role = c("aut", "ctb")))
 Maintainer: Wush Wu <wush978@gmail.com>
@@ -29,3 +29,4 @@ SystemRequirements: C++11
 BugReports: https://github.com/wush978/FeatureHashing/issues
 URL: https://github.com/wush978/FeatureHashing
 VignetteBuilder: knitr
+RoxygenNote: 7.2.1

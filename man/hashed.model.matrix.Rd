@@ -38,7 +38,7 @@ Create a model matrix with feature hashing
 \details{
 The \code{hashed.model.matrix} hashes the feature during
 the construction of the model matrix. It uses the 32-bit variant of MurmurHash3
-\url{https://code.google.com/p/smhasher/wiki/MurmurHash3}. Weinberger
+\url{https://github.com/aappleby/smhasher}. Weinberger
 et. al. (2009) used two separate hashing function \eqn{h}(\code{hashed.value}) and
 \eqn{\xi}(\code{hash.sign}) to determine the indices and the sign of the values
 respectively. Different seeds are used to implement the hashing function

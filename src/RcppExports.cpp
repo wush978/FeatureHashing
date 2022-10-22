@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // pair_sort
 void pair_sort(IntegerVector i, NumericVector x);
 RcppExport SEXP _FeatureHashing_pair_sort(SEXP iSEXP, SEXP xSEXP) {

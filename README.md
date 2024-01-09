@@ -6,14 +6,14 @@ output:
 FeatureHashing
 ==============
 
-Linux: [![Travis-ci Status](https://travis-ci.org/wush978/FeatureHashing.svg?branch=master)](https://travis-ci.org/wush978/FeatureHashing)
+Linux: [![Travis-ci Status](https://app.travis-ci.com/wush978/FeatureHashing.svg?branch=master)](https://app.travis-ci.com/wush978/FeatureHashing)
 Win : [![Build status](https://ci.appveyor.com/api/projects/status/bm4lpxn5f07d8klj/branch/master?svg=true)](https://ci.appveyor.com/project/wush978/featurehashing/branch/master)
-OS X: [![Travis-ci Status](https://travis-ci.org/wush978/FeatureHashing.svg?branch=osx)](https://travis-ci.org/wush978/FeatureHashing)
+OS X: [![Travis-ci Status](https://app.travis-ci.com/wush978/FeatureHashing.svg?branch=osx)](https://app.travis-ci.com/wush978/FeatureHashing)
 
 
-[![Coverage Status](https://img.shields.io/coveralls/wush978/FeatureHashing.svg)](https://coveralls.io/r/wush978/FeatureHashing?branch=master)
+[![Coverage Status](https://img.shields.io/coveralls/wush978/FeatureHashing.svg)](https://coveralls.io/github/wush978/FeatureHashing)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/FeatureHashing)](https://cran.r-project.org/package=FeatureHashing/)
-[![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/FeatureHashing)](https://github.com/metacran/cranlogs.app)
+[![rstudio mirror downloads](https://cranlogs.r-pkg.org/badges/FeatureHashing)](https://github.com/r-hub/cranlogs.app)
 
 Implement feature hashing with R
 

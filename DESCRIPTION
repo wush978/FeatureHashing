@@ -28,4 +28,4 @@ Suggests: RUnit, glmnet, knitr, xgboost, rmarkdown, pROC
 BugReports: https://github.com/wush978/FeatureHashing/issues
 URL: https://github.com/wush978/FeatureHashing
 VignetteBuilder: knitr
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3

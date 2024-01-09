@@ -24,7 +24,12 @@
 #include <Rcpp.h>
 #include "hash_function.h"
 #include "vector_converter.h"
+#include <boost/version.hpp>
+#if BOOST_VERSION >= 108400
+#include <boost/timer/progress_display.hpp>
+#else
 #include <boost/progress.hpp>
+#endif
 
 typedef std::map< std::string, std::string > NameClassMapping;
 typedef std::vector< std::string > StrVec;

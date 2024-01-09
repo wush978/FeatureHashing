@@ -20,6 +20,12 @@
 
 using namespace Rcpp;
 
+#if BOOST_VERSION >= 108400
+typedef boost::timer::progress_display progress_display;
+#else
+typedef boost::progress_display progress_display;
+#endif
+
 template<typename DataFrameLike>
 NameClassMapping get_class(DataFrameLike data) {
   Function lapply("lapply");
@@ -206,9 +212,9 @@ SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size
   #ifdef NOISY_DEBUG
   Rprintf("nrow(data): %d length(converters): %d\n", data.nrows(), converters.size());
   #endif
-  std::shared_ptr<boost::progress_display> pd(NULL);
+  std::shared_ptr<progress_display> pd(NULL);
   if (transpose) {
-    if (progress) pd.reset(new boost::progress_display(data.nrows(), Rcpp::Rcout));
+    if (progress) pd.reset(new progress_display(data.nrows(), Rcpp::Rcout));
     for(auto i = 0;i < data.nrows();i++) {
       if (progress) ++(*pd);
       if (is_intercept) {
@@ -234,7 +240,7 @@ SEXP hashed_model_matrix(RObject tf, DataFrameLike data, unsigned long hash_size
     }
   }
   else {
-    if (progress) pd.reset(new boost::progress_display(data.nrows(), Rcpp::Rcout));
+    if (progress) pd.reset(new progress_display(data.nrows(), Rcpp::Rcout));
     std::map< uint32_t, std::pair< std::vector<int>, std::vector<double> > > cache;
     if (is_intercept) {
       std::pair< std::vector<int>, std::vector<double> >& k(cache[0]);

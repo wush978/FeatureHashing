@@ -1,7 +1,7 @@
 Package: FeatureHashing
 Type: Package
 Title: Creates a Model Matrix via Feature Hashing with a Formula Interface
-Version: 0.9.1.6
+Version: 0.9.2
 Date: 2019-11-24
 Authors@R: c(
   person("Wush", "Wu", email = "wush978@gmail.com", role = c("aut", "cre")), 
@@ -16,7 +16,7 @@ Description: Feature hashing, also called as the hashing trick, is a method to t
   Please see the README in <https://github.com/wush978/FeatureHashing> for more information.
 License: GPL(>= 3) | file LICENSE
 Depends: 
-  R (>= 3.1),
+  R (>= 4.0),
   methods
 Imports: 
   Rcpp (>= 0.11),
@@ -25,7 +25,6 @@ Imports:
   magrittr (>= 1.5)
 LinkingTo: Rcpp, digest(>= 0.6.8), BH(>= 1.54.0-1)
 Suggests: RUnit, glmnet, knitr, xgboost, rmarkdown, pROC
-SystemRequirements: C++11
 BugReports: https://github.com/wush978/FeatureHashing/issues
 URL: https://github.com/wush978/FeatureHashing
 VignetteBuilder: knitr

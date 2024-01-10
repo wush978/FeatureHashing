@@ -202,7 +202,7 @@ KDD 2013, Chicago, IL, USA, August 11-14, 2013_. Ed. by I. S.
 Dhillon, Y. Koren, R. Ghani, T. E. Senator, P. Bradley, R. Parekh,
 J. He, R. L. Grossman and R. Uthurusamy. ACM, 2013, pp. 1222-1230.
 DOI: 10.1145/2487575.2488200. <URL:
-\url{http://doi.acm.org/10.1145/2487575.2488200}>.
+\url{https://doi.acm.org/10.1145/2487575.2488200}>.
 
 Kilian Q. Weinberger, Anirban Dasgupta, John Langford, 
 Alexander J. Smola, and Josh Attenberg. ICML, volume 382 of ACM 

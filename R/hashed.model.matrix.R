@@ -25,7 +25,7 @@
 #'@details
 #'The \code{hashed.model.matrix} hashes the feature during
 #'the construction of the model matrix. It uses the 32-bit variant of MurmurHash3 
-#'\url{https://code.google.com/p/smhasher/wiki/MurmurHash3}. Weinberger 
+#'\url{https://github.com/aappleby/smhasher}. Weinberger 
 #'et. al. (2009) used two separate hashing function \eqn{h}(\code{hashed.value}) and 
 #'\eqn{\xi}(\code{hash.sign}) to determine the indices and the sign of the values
 #'respectively. Different seeds are used to implement the hashing function 
@@ -73,7 +73,7 @@
 #'Dhillon, Y. Koren, R. Ghani, T. E. Senator, P. Bradley, R. Parekh,
 #'J. He, R. L. Grossman and R. Uthurusamy. ACM, 2013, pp. 1222-1230.
 #'DOI: 10.1145/2487575.2488200. <URL:
-#'\url{http://doi.acm.org/10.1145/2487575.2488200}>.
+#'\url{https://doi.acm.org/10.1145/2487575.2488200}>.
 #'
 #'Kilian Q. Weinberger, Anirban Dasgupta, John Langford, 
 #'Alexander J. Smola, and Josh Attenberg. ICML, volume 382 of ACM 
@@ -201,9 +201,9 @@ hashed.model.matrix <- function(formula, data, hash.size = 2^18, transpose = FAL
                                 progress = FALSE) {
   stopifnot(hash.size >= 0)
   stopifnot(is.data.frame(data))
-  stopifnot(class(formula) %in% c("formula", "character"))
+  stopifnot(inherits(formula, "formula") | inherits(formula, "character"))
   
-  if(class(formula) == "character") formula %<>% paste(collapse = " + ") %>% paste("~", .) %>% as.formula
+  if(inherits(formula, "character")) formula %<>% paste(collapse = " + ") %>% paste("~", .) %>% as.formula
   
   tf.idf.string <- "type = \"tf-idf\""
   
